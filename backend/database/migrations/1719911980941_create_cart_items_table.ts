@@ -7,7 +7,12 @@ export default class extends BaseSchema {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id')
       table.integer('cart_id').unsigned().references('id').inTable('carts')
-      table.integer('product_id').unsigned().references('id').inTable('products').onDelete('CASCADE')
+      table
+        .integer('product_id')
+        .unsigned()
+        .references('id')
+        .inTable('products')
+        .onDelete('CASCADE')
       table.timestamp('created_at')
       table.timestamp('updated_at')
     })
