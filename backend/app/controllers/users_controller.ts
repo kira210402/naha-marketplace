@@ -2,9 +2,11 @@ import ClientException from '#exceptions/client_exception'
 import User from '#models/user'
 import type { HttpContext } from '@adonisjs/core/http'
 export default class UsersController {
-  async index({ response, pagination }: HttpContext) {
+  async index({ request, response, pagination }: HttpContext) {
     const { perPage, page } = pagination
-    const users = await User.query().orderBy('id', 'asc').paginate(page, perPage)
+    const sortField = request.input('sortField', 'id')
+    const sortOrder = request.input('sortOrder', 'asc')
+    const users = await User.query().orderBy(sortField, sortOrder).paginate(page, perPage)
     if (!users) throw new ClientException()
     return response.ok({
       code: 200,

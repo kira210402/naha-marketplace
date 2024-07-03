@@ -43,6 +43,7 @@ router.use([
  * the routes or the routes group.
  */
 export const middleware = router.named({
+  sortOrderBy: () => import('#middleware/sort_order_by_middleware'),
   pagination: () => import('#middleware/pagination_middleware'),
   guest: () => import('#middleware/guest_middleware'),
   auth: () => import('#middleware/auth_middleware'),
