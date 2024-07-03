@@ -35,4 +35,5 @@ export default await Env.create(new URL('../', import.meta.url), {
   |----------------------------------------------------------
   */
   SESSION_DRIVER: Env.schema.enum(['cookie', 'memory'] as const),
+  JWT_ACCESS_TOKEN_KEY: Env.schema.string(),
 })

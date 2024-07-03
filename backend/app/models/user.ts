@@ -7,6 +7,9 @@ import type { HasOne } from '@adonisjs/lucid/types/relations'
 
 import Role from './role.js'
 import Store from './store.js'
+import { JwtAccessTokenProvider, JwtSecret } from '#providers/jwt_access_token_provider'
+import parseDuration from 'parse-duration'
+import env from '#start/env'
 
 const AuthFinder = withAuthFinder(() => hash.use('scrypt'), {
   uids: ['email'],
@@ -44,4 +47,13 @@ export default class User extends compose(BaseModel, AuthFinder) {
     foreignKey: 'userStoreId',
   })
   declare user: HasOne<typeof Store>
+
+  static accessTokens = JwtAccessTokenProvider.forModel(User, {
+    expiresInMillis: parseDuration('1 day')!,
+    key: new JwtSecret(env.get('JWT_ACCESS_TOKEN_KEY')),
+    primaryKey: 'id',
+    algorithm: 'HS256',
+    audience: 'https://client.example.com',
+    issuer: 'https://server.example.com',
+  })
 }
