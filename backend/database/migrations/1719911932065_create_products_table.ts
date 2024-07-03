@@ -12,7 +12,11 @@ export default class extends BaseSchema {
       table.string('price')
       table.integer('quantity')
       table.integer('discount')
-      table.text('image').defaultTo('https://static.vecteezy.com/system/resources/previews/009/292/244/original/default-avatar-icon-of-social-media-user-vector.jpg')
+      table
+        .text('image')
+        .defaultTo(
+          'https://static.vecteezy.com/system/resources/previews/009/292/244/original/default-avatar-icon-of-social-media-user-vector.jpg'
+        )
 
       table.timestamp('created_at')
       table.timestamp('updated_at')

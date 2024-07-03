@@ -11,7 +11,11 @@ export default class extends BaseSchema {
       table.string('description')
       table.string('phone')
       table.string('address')
-      table.string('avatar').defaultTo('https://static.vecteezy.com/system/resources/previews/009/292/244/original/default-avatar-icon-of-social-media-user-vector.jpg')
+      table
+        .string('avatar')
+        .defaultTo(
+          'https://static.vecteezy.com/system/resources/previews/009/292/244/original/default-avatar-icon-of-social-media-user-vector.jpg'
+        )
 
       table.timestamp('created_at')
       table.timestamp('updated_at')

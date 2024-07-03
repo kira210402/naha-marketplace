@@ -9,7 +9,11 @@ export default class extends BaseSchema {
       table.string('username').nullable()
       table.string('email', 254).notNullable().unique()
       table.string('password').notNullable()
-      table.string('avatar').defaultTo('https://static.vecteezy.com/system/resources/previews/009/292/244/original/default-avatar-icon-of-social-media-user-vector.jpg')
+      table
+        .string('avatar')
+        .defaultTo(
+          'https://static.vecteezy.com/system/resources/previews/009/292/244/original/default-avatar-icon-of-social-media-user-vector.jpg'
+        )
 
       table.timestamp('created_at').notNullable()
       table.timestamp('updated_at').nullable()
