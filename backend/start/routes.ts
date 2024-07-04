@@ -37,6 +37,7 @@ router
             router.post('/', [UsersController, 'store'])
             router.put('/', [UsersController, 'update'])
             router.delete('/:id', [UsersController, 'destroy']).use(middleware.author(EUserRole.ADMIN))
+            router.put('/:id', [UsersController, 'lockUser']).use(middleware.author(EUserRole.ADMIN))
           })
           .prefix('/users')
 

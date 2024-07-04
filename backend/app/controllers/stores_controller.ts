@@ -50,10 +50,13 @@ export default class StoresController {
     })
   }
 
-  async update({ params, request, response }: HttpContext) {
+  async update({ params, request, response, auth }: HttpContext) {
     const data = request.only(['name', 'description', 'phoneNumber', 'address', 'avatar'])
     const payload = await updateStoreValidator.validate(data)
     const store = await Store.findOrFail(params.id)
+    if (store.userId !== auth.user?.$attributes.id) {
+      throw new Error('You are not authorized to perform this action')
+    }
     await store.merge(payload).save()
     return response.ok({
       code: 200,
@@ -62,8 +65,11 @@ export default class StoresController {
     })
   }
 
-  async destroy({ params, response }: HttpContext) {
+  async destroy({ params, response, auth }: HttpContext) {
     const store = await Store.findOrFail(params.id)
+    if (store.userId !== auth.user?.$attributes.id) {
+      throw new Error('You are not authorized to perform this action')
+    }
     await store.delete()
     return response.ok({
       code: 200,

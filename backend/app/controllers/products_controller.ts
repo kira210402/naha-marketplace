@@ -4,6 +4,7 @@ import Product from '#models/product'
 import Store from '#models/store'
 import { createProductValidator, updateProductValidator } from '#validators/product'
 import type { HttpContext } from '@adonisjs/core/http'
+import { EUserRole } from '../enums/EUserRole.js'
 
 export default class ProductsController {
   async index({ request, response, pagination }: HttpContext) {
@@ -31,14 +32,10 @@ export default class ProductsController {
   }
 
   async store({ request, auth, response, params }: HttpContext) {
-    // const store = await Store.findByOrFail('userId', auth.user?.$attributes.id)
     const stores = await Store.query().where('userId', auth.user?.$attributes.id)
-    console.log('stores ', stores)
-    // find store that has id equal to params.storeId
     const store = stores.find((store) => store.$attributes.id === parseInt(params.storeId))
-    // const store = stores[0]
-    console.log('store ', store)
     if (!store) throw new StoreException()
+    if(store.userId !== auth.user?.$attributes.id) throw new Error('You are not authorized to perform this action')
     const data = request.only(['name', 'description', 'price', 'quantity', 'discount'])
     const payload = await createProductValidator.validate(data)
     const product = await Product.create({
@@ -73,8 +70,12 @@ export default class ProductsController {
     })
   }
 
-  async destroy({ params, response }: HttpContext) {
+  async destroy({ params, response, auth }: HttpContext) {
     const product = await Product.findOrFail(params.id)
+    const store = await Store.findOrFail(product.storeId)
+    if (store.userId !== auth.user?.$attributes.id && auth.user?.$attributes.role !== EUserRole.ADMIN) {
+      throw new Error('You are not authorized to perform this action')
+    }
     await product.delete()
     return response.ok({
       code: 200,
