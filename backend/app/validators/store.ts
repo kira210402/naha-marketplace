@@ -2,12 +2,13 @@ import vine from '@vinejs/vine'
 
 export const createStoreValidator = vine.compile(
   vine.object({
-    name: vine.string().trim().unique(
-      async (db, value) => {
-        const match = await db.from('users').select('id').where('username', value).first()
+    name: vine
+      .string()
+      .trim()
+      .unique(async (db, value) => {
+        const match = await db.from('stores').select('id').where('name', value).first()
         return !match
-      }
-    ),
+      }),
     description: vine.string().trim(),
     phoneNumber: vine
       .string()
@@ -22,10 +23,14 @@ export const createStoreValidator = vine.compile(
 
 export const updateStoreValidator = vine.compile(
   vine.object({
-    name: vine.string().trim().unique(async (db, value) => {
-      const match = await db.from('users').select('id').where('username', value).first()
-      return !match
-    }).optional(),
+    name: vine
+      .string()
+      .trim()
+      .unique(async (db, value) => {
+        const match = await db.from('stores').select('id').where('name', value).first()
+        return !match
+      })
+      .optional(),
     description: vine.string().trim().optional(),
     phoneNumber: vine
       .string()

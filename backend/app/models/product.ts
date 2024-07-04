@@ -5,6 +5,9 @@ export default class Product extends BaseModel {
   @column({ isPrimary: true })
   declare id: number
 
+  @column({ columnName: 'store_id' })
+  declare storeId: number
+
   @column()
   declare name: string
 

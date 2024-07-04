@@ -8,8 +8,8 @@ export default class Store extends BaseModel {
   @column({ isPrimary: true })
   declare id: number
 
-  @column({columnName: 'user_id'})
-  declare userStoreId: number
+  @column({ columnName: 'user_id' })
+  declare userId: number
 
   @column()
   declare name: string
@@ -17,7 +17,7 @@ export default class Store extends BaseModel {
   @column()
   declare description: string
 
-  @column({columnName: 'phone'})
+  @column({ columnName: 'phone' })
   declare phoneNumber: string
 
   @column()
