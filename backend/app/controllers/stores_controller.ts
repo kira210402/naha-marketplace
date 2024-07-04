@@ -18,7 +18,7 @@ export default class StoresController {
   }
 
   async indexByUser({ auth, response }: HttpContext) {
-    const stores = await Store.query().where('userStoreId', auth.user?.$attributes.id)
+    const stores = await Store.query().where('userId', auth.user?.$attributes.id)
     return response.ok({
       code: 200,
       message: 'get stores by user success',
@@ -31,7 +31,7 @@ export default class StoresController {
     const payload = await createStoreValidator.validate(data)
     console.log('auth.user ', auth.user?.$attributes.id)
     const store = await Store.create({
-      userStoreId: auth.user?.$attributes.id,
+      userId: auth.user?.$attributes.id,
       ...payload,
     })
     return response.created({
