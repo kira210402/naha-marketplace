@@ -8,6 +8,7 @@ export default class AuthController {
     const payload = await registerValidator.validate(data)
     const user = await User.create(payload)
     return response.created({
+      code: 201,
       message: 'Register success',
       user,
     })
@@ -19,6 +20,7 @@ export default class AuthController {
     const user = await User.verifyCredentials(email, password)
     const token = await User.accessTokens.create(user)
     return response.ok({
+      code: 200,
       message: 'Login success',
       accessToken: token,
     })
@@ -30,8 +32,8 @@ export default class AuthController {
     await User.accessTokens.delete(user, user.id)
 
     return response.ok({
-      success: true,
-      message: 'User logged out',
+      code: 200,
+      message: 'logout success',
     })
   }
 }
