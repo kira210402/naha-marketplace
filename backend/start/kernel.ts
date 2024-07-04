@@ -44,6 +44,7 @@ router.use([
  * the routes or the routes group.
  */
 export const middleware = router.named({
+  lockUser: () => import('#middleware/lock_user_middleware'),
   author: () => import('#middleware/author_middleware'),
   sortOrderBy: () => import('#middleware/sort_order_by_middleware'),
   pagination: () => import('#middleware/pagination_middleware'),
