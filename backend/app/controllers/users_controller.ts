@@ -1,5 +1,6 @@
 import ClientException from '#exceptions/client_exception'
 import User from '#models/user'
+import { createUserValidator, updateUserValidator } from '#validators/user'
 import type { HttpContext } from '@adonisjs/core/http'
 export default class UsersController {
   async index({ request, response, pagination }: HttpContext) {
@@ -17,7 +18,8 @@ export default class UsersController {
 
   async store({ request, response }: HttpContext) {
     const data = request.only(['username', 'password', 'email'])
-    const user = await User.create(data)
+    const payload = await createUserValidator.validate(data)
+    const user = await User.create(payload)
     return response.ok({
       code: 200,
       message: 'success',
@@ -26,17 +28,14 @@ export default class UsersController {
   }
 
   async update({ request, params, response }: HttpContext) {
-    const user = await User.find(params.id)
-    if (!user) {
-      throw new ClientException()
-    }
-    user.username = request.input('username')
-    user.password = request.input('password')
-    await user.save()
+    const data = request.only(['username', 'password', 'email'])
+    const payload = await updateUserValidator.validate(data)
+    const user = await User.findOrFail(params.id)
+    const updatedUser = await user.merge(payload).save()
     return response.ok({
       code: 200,
       message: 'success',
-      user,
+      user: updatedUser,
     })
   }
 
