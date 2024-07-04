@@ -56,4 +56,15 @@ export default class UsersController {
     if (!user) throw new ClientException()
     response.status(200).json({ code: 200, message: 'success', user })
   }
+
+  async lockUser({params, response}: HttpContext) {
+    const user = await User.find(params.id)
+    if (!user) throw new ClientException()
+    user.isLocked = true
+    await user.save()
+    return response.ok({
+      code: 200,
+      message: `lock user ${user.username} success`,
+    })
+  }
 }

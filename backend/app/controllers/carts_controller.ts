@@ -8,7 +8,6 @@ export default class CartsController {
   async index({ request, response, pagination, auth }: HttpContext) {
     const { page, perPage } = pagination
     const cart = await Cart.findByOrFail('userId', auth.user?.$attributes.id)
-    console.log('cart ', cart)
     const sortField = request.input('sortField', 'id')
     const sortOrder = request.input('sortOrder', 'asc')
     const cartItems = await CartItem.query()
