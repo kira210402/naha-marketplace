@@ -13,6 +13,7 @@ import { middleware } from './kernel.js'
 import AuthController from '#controllers/auth_controller'
 import StoresController from '#controllers/stores_controller'
 import ProductsController from '#controllers/products_controller'
+import CartsController from '#controllers/carts_controller'
 router.where('id', router.matchers.number())
 
 router
@@ -53,11 +54,19 @@ router
             router.get('/', [ProductsController, 'index']).use(middleware.pagination())
             router.get('/store/:storeId', [ProductsController, 'indexByStore'])
             router.get('/:id', [ProductsController, 'show'])
-            router.post('/', [ProductsController, 'store'])
+            router.post('/:storeId', [ProductsController, 'store'])
             router.put('/:id', [ProductsController, 'update'])
             router.delete('/:id', [ProductsController, 'destroy'])
           })
           .prefix('/products')
+
+        router
+          .group(() => {
+            router.get('/', [CartsController, 'index']).use(middleware.pagination())
+            router.post('/add-product', [CartsController, 'addProduct'])
+            router.put('/', [CartsController, 'update'])
+          })
+          .prefix('/cart')
       })
       .use(middleware.auth({ guards: ['api'] }))
   })
