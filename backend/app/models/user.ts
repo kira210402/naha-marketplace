@@ -48,12 +48,12 @@ export default class User extends compose(BaseModel, AuthFinder) {
   declare updatedAt: DateTime | null
 
   @hasOne(() => Role, {
-    foreignKey: 'userRoleId',
+    foreignKey: 'userId',
   })
   declare roles: HasOne<typeof Role>
 
   @hasOne(() => Store, {
-    foreignKey: 'userStoreId',
+    foreignKey: 'userId',
   })
   declare user: HasOne<typeof Store>
 

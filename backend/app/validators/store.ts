@@ -5,10 +5,11 @@ export const createStoreValidator = vine.compile(
     name: vine
       .string()
       .trim()
-      .unique(async (db, value) => {
-        const match = await db.from('stores').select('id').where('name', value).first()
-        return !match
-      }),
+      // .unique(async (db, value) => {
+      //   const match = await db.from('stores').select('id').where('name', value).first()
+      //   return !match
+      // })
+      ,
     description: vine.string().trim(),
     phoneNumber: vine
       .string()
