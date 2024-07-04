@@ -36,7 +36,7 @@ router.use([
   () => import('@adonisjs/core/bodyparser_middleware'),
   () => import('@adonisjs/session/session_middleware'),
   () => import('@adonisjs/auth/initialize_auth_middleware'),
-  () => import('#middleware/initialize_bouncer_middleware')
+  () => import('#middleware/initialize_bouncer_middleware'),
 ])
 
 /**
@@ -44,6 +44,7 @@ router.use([
  * the routes or the routes group.
  */
 export const middleware = router.named({
+  author: () => import('#middleware/author_middleware'),
   sortOrderBy: () => import('#middleware/sort_order_by_middleware'),
   pagination: () => import('#middleware/pagination_middleware'),
   guest: () => import('#middleware/guest_middleware'),

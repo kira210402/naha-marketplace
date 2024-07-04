@@ -9,6 +9,7 @@ import Store from './store.js'
 import { JwtAccessTokenProvider, JwtSecret } from '#providers/jwt_access_token_provider'
 import parseDuration from 'parse-duration'
 import env from '#start/env'
+import { EUserRole } from '../enums/EUserRole.js'
 
 const AuthFinder = withAuthFinder(() => hash.use('scrypt'), {
   uids: ['email'],
@@ -29,7 +30,7 @@ export default class User extends compose(BaseModel, AuthFinder) {
   declare password: string
 
   @column()
-  declare role: string
+  declare role: EUserRole
 
   @column()
   declare avatar: string

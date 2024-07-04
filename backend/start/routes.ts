@@ -14,6 +14,7 @@ import AuthController from '#controllers/auth_controller'
 import StoresController from '#controllers/stores_controller'
 import ProductsController from '#controllers/products_controller'
 import CartsController from '#controllers/carts_controller'
+import { EUserRole } from '../app/enums/EUserRole.js'
 router.where('id', router.matchers.number())
 
 router
@@ -28,11 +29,14 @@ router
         // user routers
         router
           .group(() => {
-            router.get('/', [UsersController, 'index']).use(middleware.pagination())
+            router
+              .get('/', [UsersController, 'index'])
+              .use(middleware.pagination())
+              .use(middleware.author(EUserRole.ADMIN))
             router.get('/:id', [UsersController, 'show'])
             router.post('/', [UsersController, 'store'])
-            router.put('/:id', [UsersController, 'update'])
-            router.delete('/:id', [UsersController, 'destroy'])
+            router.put('/', [UsersController, 'update'])
+            router.delete('/:id', [UsersController, 'destroy']).use(middleware.author(EUserRole.ADMIN))
           })
           .prefix('/users')
 

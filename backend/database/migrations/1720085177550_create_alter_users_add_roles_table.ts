@@ -1,12 +1,12 @@
 import { BaseSchema } from '@adonisjs/lucid/schema'
+import { EUserRole } from '../../app/enums/EUserRole.js'
 
 export default class extends BaseSchema {
-  protected tableName = 'stores'
+  protected tableName = 'users'
 
   async up() {
     this.schema.alterTable(this.tableName, (table) => {
-      table.dropColumn('userId')
-      table.integer('user_id').unsigned().references('id').inTable('users').onDelete('CASCADE')
+      table.string('role').defaultTo(EUserRole.BUYER).notNullable()
     })
   }
 
