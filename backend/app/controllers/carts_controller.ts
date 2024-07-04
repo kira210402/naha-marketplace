@@ -43,10 +43,13 @@ export default class CartsController {
 
   async update({ request, response, auth }: HttpContext) {
     const cart = await Cart.findByOrFail('userId', auth.user?.$attributes.id)
-    const data: { id: number; quantity: number; }[] = request.body() as { id: number; quantity: number; }[];
+    const data: { id: number; quantity: number }[] = request.body() as {
+      id: number
+      quantity: number
+    }[]
     for (const item of data) {
       const cartItem = await CartItem.findOrFail(item.id)
-      if(cartItem.cartId == cart.id) {
+      if (cartItem.cartId == cart.id) {
         await cartItem.merge({ quantity: item.quantity }).save()
       }
     }

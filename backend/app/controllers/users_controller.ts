@@ -27,10 +27,10 @@ export default class UsersController {
     })
   }
 
-  async update({ request, params, response }: HttpContext) {
+  async update({ request, response, auth }: HttpContext) {
     const data = request.only(['username', 'password', 'email'])
     const payload = await updateUserValidator.validate(data)
-    const user = await User.findOrFail(params.id)
+    const user = await User.findOrFail(auth.user?.$attributes.id)
     const updatedUser = await user.merge(payload).save()
     return response.ok({
       code: 200,
