@@ -118,12 +118,24 @@ router
           .prefix('/cart')
 
         // order routers
-        router.group(() => {
-          router
-            .get('/', [OrdersController, 'index'])
-            .as('orders.index')
-            .use(middleware.pagination())
-        })
+        router
+          .group(() => {
+            router
+              .get('/store/:id', [OrdersController, 'indexByStore'])
+              .as('orders.indexByStore')
+              .use(middleware.pagination())
+            router
+              .get('/my', [OrdersController, 'indexByUser'])
+              .as('orders.indexByUser')
+              .use(middleware.pagination())
+            router.put('/my/:id', [OrdersController, 'updateMyOrder']).as('orders.updateMyOrder')
+            // router to update status of order of one of my stores
+            router
+              .put('/store/:storeId/order/:id', [OrdersController, 'updateStoreOrder'])
+              .as('orders.updateStoreOrder')
+            router.post('/', [OrdersController, 'store']).as('orders.store')
+          })
+          .prefix('/orders')
       })
       .use(middleware.auth({ guards: ['api'] }))
   })

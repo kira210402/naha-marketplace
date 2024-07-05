@@ -63,7 +63,7 @@ export default class ProductsController {
     const stores = await Store.query().where('userId', auth.user?.$attributes.id)
     const product = await Product.findOrFail(params.id)
     const store = stores.find((store) => store.$attributes.id === product.storeId)
-    if(!store) throw new Error('You are not authorized to perform this action')
+    if (!store) throw new Error('You are not authorized to perform this action')
     const data = request.only(['name', 'description', 'price', 'quantity', 'discount'])
     const payload = await updateProductValidator.validate(data)
     await product.merge(payload).save()
