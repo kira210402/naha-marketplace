@@ -39,6 +39,7 @@ router
               .use(middleware.pagination())
               .use(middleware.author(EUserRole.ADMIN))
             router.get('/:id', [UsersController, 'show']).as('users.show')
+            router.patch('/upload/:id', [UsersController, 'upload'])
             router
               .post('/', [UsersController, 'store'])
               .as('users.store')
