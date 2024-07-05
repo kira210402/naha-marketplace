@@ -47,7 +47,9 @@ export default class CartsController {
       quantity: number
     }[]
     for (const item of data) {
-      const cartItem = await CartItem.findOrFail(item.id)
+
+      const cartItem = await CartItem.find(item.id)
+      if(!cartItem) continue
       if (cartItem.cartId == cart.id) {
         await cartItem.merge({ quantity: item.quantity }).save()
       }

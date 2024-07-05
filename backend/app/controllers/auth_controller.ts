@@ -29,9 +29,8 @@ export default class AuthController {
   }
 
   async logout({ response, auth }: HttpContext) {
-    const getUser = auth.user?.id
-    const user = await User.findOrFail(getUser)
-    await User.accessTokens.delete(user, user.id)
+    // delete accessToken of user that has logined
+    
 
     return response.ok({
       code: 200,
