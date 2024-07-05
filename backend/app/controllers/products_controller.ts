@@ -35,7 +35,8 @@ export default class ProductsController {
     const stores = await Store.query().where('userId', auth.user?.$attributes.id)
     const store = stores.find((store) => store.$attributes.id === parseInt(params.storeId))
     if (!store) throw new StoreException()
-    if(store.userId !== auth.user?.$attributes.id) throw new Error('You are not authorized to perform this action')
+    if (store.userId !== auth.user?.$attributes.id)
+      throw new Error('You are not authorized to perform this action')
     const data = request.only(['name', 'description', 'price', 'quantity', 'discount'])
     const payload = await createProductValidator.validate(data)
     const product = await Product.create({
@@ -58,10 +59,13 @@ export default class ProductsController {
     })
   }
 
-  async update({ params, request, response }: HttpContext) {
+  async update({ params, request, response, auth }: HttpContext) {
+    const stores = await Store.query().where('userId', auth.user?.$attributes.id)
+    const product = await Product.findOrFail(params.id)
+    const store = stores.find((store) => store.$attributes.id === product.storeId)
+    if(!store) throw new Error('You are not authorized to perform this action')
     const data = request.only(['name', 'description', 'price', 'quantity', 'discount'])
     const payload = await updateProductValidator.validate(data)
-    const product = await Product.findOrFail(params.id)
     await product.merge(payload).save()
     return response.ok({
       code: 200,
@@ -73,7 +77,10 @@ export default class ProductsController {
   async destroy({ params, response, auth }: HttpContext) {
     const product = await Product.findOrFail(params.id)
     const store = await Store.findOrFail(product.storeId)
-    if (store.userId !== auth.user?.$attributes.id && auth.user?.$attributes.role !== EUserRole.ADMIN) {
+    if (
+      store.userId !== auth.user?.$attributes.id &&
+      auth.user?.$attributes.role !== EUserRole.ADMIN
+    ) {
       throw new Error('You are not authorized to perform this action')
     }
     await product.delete()
