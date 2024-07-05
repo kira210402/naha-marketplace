@@ -5,6 +5,7 @@ import { EOrderStatus } from '../enums/EOrderStatus.js'
 import Store from '#models/store'
 import StoreException from '#exceptions/store_exception'
 import { createOrderValidator } from '#validators/order'
+import Product from '#models/product'
 
 export default class OrdersController {
   async indexByStore({ response, auth, pagination, params }: HttpContext) {
@@ -12,15 +13,12 @@ export default class OrdersController {
     const stores = await Store.query().where('userId', auth.user?.$attributes.id)
     const store = stores.find((store) => store.id === params.id)
     if (!store) throw new StoreException()
-    const orders = await Order.query()
-      .whereIn('cartItemId', (query) => {
-        query
-          .select('id')
-          .from('cart_items')
-          .whereIn('productId', (query) => {
-            query.select('id').from('products').whereIn('storeId', params.id)
-          })
-      })
+
+      const orders = await Order.query()
+      .select('orders.*')
+      .join('cart_items', 'orders.cart_item_id', 'cart_items.id')
+      .join('products', 'cart_items.product_id', 'products.id')
+      .where('products.store_id', store.id)
       .paginate(page, perPage)
 
     return response.ok({
