@@ -1,9 +1,7 @@
-import cloudinary from '#config/cloudinary'
 import ClientException from '#exceptions/client_exception'
 import User from '#models/user'
 import { createUserValidator, updateUserValidator } from '#validators/user'
 import type { HttpContext } from '@adonisjs/core/http'
-import { pipeline } from 'node:stream/promises'
 import { UploadCloudinary } from '#services/upload_cloudinary_service'
 export default class UsersController {
   async index({ request, response, pagination }: HttpContext) {
@@ -20,7 +18,16 @@ export default class UsersController {
   }
 
   async store({ request, response }: HttpContext) {
-    const data = request.only(['username', 'password', 'email'])
+    const file = request.file('avatar')
+    const { username, email, password } = request.only(['username', 'email', 'password'])
+    let cloudinary_response = await UploadCloudinary.upload(file)
+    const { url } = cloudinary_response as { url: string }
+    const data = {
+      username,
+      email,
+      password,
+      avatar: url,
+    }
     const payload = await createUserValidator.validate(data)
     const user = await User.create(payload)
     return response.ok({
@@ -31,7 +38,22 @@ export default class UsersController {
   }
 
   async update({ request, response, auth }: HttpContext) {
-    const data = request.only(['username', 'password', 'email'])
+    const file = request.file('avatar')
+    const { username, email, password, phoneNumber, address } = request.only([
+      'username',
+      'email',
+      'password',
+      'phoneNumber',
+      'address',
+    ])
+    let cloudinary_response = await UploadCloudinary.upload(file)
+    const { url } = cloudinary_response as { url: string }
+    const data = {
+      username,
+      email,
+      password,
+      avatar: url,
+    }
     const payload = await updateUserValidator.validate(data)
     const user = await User.findOrFail(auth.user?.$attributes.id)
     const updatedUser = await user.merge(payload).save()
