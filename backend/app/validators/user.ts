@@ -8,7 +8,8 @@ export const createUserValidator = vine.compile(
       .unique(async (db, value) => {
         const match = await db.from('users').select('id').where('username', value).first()
         return !match
-      }),
+      })
+      .regex(/^[a-zA-Z0-9.\-_$@*!]{3,30}$/),
     email: vine
       .string()
       .trim()
@@ -31,6 +32,7 @@ export const updateUserValidator = vine.compile(
         const match = await db.from('users').select('id').where('username', value).first()
         return !match
       })
+      .regex(/^[a-zA-Z0-9.\-_$@*!]{3,30}$/)
       .optional(),
     email: vine
       .string()
@@ -43,5 +45,8 @@ export const updateUserValidator = vine.compile(
       })
       .optional(),
     password: vine.string().minLength(6).trim().optional(),
+    avatar: vine.string().optional(),
+    phoneNumber: vine.string().optional(),
+    address: vine.string().optional(),
   })
 )
