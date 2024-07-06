@@ -103,6 +103,7 @@ router
               .delete('/:id', [ProductsController, 'destroy'])
               .as('products.destroy')
               .use(middleware.lockUser())
+            router.patch('/upload', [ProductsController, 'uploadFiles'])
           })
           .prefix('/products')
 

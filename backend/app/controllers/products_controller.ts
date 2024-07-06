@@ -5,6 +5,7 @@ import Store from '#models/store'
 import { createProductValidator, updateProductValidator } from '#validators/product'
 import type { HttpContext } from '@adonisjs/core/http'
 import { EUserRole } from '../enums/EUserRole.js'
+import { UploadCloudinary } from '#services/upload_cloudinary_service'
 
 export default class ProductsController {
   async index({ request, response, pagination }: HttpContext) {
@@ -37,12 +38,34 @@ export default class ProductsController {
     if (!store) throw new StoreException()
     if (store.userId !== auth.user?.$attributes.id)
       throw new Error('You are not authorized to perform this action')
-    const data = request.only(['name', 'description', 'price', 'quantity', 'discount'])
+
+    const files = request.files('images') as any[]
+    let cloudResponse = await UploadCloudinary.uploadFiles(files)
+    const imagesUrl = (cloudResponse.files as { url: string }[]).map((file) => file.url)
+
+    const { name, description, price, quantity, discount } = request.only([
+      'name',
+      'description',
+      'price',
+      'quantity',
+      'discount',
+    ])
+
+    const data = {
+      name,
+      description,
+      price,
+      quantity,
+      discount,
+      images: JSON.stringify(imagesUrl),
+    }
+
     const payload = await createProductValidator.validate(data)
     const product = await Product.create({
       storeId: store.id,
       ...payload,
     })
+
     return response.created({
       code: 201,
       message: 'create product success',
@@ -64,9 +87,31 @@ export default class ProductsController {
     const product = await Product.findOrFail(params.id)
     const store = stores.find((store) => store.$attributes.id === product.storeId)
     if (!store) throw new Error('You are not authorized to perform this action')
-    const data = request.only(['name', 'description', 'price', 'quantity', 'discount'])
+
+    const files = request.files('images') as any[]
+    let cloudResponse = await UploadCloudinary.uploadFiles(files)
+    const imagesUrl = (cloudResponse.files as { url: string }[]).map((file) => file.url)
+
+    const { name, description, price, quantity, discount } = request.only([
+      'name',
+      'description',
+      'price',
+      'quantity',
+      'discount',
+    ])
+    const data = {
+      name,
+      description,
+      price,
+      quantity,
+      discount,
+      images: JSON.stringify(imagesUrl),
+    }
+
     const payload = await updateProductValidator.validate(data)
+
     await product.merge(payload).save()
+    console.log(product)
     return response.ok({
       code: 200,
       message: 'update product success',
@@ -88,5 +133,13 @@ export default class ProductsController {
       code: 200,
       message: 'delete product success',
     })
+  }
+
+  async uploadFiles({ request }: HttpContext) {
+    const files = request.files('images') as any[]
+    let cloudinaryResponse = await UploadCloudinary.uploadFiles(files)
+    const imageUrls = (cloudinaryResponse.files as { url: string }[]).map((file) => file.url)
+    console.log(imageUrls)
+    return imageUrls
   }
 }

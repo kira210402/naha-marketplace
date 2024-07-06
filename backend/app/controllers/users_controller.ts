@@ -53,6 +53,8 @@ export default class UsersController {
       email,
       password,
       avatar: url,
+      phoneNumber,
+      address,
     }
     const payload = await updateUserValidator.validate(data)
     const user = await User.findOrFail(auth.user?.$attributes.id)
