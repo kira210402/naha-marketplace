@@ -1,7 +1,7 @@
 import { NavLink, useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { login } from "../../services/Auth";
+import { login } from "../../services/auth";
 import { setCookie } from "../../helpers/cookie";
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -16,7 +16,6 @@ const LoginPage = () => {
         .required("Vui lòng nhập địa chỉ email"),
       password: Yup.string()
         .min(8, "Mật khẩu phải có ít nhất 8 ký tự")
-        .matches(/[^a-zA-Z0-9]/, "Mật khẩu phải có ít nhất 1 ký tự đặc biệt")
         .required("Vui lòng nhập mật khẩu"),
     }),
     onSubmit: async (values) => {
