@@ -1,5 +1,12 @@
+import ProductCard from '../../components/client/productCard/ProductCard';
+
 const HomePage = () => {
-  return <div>Home Page</div>;
+  return (
+    <div>
+      <ProductCard />
+
+    </div>
+  )
 };
 
 export default HomePage;
