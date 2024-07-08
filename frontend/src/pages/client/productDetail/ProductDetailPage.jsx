@@ -1,7 +1,6 @@
-import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-const env = import.meta.env
+import { getProduct } from '../../../services/products';
 
 const ProductDetailPage = () => {
   const { id } = useParams();
@@ -9,9 +8,8 @@ const ProductDetailPage = () => {
 
   useEffect(() => {
     const fetchProduct = async () => {
-      const response = await axios.get(`${env.VITE_API_BASE_URL}/products/${id}`);
-      console.log('response', response.data.product);
-      setProduct(response.data.product);
+      const response = await getProduct(id);
+      setProduct(response.product);
     };
     fetchProduct();
   }, [id]);
@@ -32,19 +30,24 @@ const ProductDetailPage = () => {
                 <div className="flex mb-4">
                 </div>
                 <p className="leading-relaxed">{product.description}</p>
-
-                <div className="flex">
-                  <span className="title-font font-medium text-2xl text-gray-900">${product.price}</span>
-                  <span className="title-font font-medium text-2xl text-gray-900">-{product.discount}%</span>
-                  <button className="flex ml-auto text-white bg-red-500 border-0 py-2 px-6 focus:outline-none hover:bg-red-600 rounded">Add to cart</button>
+                <div className='flex'>
+                  <span className='title-font text-2xl font-medium text-gray-900'>
+                    ${product.price}
+                  </span>
+                  <span className='title-font text-2xl font-medium text-gray-900'>
+                    -{product.discount}%
+                  </span>
+                  <button className='ml-auto flex rounded border-0 bg-red-500 px-6 py-2 text-white hover:bg-red-600 focus:outline-none'>
+                    Add to cart
+                  </button>
                 </div>
               </div>
             </div>
           </div>
         </section>
-      }
+      )}
     </>
-  )
-}
+  );
+};
 
 export default ProductDetailPage;

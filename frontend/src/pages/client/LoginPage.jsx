@@ -1,7 +1,7 @@
 import { NavLink, useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { login } from "../../services/Auth";
+import { login } from "../../services/auth";
 import { setCookie } from "../../helpers/cookie";
 const LoginPage = () => {
   const navigate = useNavigate();
