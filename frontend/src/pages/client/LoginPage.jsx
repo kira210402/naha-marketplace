@@ -16,12 +16,12 @@ const LoginPage = () => {
         .required("Vui lòng nhập địa chỉ email"),
       password: Yup.string()
         .min(8, "Mật khẩu phải có ít nhất 8 ký tự")
-        .matches(/[^a-zA-Z0-9]/, "Mật khẩu phải có ít nhất 1 ký tự đặc biệt")
         .required("Vui lòng nhập mật khẩu"),
     }),
     onSubmit: async (values) => {
       try {
         const response = await login(values);
+        console.log('response', response)
         if (response) {
           setCookie("token", response.accessToken.token, 1);
           navigate("/");
