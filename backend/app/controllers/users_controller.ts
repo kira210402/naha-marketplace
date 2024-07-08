@@ -47,7 +47,7 @@ export default class UsersController {
     ])
     const user = await User.findOrFail(auth.user?.$attributes.id)
     let avatar: string = user.avatar
-    if(request.file('avatar')) {
+    if (request.file('avatar')) {
       const file = request.file('avatar')
       let cloudinary_response = await UploadCloudinary.upload(file)
       const { url } = cloudinary_response as { url: string }
@@ -86,18 +86,6 @@ export default class UsersController {
     const user = await User.find(params.id)
     if (!user) throw new ClientException()
     response.status(200).json({ code: 200, message: 'success', user })
-  }
-  async upload({ request, response }: HttpContext) {
-    try {
-      if (request.file('avatar')) {
-        let cloudinary_response = await UploadCloudinary.upload(request.file('avatar'))
-        const { url } = cloudinary_response as { url: string }
-        return response.json(cloudinary_response)
-      }
-      return response.json({ status: false, data: 'Please upload an Image.' })
-    } catch (error) {
-      return response.status(500).json({ status: false, error: error.message })
-    }
   }
   async lockUser({ params, response }: HttpContext) {
     const user = await User.find(params.id)

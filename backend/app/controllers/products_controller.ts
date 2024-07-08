@@ -134,12 +134,4 @@ export default class ProductsController {
       message: 'delete product success',
     })
   }
-
-  async uploadFiles({ request }: HttpContext) {
-    const files = request.files('images') as any[]
-    let cloudinaryResponse = await UploadCloudinary.uploadFiles(files)
-    const imageUrls = (cloudinaryResponse.files as { url: string }[]).map((file) => file.url)
-    console.log(imageUrls)
-    return imageUrls
-  }
 }
