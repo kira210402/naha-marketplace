@@ -55,7 +55,7 @@ const ProductDetailPage = () => {
             </div>
           </div>
         </section>
-      )}
+      }
     </>
   );
 };

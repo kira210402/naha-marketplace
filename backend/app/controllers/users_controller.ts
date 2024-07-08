@@ -38,7 +38,6 @@ export default class UsersController {
   }
 
   async update({ request, response, auth }: HttpContext) {
-    const file = request.file('avatar')
     const { username, email, password, phoneNumber, address } = request.only([
       'username',
       'email',
@@ -46,19 +45,23 @@ export default class UsersController {
       'phoneNumber',
       'address',
     ])
-    let cloudinary_response = await UploadCloudinary.upload(file)
-    console.log(cloudinary_response)
-    const { url } = cloudinary_response as { url: string }
+    const user = await User.findOrFail(auth.user?.$attributes.id)
+    let avatar: string = user.avatar
+    if(request.file('avatar')) {
+      const file = request.file('avatar')
+      let cloudinary_response = await UploadCloudinary.upload(file)
+      const { url } = cloudinary_response as { url: string }
+      avatar = url
+    }
     const data = {
       username,
       email,
       password,
-      avatar: url,
+      avatar,
       phoneNumber,
       address,
     }
     const payload = await updateUserValidator.validate(data)
-    const user = await User.findOrFail(auth.user?.$attributes.id)
     const updatedUser = await user.merge(payload).save()
     return response.ok({
       code: 200,
