@@ -1,6 +1,7 @@
 import LayoutDefault from "../layouts/client/LayoutDefault";
 import HomePage from "../pages/client/HomePage";
 import LoginPage from "../pages/client/LoginPage";
+import ProductDetailPage from '../pages/client/productDetail/ProductDetailPage';
 import RegisterPage from "../pages/client/RegisterPage";
 
 export const routes = [
@@ -19,6 +20,10 @@ export const routes = [
       {
         path: "/register",
         element: <RegisterPage />,
+      },
+      {
+        path: "/products/:id",
+        element: <ProductDetailPage />,
       },
       {
         path: "*",
