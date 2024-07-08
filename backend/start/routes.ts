@@ -39,7 +39,6 @@ router
               .use(middleware.pagination())
               .use(middleware.author(EUserRole.ADMIN))
             router.get('/:id', [UsersController, 'show']).as('users.show')
-            router.patch('/upload/:id', [UsersController, 'upload'])
             router
               .post('/', [UsersController, 'store'])
               .as('users.store')
@@ -81,31 +80,6 @@ router
           .prefix('/stores')
 
         // product routers
-        router
-          .group(() => {
-            router
-              .get('/', [ProductsController, 'index'])
-              .as('products.index')
-              .use(middleware.pagination())
-            router
-              .get('/store/:storeId', [ProductsController, 'indexByStore'])
-              .as('products.indexByStore')
-            router.get('/:id', [ProductsController, 'show']).as('products.show')
-            router
-              .post('/:storeId', [ProductsController, 'store'])
-              .as('products.store')
-              .use(middleware.lockUser())
-            router
-              .put('/:id', [ProductsController, 'update'])
-              .as('products.update')
-              .use(middleware.lockUser())
-            router
-              .delete('/:id', [ProductsController, 'destroy'])
-              .as('products.destroy')
-              .use(middleware.lockUser())
-            router.patch('/upload', [ProductsController, 'uploadFiles'])
-          })
-          .prefix('/products')
 
         // cart routers
         router
@@ -140,5 +114,32 @@ router
           .prefix('/orders')
       })
       .use(middleware.auth({ guards: ['api'] }))
+    router
+      .group(() => {
+        router
+          .get('/', [ProductsController, 'index'])
+          .as('products.index')
+          .use(middleware.pagination())
+        router
+          .get('/store/:storeId', [ProductsController, 'indexByStore'])
+          .as('products.indexByStore')
+        router.get('/:id', [ProductsController, 'show']).as('products.show')
+        router
+          .post('/:storeId', [ProductsController, 'store'])
+          .as('products.store')
+          .use(middleware.lockUser())
+          .use(middleware.auth({ guards: ['api'] }))
+        router
+          .put('/:id', [ProductsController, 'update'])
+          .as('products.update')
+          .use(middleware.lockUser())
+          .use(middleware.auth({ guards: ['api'] }))
+        router
+          .delete('/:id', [ProductsController, 'destroy'])
+          .as('products.destroy')
+          .use(middleware.lockUser())
+          .use(middleware.auth({ guards: ['api'] }))
+      })
+      .prefix('/products')
   })
   .prefix('/api/v1')
