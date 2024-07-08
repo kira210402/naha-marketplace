@@ -139,6 +139,6 @@ router
           })
           .prefix('/orders')
       })
-      .use(middleware.auth({ guards: ['api'] }))
+      // .use(middleware.auth({ guards: ['api'] }))
   })
   .prefix('/api/v1')
