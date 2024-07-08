@@ -47,6 +47,7 @@ export default class UsersController {
       'address',
     ])
     let cloudinary_response = await UploadCloudinary.upload(file)
+    console.log(cloudinary_response)
     const { url } = cloudinary_response as { url: string }
     const data = {
       username,
