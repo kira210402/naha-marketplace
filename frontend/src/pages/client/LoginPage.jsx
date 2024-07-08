@@ -21,6 +21,7 @@ const LoginPage = () => {
     onSubmit: async (values) => {
       try {
         const response = await login(values);
+        console.log('response', response)
         if (response) {
           setCookie("token", response.accessToken.token, 1);
           navigate("/");
