@@ -6,3 +6,11 @@
 - add product to cart
 - add cart item to order
 - order
+
+####
+- login, register
+- homepage
+- store
+- product
+- cart
+- order
