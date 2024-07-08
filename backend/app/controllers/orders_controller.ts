@@ -14,7 +14,7 @@ export default class OrdersController {
     const store = stores.find((store) => store.id === params.id)
     if (!store) throw new StoreException()
 
-      const orders = await Order.query()
+    const orders = await Order.query()
       .select('orders.*')
       .join('cart_items', 'orders.cart_item_id', 'cart_items.id')
       .join('products', 'cart_items.product_id', 'products.id')
