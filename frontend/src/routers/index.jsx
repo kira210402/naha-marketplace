@@ -1,33 +1,35 @@
-import LayoutDefault from "../layouts/client/LayoutDefault";
-import HomePage from "../pages/client/HomePage";
-import LoginPage from "../pages/client/LoginPage";
+import LayoutDefault from '../layouts/client/LayoutDefault';
+import HomePage from '../pages/client/HomePage';
+import LoginPage from '../pages/client/LoginPage';
 import ProductDetailPage from '../pages/client/productDetail/ProductDetailPage';
-import RegisterPage from "../pages/client/RegisterPage";
+import RegisterPage from '../pages/client/RegisterPage';
+import UserProfilePage from '../pages/client/UserProfilePage';
 
 export const routes = [
   {
-    path: "/",
+    path: '/',
     element: <LayoutDefault />,
     children: [
       {
-        path: "/",
+        path: '/',
         element: <HomePage />,
       },
       {
-        path: "/login",
+        path: '/login',
         element: <LoginPage />,
       },
       {
-        path: "/register",
+        path: '/register',
         element: <RegisterPage />,
       },
       {
-        path: "/products/:id",
+        path: '/products/:id',
         element: <ProductDetailPage />,
       },
+      { path: '/user', element: <UserProfilePage /> },
       {
-        path: "*",
-        redirectTo: "/", // Redirect to home page if the route doesn't exist
+        path: '*',
+        redirectTo: '/', // Redirect to home page if the route doesn't exist
       },
     ],
   },
