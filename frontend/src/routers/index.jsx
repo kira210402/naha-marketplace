@@ -3,6 +3,7 @@ import HomePage from "../pages/client/HomePage";
 import LoginPage from "../pages/client/LoginPage";
 import ProductDetailPage from '../pages/client/productDetail/ProductDetailPage';
 import RegisterPage from "../pages/client/RegisterPage";
+import StorePage from '../pages/client/store/StorePage';
 
 export const routes = [
   {
@@ -24,6 +25,10 @@ export const routes = [
       {
         path: "/products/:id",
         element: <ProductDetailPage />,
+      },
+      {
+        path: "/stores/:id",
+        element: <StorePage />,
       },
       {
         path: "*",
