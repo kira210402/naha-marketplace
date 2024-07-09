@@ -1,4 +1,5 @@
 import LayoutDefault from "../layouts/client/LayoutDefault";
+import CartPage from '../pages/client/cart/CartPage';
 import HomePage from "../pages/client/HomePage";
 import LoginPage from "../pages/client/LoginPage";
 import ProductDetailPage from '../pages/client/productDetail/ProductDetailPage';
@@ -29,6 +30,10 @@ export const routes = [
       {
         path: "/stores/:id",
         element: <StorePage />,
+      },
+      {
+        path: "/cart/:id",
+        element: <CartPage />,
       },
       {
         path: "*",
