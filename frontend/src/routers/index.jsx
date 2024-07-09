@@ -1,3 +1,4 @@
+import UserProfilePage from '../pages/client/UserProfilePage';
 import LayoutDefault from "../layouts/client/LayoutDefault";
 import CartPage from '../pages/client/cart/CartPage';
 import HomePage from "../pages/client/HomePage";
@@ -5,28 +6,28 @@ import LoginPage from "../pages/client/LoginPage";
 import ProductDetailPage from '../pages/client/productDetail/ProductDetailPage';
 import RegisterPage from "../pages/client/RegisterPage";
 import StorePage from '../pages/client/store/StorePage';
-
 export const routes = [
   {
-    path: "/",
+    path: '/',
     element: <LayoutDefault />,
     children: [
       {
-        path: "/",
+        path: '/',
         element: <HomePage />,
       },
       {
-        path: "/login",
+        path: '/login',
         element: <LoginPage />,
       },
       {
-        path: "/register",
+        path: '/register',
         element: <RegisterPage />,
       },
       {
-        path: "/products/:id",
+        path: '/products/:id',
         element: <ProductDetailPage />,
       },
+      { path: '/user', element: <UserProfilePage /> },
       {
         path: "/stores/:id",
         element: <StorePage />,
