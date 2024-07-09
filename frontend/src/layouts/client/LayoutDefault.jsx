@@ -1,6 +1,6 @@
-import { NavLink, Outlet } from 'react-router-dom';
+import { Link, NavLink, Outlet } from 'react-router-dom';
 import Search from '../../components/client/search/Search';
-import NavBar from '../../components/client/navBar/NavBar';
+// import NavBar from '../../components/client/navBar/NavBar';
 import Footer from '../../components/client/footer/Footer';
 // import { getCookie } from '../../helpers/cookie';
 // import { jwtDecode } from 'jwt-decode';
@@ -19,10 +19,12 @@ const LayoutDefault = () => {
       <div className='min-h-screen bg-gray-100'>
         <header className='bg-white shadow'>
           <div className='container mx-auto flex items-center justify-between px-6 py-3'>
-            <div className='text-2xl font-bold'>MyApp</div>
-            <div className='flex flex-col'>
+            <div className='text-2xl font-bold'>
+              <Link to="/">MyApp</Link>
+            </div>
+            <div>
               <Search />
-              <NavBar />
+              {/* <NavBar /> */}
             </div>
             <nav>
               <ul className='flex space-x-4'>
