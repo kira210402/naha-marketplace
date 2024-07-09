@@ -5,19 +5,26 @@ import { addProductToCartValidator } from '#validators/cart'
 import Product from '#models/product'
 
 export default class CartsController {
-  async index({ request, response, pagination, auth }: HttpContext) {
-    const { page, perPage } = pagination
-    const cart = await Cart.findByOrFail('userId', auth.user?.$attributes.id)
-    const sortField = request.input('sortField', 'id')
-    const sortOrder = request.input('sortOrder', 'asc')
+  async index({ request, response, params }: HttpContext) {
+    // const { page, perPage } = pagination
+    // const cart = await Cart.findByOrFail('userId', auth.user?.$attributes.id)
+    const cart = await Cart.findOrFail(params.id)
+    // const sortField = request.input('sortField', 'id')
+    // const sortOrder = request.input('sortOrder', 'asc')
     const cartItems = await CartItem.query()
       .where('cartId', cart.id)
-      .orderBy(sortField, sortOrder)
-      .paginate(page, perPage)
+      // .orderBy(sortField, sortOrder)
+      // .paginate(page, perPage)
+    const products = []
+    for(let cartItem of cartItems) {
+      const product = await Product.find(cartItem.productId)
+      products.push(product?.$attributes)
+    }
+    console.log('products', products)
     return response.ok({
       code: 200,
       message: 'get cart items success',
-      cartItems,
+      products,
     })
   }
 
