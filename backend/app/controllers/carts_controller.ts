@@ -11,12 +11,11 @@ export default class CartsController {
     const cart = await Cart.findOrFail(params.id)
     // const sortField = request.input('sortField', 'id')
     // const sortOrder = request.input('sortOrder', 'asc')
-    const cartItems = await CartItem.query()
-      .where('cartId', cart.id)
-      // .orderBy(sortField, sortOrder)
-      // .paginate(page, perPage)
+    const cartItems = await CartItem.query().where('cartId', cart.id)
+    // .orderBy(sortField, sortOrder)
+    // .paginate(page, perPage)
     const products = []
-    for(let cartItem of cartItems) {
+    for (let cartItem of cartItems) {
       const product = await Product.find(cartItem.productId)
       products.push(product?.$attributes)
     }

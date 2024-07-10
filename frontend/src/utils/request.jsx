@@ -6,6 +6,15 @@ export const get = async (path) => {
     return response.data;
   } catch (error) {
     console.error('Error during axios get:', error);
+    if (error.response) {
+      console.error('Error response data:', error.response.data);
+      console.error('Error response status:', error.response.status);
+      console.error('Error response headers:', error.response.headers);
+    } else if (error.request) {
+      console.error('Error request:', error.request);
+    } else {
+      console.error('Error message:', error.message);
+    }
     throw error;
   }
 };
@@ -21,6 +30,15 @@ export const post = async (path, options) => {
     return response.data;
   } catch (error) {
     console.error('Error during axios post:', error);
+    if (error.response) {
+      console.error('Error response data:', error.response.data);
+      console.error('Error response status:', error.response.status);
+      console.error('Error response headers:', error.response.headers);
+    } else if (error.request) {
+      console.error('Error request:', error.request);
+    } else {
+      console.error('Error message:', error.message);
+    }
     throw error;
   }
 };
@@ -31,20 +49,15 @@ export const del = async (path) => {
     return response.data;
   } catch (error) {
     console.error('Error during axios delete:', error);
-    throw error;
-  }
-};
-
-export const getUserByToken = async (path, token) => {
-  try {
-    const response = await axiosInstance.get(path, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    return response.data;
-  } catch (error) {
-    console.error('Error during axios get user by token:', error);
+    if (error.response) {
+      console.error('Error response data:', error.response.data);
+      console.error('Error response status:', error.response.status);
+      console.error('Error response headers:', error.response.headers);
+    } else if (error.request) {
+      console.error('Error request:', error.request);
+    } else {
+      console.error('Error message:', error.message);
+    }
     throw error;
   }
 };
