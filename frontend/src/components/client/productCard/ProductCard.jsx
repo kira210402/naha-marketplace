@@ -1,6 +1,12 @@
-import {Link} from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import { addProductToCart } from '../../../services/cart';
 
 const ProductCard = ({ product }) => {
+
+  const handleAddToCart = async () => {
+    const response = await addProductToCart(product.id);
+    console.log('response', response);
+  }
 
   return (
     <>
@@ -25,7 +31,7 @@ const ProductCard = ({ product }) => {
           </Link>
         )}
         <div className='px-5 pb-5'>
-        <Link to={`/products/${product.id}`}>
+          <Link to={`/products/${product.id}`}>
             <h5 className='text-xl font-semibold tracking-tight text-gray-900 dark:text-white'>
               {product.name}
             </h5>
@@ -38,12 +44,12 @@ const ProductCard = ({ product }) => {
             <span className='text-3xl font-bold text-gray-900 dark:text-white'>
               -{product.discount}%
             </span>
-            <a
-              href='#'
+            <button
               className='rounded-lg bg-blue-700 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'
+              onClick={handleAddToCart}
             >
               Add to cart
-            </a>
+            </button>
           </div>
         </div>
       </div>

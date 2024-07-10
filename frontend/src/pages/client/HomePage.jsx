@@ -8,7 +8,6 @@ const HomePage = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       const response = await getListProduct();
-      console.log(response)
       setProducts(response.products.data);
     };
     fetchProducts();
