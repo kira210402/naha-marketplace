@@ -1,21 +1,42 @@
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
 import { getCartItems } from '../../../services/cart';
+import { useDispatch } from 'react-redux';
+import { getCookie } from '../../../helpers/cookie';
+import { jwtDecode } from 'jwt-decode';
+import { getUser } from '../../../services/user';
+import { setUser } from '../../../redux/features/user';
+import { Link } from 'react-router-dom';
 
 const CartPage = () => {
-  const { id } = useParams();
   const [cartItems, setCartItems] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    const fetchCartItems = async () => {
-      const response = await getCartItems(id);
-      console.log('response', response);
-      setCartItems(response.products);
-    }
-    fetchCartItems();
-  }, [id])
+    const fetchData = async () => {
+      try {
+        const token = getCookie('token');
+        if (token) {
+          const decodedUser = jwtDecode(token);
+          const userInfo = await getUser(decodedUser.id);
+          dispatch(setUser(userInfo));
 
-  // const [shippingFee, setShippingFee] = useState(50);
+          const cartResponse = await getCartItems(userInfo.id);
+          setCartItems(cartResponse.products);
+        }
+      } catch (error) {
+        console.error('Failed to fetch data:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [dispatch])
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   const handleRemoveItem = (id) => {
     setCartItems(cartItems.filter(item => item.id !== id));
@@ -84,7 +105,9 @@ const CartPage = () => {
                 <span>${totalPrice}</span>
               </div>
               <button className="w-full bg-blue-500 text-white py-2 rounded">Proceed to Checkout</button>
-              <button className="w-full bg-gray-500 text-white py-2 rounded mt-2">Add More Products</button>
+              <button className="w-full bg-gray-500 text-white py-2 rounded mt-2">
+                <Link to={'/'}>Add More Products</Link>
+              </button>
             </div>
           </div>
         </div>
