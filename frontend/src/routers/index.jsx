@@ -33,7 +33,7 @@ export const routes = [
         element: <StorePage />,
       },
       {
-        path: "/cart/:id",
+        path: "/cart",
         element: <CartPage />,
       },
       {

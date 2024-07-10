@@ -10,7 +10,8 @@ const navLinks = [
   { to: '/', label: 'Home' },
   { to: '/register', label: 'Register' },
   { to: '/login', label: 'Login' },
-  { to: '/users', label: 'User' },
+  { to: '/user', label: 'User' },
+  { to: '/cart', label: 'Cart' },
 ];
 
 const LayoutDefault = () => {
@@ -24,7 +25,6 @@ const LayoutDefault = () => {
             </div>
             <div>
               <Search />
-              {/* <NavBar /> */}
             </div>
             <nav>
               <ul className='flex space-x-4'>
