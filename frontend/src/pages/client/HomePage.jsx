@@ -1,10 +1,21 @@
-import ProductCard from '../../components/client/productCard/ProductCard';
+import ProductList from '../../components/client/storePage/productList/ProductList';
+import {useEffect, useState} from 'react';
+import { getListProduct } from '../../services/products';
 
 const HomePage = () => {
+  const [products, setProducts] = useState([]);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      const response = await getListProduct();
+      setProducts(response.products.data);
+    };
+    fetchProducts();
+  })
+  
   return (
     <div>
-      <ProductCard />
-
+      <ProductList products={products} />
     </div>
   )
 };

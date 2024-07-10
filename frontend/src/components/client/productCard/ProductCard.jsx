@@ -1,71 +1,58 @@
-import { useEffect, useState } from 'react';
-import { getListProduct } from '../../../services/products';
+import { Link } from 'react-router-dom';
+import { addProductToCart } from '../../../services/cart';
 
-const ProductCard = () => {
-  const [products, setProducts] = useState([]);
+const ProductCard = ({ product }) => {
 
-  useEffect(() => {
-    const fetchProducts = async () => {
-      const response = await getListProduct();
-      console.log(response)
-      setProducts(response.products.data);
-    };
-    fetchProducts();
-  }, []);
+  const handleAddToCart = async () => {
+    const response = await addProductToCart(product.id);
+    console.log('response', response);
+  }
 
   return (
     <>
-      {products && (
-        <ul className='m-5 flex'>
-          {products.map((item) => (
-            <>
-              <div className='m-3 w-full max-w-sm rounded-lg border border-gray-200 bg-white shadow dark:border-gray-700 dark:bg-gray-800'>
-                {item.images ? (
-                  <a href='#'>
-                    <img
-                      className='rounded-t-lg p-8'
-                      src={item.images[0]}
-                      alt='product image'
-                    />
-                  </a>
-                ) : (
-                  <a href='#'>
-                    <img
-                      className='rounded-t-lg p-8'
-                      src={
-                        'https://curie.pnnl.gov/sites/default/files/default_images/default-image_0.jpeg'
-                      }
-                      alt='product image'
-                    />
-                  </a>
-                )}
-                <div className='px-5 pb-5'>
-                  <a href='#'>
-                    <h5 className='text-xl font-semibold tracking-tight text-gray-900 dark:text-white'>
-                      {item.name}
-                    </h5>
-                  </a>
+      <div className='m-3 w-full max-w-sm rounded-lg border border-gray-200 bg-white shadow dark:border-gray-700 dark:bg-gray-800'>
+        {product.images ? (
+          <Link to={`/products/${product.id}`}>
+            <img
+              className='rounded-t-lg p-8'
+              src={product.images[0]}
+              alt='product image'
+            />
+          </Link>
+        ) : (
+          <Link to={`/products/${product.id}`}>
+            <img
+              className='rounded-t-lg p-8'
+              src={
+                'https://curie.pnnl.gov/sites/default/files/default_images/default-image_0.jpeg'
+              }
+              alt='product image'
+            />
+          </Link>
+        )}
+        <div className='px-5 pb-5'>
+          <Link to={`/products/${product.id}`}>
+            <h5 className='text-xl font-semibold tracking-tight text-gray-900 dark:text-white'>
+              {product.name}
+            </h5>
+          </Link>
 
-                  <div className='flex items-center justify-between'>
-                    <span className='text-3xl font-bold text-gray-900 dark:text-white'>
-                      ${item.price}
-                    </span>
-                    <span className='text-3xl font-bold text-gray-900 dark:text-white'>
-                      -{item.discount}%
-                    </span>
-                    <a
-                      href='#'
-                      className='rounded-lg bg-blue-700 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'
-                    >
-                      Add to cart
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </>
-          ))}
-        </ul>
-      )}
+          <div className='flex items-center justify-between'>
+            <span className='text-3xl font-bold text-gray-900 dark:text-white'>
+              ${product.price}
+            </span>
+            <span className='text-3xl font-bold text-gray-900 dark:text-white'>
+              -{product.discount}%
+            </span>
+            <button
+              className='rounded-lg bg-blue-700 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'
+              onClick={handleAddToCart}
+            >
+              Add to cart
+            </button>
+          </div>
+        </div>
+      </div>
     </>
   );
 };
