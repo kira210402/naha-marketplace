@@ -23,10 +23,6 @@ router
     // auth routers
     router.post('/login', [AuthController, 'login']).as('login')
     router.post('/register', [AuthController, 'register']).as('register')
-    router
-      .delete('/logout', [AuthController, 'logout'])
-      .as('logout')
-      .use(middleware.auth({ guards: ['api'] }))
 
     router
       .group(() => {

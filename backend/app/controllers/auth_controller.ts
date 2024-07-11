@@ -27,13 +27,4 @@ export default class AuthController {
       accessToken: token,
     })
   }
-
-  async logout({ response, auth }: HttpContext) {
-    // delete accessToken of user that has logined
-
-    return response.ok({
-      code: 200,
-      message: 'logout success',
-    })
-  }
 }
