@@ -43,6 +43,30 @@ export const post = async (path, options) => {
   }
 };
 
+export const put = async (path, options) => {
+  try {
+    const response = await axiosInstance.put(path, options, {
+      headers: {
+        Accept: 'application/json',
+        'Content-type': 'application/json',
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error during axios put:', error);
+    if (error.response) {
+      console.error('Error response data:', error.response.data);
+      console.error('Error response status:', error.response.status);
+      console.error('Error response headers:', error.response.headers);
+    } else if (error.request) {
+      console.error('Error request:', error.request);
+    } else {
+      console.error('Error message:', error.message);
+    }
+    throw error;
+  }
+}
+
 export const del = async (path) => {
   try {
     const response = await axiosInstance.delete(path);
