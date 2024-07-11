@@ -25,5 +25,5 @@ export default class CartItem extends BaseModel {
   @hasOne(() => Product, {
     foreignKey: 'cartItemProductId',
   })
-  declare user: HasOne<typeof Product>
+  declare product: HasOne<typeof Product>
 }
