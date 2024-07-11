@@ -18,14 +18,6 @@ export const routes = [
         element: <HomePage />,
       },
       {
-        path: '/login',
-        element: <LoginPage />,
-      },
-      {
-        path: '/register',
-        element: <RegisterPage />,
-      },
-      {
         path: '/products/:id',
         element: <ProductDetailPage />,
       },
@@ -55,5 +47,13 @@ export const routes = [
         redirectTo: '/',
       },
     ],
+  },
+  {
+    path: '/login',
+    element: <LoginPage />,
+  },
+  {
+    path: '/register',
+    element: <RegisterPage />,
   },
 ];
