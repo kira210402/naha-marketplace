@@ -33,7 +33,7 @@ export const routes = [
         element: <PrivateRoute />,
         children: [
           {
-            path: '/about',
+            path: '/users/:id',
             element: <UserProfilePage />,
           },
         ],
@@ -52,7 +52,7 @@ export const routes = [
       },
       {
         path: '*',
-        redirectTo: '/', // Redirect to home page if the route doesn't exist
+        redirectTo: '/',
       },
     ],
   },

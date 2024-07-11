@@ -2,11 +2,10 @@ import { useEffect, useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import Search from '../../components/client/search/Search';
 import { getCookie } from '../../helpers/cookie';
-import { useDispatch, useSelector } from 'react-redux';
 import { jwtDecode } from 'jwt-decode';
 import { getUser } from '../../services/user';
-import { setUser } from '../../redux/features/user';
 import { Flex, Spin } from 'antd';
+import useUserStore from '../../zustandStore/UseUserStore';
 const iconCart = (
   <svg
     xmlns='http://www.w3.org/2000/svg'
@@ -34,8 +33,8 @@ const navLinks = [
 
 const Header = () => {
   const token = getCookie('token');
-  const dispatch = useDispatch();
-  const user = useSelector((state) => state.user.user);
+  const setUser = useUserStore((state) => state.setUser);
+  const user = useUserStore((state) => state.user);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -44,7 +43,7 @@ const Header = () => {
         if (token) {
           const decodedUser = jwtDecode(token);
           const userInfo = await getUser(decodedUser.id);
-          dispatch(setUser(userInfo.user));
+          setUser(userInfo.user);
         }
       } catch (error) {
         console.error('Failed to fetch user:', error);
@@ -53,8 +52,7 @@ const Header = () => {
       }
     };
     fetchUser();
-  }, [dispatch, token]);
-
+  }, [setUser, token]);
 
   if (loading) {
     return (
@@ -69,6 +67,8 @@ const Header = () => {
       </Flex>
     );
   }
+
+  console.log(user);
 
   return (
     <header className='bg-white shadow'>
@@ -104,8 +104,8 @@ const Header = () => {
             {token ? (
               <>
                 <li>
-                  <NavLink to='/about' className='username'>
-                    {user.username ? user.username : "username"}
+                  <NavLink to={`/users/${user.id}`} className='username'>
+                    {user.username ? user.username : 'username'}
                   </NavLink>
                 </li>
                 <li>
