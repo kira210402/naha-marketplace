@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { getCartItems } from '../../../services/cart';
+import { getCartItems, updateCart } from '../../../services/cart';
 import { useDispatch } from 'react-redux';
 import { getCookie } from '../../../helpers/cookie';
 import { jwtDecode } from 'jwt-decode';
@@ -41,15 +41,24 @@ const CartPage = () => {
   }
 
   const handleRemoveItem = (id) => {
-
     setCartItems(cartItems.filter(item => item.id !== id));
   };
 
   const handleQuantityChange = (id, delta) => {
     setCartItems(cartItems.map(item =>
-      item.id === id ? { ...item, quantity: item.quantity + delta } : item
+      item.product.id === id ? { ...item, quantity: item.quantity + delta } : item
     ));
   };
+
+  const cartItemBody = cartItems.map(item => ({
+    id: item.id,
+    quantity: item.quantity
+  }));
+
+  const handleSave = async () => {
+    const response = await updateCart(cartItemBody);
+    setCartItems(response.products);
+  }
 
   const totalPrice = cartItems.reduce((total, item) => total + item.product.price * item.quantity, 0);
 
@@ -59,7 +68,16 @@ const CartPage = () => {
         <div className='container mx-auto p-4'>
           <div className='grid grid-cols-1 gap-4 md:grid-cols-2'>
             <div className='rounded bg-white p-4 shadow'>
-              <h2 className='mb-4 text-xl font-bold'>Shopping Cart</h2>
+              <div className="flex justify-between">
+                <h2 className='mb-4 text-xl font-bold'>Shopping Cart</h2>
+                <button
+                  type="button"
+                  className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+                  onClick={handleSave}
+                >
+                  Save
+                </button>
+              </div>
               {cartItems.map((item) => (
                 <div
                   key={item.product.id}

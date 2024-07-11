@@ -29,6 +29,7 @@ const navLinks = [
   { to: '/cart', label: iconCart },
   { to: '/about', label: 'About' },
   { to: '/contact', label: 'Contact' },
+  { to: '/stores', label: 'Stores' },
 ];
 
 const Header = () => {
@@ -43,7 +44,7 @@ const Header = () => {
         if (token) {
           const decodedUser = jwtDecode(token);
           const userInfo = await getUser(decodedUser.id);
-          dispatch(setUser(userInfo));
+          dispatch(setUser(userInfo.user));
         }
       } catch (error) {
         console.error('Failed to fetch user:', error);
@@ -53,6 +54,7 @@ const Header = () => {
     };
     fetchUser();
   }, [dispatch, token]);
+
 
   if (loading) {
     return (
@@ -102,8 +104,8 @@ const Header = () => {
             {token ? (
               <>
                 <li>
-                  <NavLink to='/info-user' className='username'>
-                    {user?.username ? user.username : 'username'}
+                  <NavLink to='/about' className='username'>
+                    {user.username ? user.username : "username"}
                   </NavLink>
                 </li>
                 <li>
