@@ -69,63 +69,61 @@ const Header = () => {
   }
 
   return (
-    <header className='bg-white shadow'>
-      <div className='container mx-auto flex items-center justify-between px-6 py-3'>
-        <div className='w-1/6 text-2xl font-bold'>
-          <Link to='/'>MyApp</Link>
-        </div>
-        <div className='w-2/6'>
-          <Search />
-        </div>
-        <nav className='flex w-3/6 space-x-4'>
-          <ul className='flex w-2/3 space-x-4'>
-            {navLinks.map((link) => (
-              <li key={link.to}>
-                <NavLink
-                  to={link.to}
-                  className={({ isActive }) =>
-                    isActive ? 'text-blue-400' : 'hover:text-gray-400'
-                  }
-                >
-                  {typeof link.label === 'string' ? (
-                    link.label
-                  ) : (
-                    <span className='inline-flex items-center gap-1'>
-                      {link.label}
-                    </span>
-                  )}
+    <div className='container mx-auto flex items-center justify-between px-6 py-3'>
+      <div className='w-1/6 text-2xl font-bold'>
+        <Link to='/'>MyApp</Link>
+      </div>
+      <div className='w-2/6'>
+        <Search />
+      </div>
+      <nav className='flex w-3/6 space-x-4'>
+        <ul className='flex w-2/3 space-x-4'>
+          {navLinks.map((link) => (
+            <li key={link.to}>
+              <NavLink
+                to={link.to}
+                className={({ isActive }) =>
+                  isActive ? 'text-blue-400' : 'hover:text-gray-400'
+                }
+              >
+                {typeof link.label === 'string' ? (
+                  link.label
+                ) : (
+                  <span className='inline-flex items-center gap-1'>
+                    {link.label}
+                  </span>
+                )}
+              </NavLink>
+            </li>
+          ))}
+        </ul>
+        <ul className='layout__default--account flex space-x-4'>
+          {token ? (
+            <>
+              <li>
+                <NavLink to='/info-user' className='username'>
+                  {user?.username ? user.username : 'username'}
                 </NavLink>
               </li>
-            ))}
-          </ul>
-          <ul className='layout__default--account flex space-x-4'>
-            {token ? (
-              <>
-                <li>
-                  <NavLink to='/info-user' className='username'>
-                    {user?.username ? user.username : 'username'}
-                  </NavLink>
-                </li>
-                <li>
-                  <NavLink to='/logout'>Đăng xuất</NavLink>
-                </li>
-              </>
-            ) : (
-              <>
-                <li>
-                  <NavLink to='/login' className='login'>
-                    Đăng nhập
-                  </NavLink>
-                </li>
-                <li>
-                  <NavLink to='/register'>Đăng ký</NavLink>
-                </li>
-              </>
-            )}
-          </ul>
-        </nav>
-      </div>
-    </header>
+              <li>
+                <NavLink to='/logout'>Đăng xuất</NavLink>
+              </li>
+            </>
+          ) : (
+            <>
+              <li>
+                <NavLink to='/login' className='login'>
+                  Đăng nhập
+                </NavLink>
+              </li>
+              <li>
+                <NavLink to='/register'>Đăng ký</NavLink>
+              </li>
+            </>
+          )}
+        </ul>
+      </nav>
+    </div>
   );
 };
 
