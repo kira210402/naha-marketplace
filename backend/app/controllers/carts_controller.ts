@@ -75,6 +75,37 @@ import { addProductToCartValidator } from '#validators/cart'
 import Product from '#models/product'
 
 export default class CartsController {
+
+  async addProduct({ response, auth, params }: HttpContext) {
+    const { productId } = params
+    const cart = await Cart.findByOrFail('userId', auth.user?.$attributes.id)
+    const product = await Product.findOrFail(productId)
+    // await CartItem.create({
+    //   cartId: cart.id,
+    //   productId: product.id,
+    //   quantity: 1,
+    // })
+    // check if product already in cart, increase quantity, else add new item
+    let cartItem = await CartItem.query()
+      .where('cartId', cart.id)
+      .where('productId', product.id)
+      .first()
+    if (cartItem) {
+      await cartItem.merge({ quantity: cartItem.quantity + 1 }).save()
+    } else {
+      cartItem = await CartItem.create({
+        cartId: cart.id,
+        productId: product.id,
+        quantity: 1,
+      })
+    }
+    return response.created({
+      code: 201,
+      message: 'add product to cart success',
+      product: product.$attributes,
+      cartItem: cartItem?.$attributes,
+    })
+=======
   async index({ response, params }: HttpContext) {
     try {
       const cart = await Cart.findOrFail(params.id)
@@ -98,42 +129,6 @@ export default class CartsController {
       return response.internalServerError({
         code: 500,
         message: 'Failed to get cart items',
-        error: error.message,
-      })
-    }
-  }
-
-  async addProduct({ request, response, auth }: HttpContext) {
-    try {
-      const user = await auth.authenticate()
-      const cart = await Cart.findByOrFail('user_id', user.id)
-
-      const data = request.only(['productId', 'quantity'])
-      const payload = await addProductToCartValidator.validate(data)
-
-      const product = await Product.findOrFail(payload.productId)
-
-      if (product.quantity < payload.quantity) {
-        return response.badRequest({
-          code: 400,
-          message: 'Quantity exceeds stock',
-        })
-      }
-
-      const cartItem = await CartItem.create({
-        cartId: cart.id,
-        ...payload,
-      })
-
-      return response.created({
-        code: 201,
-        message: 'Add product to cart success',
-        cartItem,
-      })
-    } catch (error) {
-      return response.badRequest({
-        code: 400,
-        message: 'Failed to add product to cart',
         error: error.message,
       })
     }

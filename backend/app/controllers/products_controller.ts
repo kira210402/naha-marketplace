@@ -111,7 +111,6 @@ export default class ProductsController {
     const payload = await updateProductValidator.validate(data)
 
     await product.merge(payload).save()
-    console.log(product)
     return response.ok({
       code: 200,
       message: 'update product success',
