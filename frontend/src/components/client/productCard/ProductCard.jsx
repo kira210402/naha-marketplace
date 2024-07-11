@@ -1,12 +1,20 @@
 import { Link } from 'react-router-dom';
 import { addProductToCart } from '../../../services/cart';
+import toast from 'react-hot-toast';
 
 const ProductCard = ({ product }) => {
   const productId = product.id;
   const handleAddToCart = async () => {
-    const response = await addProductToCart(productId);
-    console.log(response);
-    return response;
+    try {
+      const response = await addProductToCart(productId);
+      if (response) {
+        toast.success('Product added to cart successfully!');
+      } else {
+        toast.error('Failed to add product to cart.');
+      }
+    } catch (error) {
+      toast.error('An error occurred while adding the product to cart.');
+    }
   };
 
   return (

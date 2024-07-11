@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react';
 import { Flex, Spin } from 'antd';
 import { deleteAllCookies } from '../../helpers/cookie';
 import { checkLogin } from './../../redux/actions/loginStatus';
-
 function Logout() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
@@ -15,12 +14,13 @@ function Logout() {
       try {
         deleteAllCookies();
         dispatch(checkLogin(false));
-        navigate('/login');
+        setTimeout(() => {
+          navigate('/login');
+        }, 1000);
       } catch (error) {
         console.log('error logout', error);
       } finally {
         setLoading(false);
-        // window.location.reload();
       }
     };
 
