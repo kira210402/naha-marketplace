@@ -32,14 +32,16 @@ export default class CartsController {
     try {
       const userId = await auth.user?.id
       const cart = await Cart.findByOrFail('userId', userId)
-      console.log('cart', cart.id)
       const cartItems = await cart.related('cartItems').query()
       const products = []
       for (let cartItem of cartItems) {
         const product = await cartItem.related('product').query().first()
-        products.push({ product: product?.$attributes, quantity: cartItem.quantity })
+        products.push({
+          product: product?.$attributes,
+          quantity: cartItem.quantity,
+          id: cartItem.id,
+        })
       }
-      console.log('products', products)
       return response.ok({
         code: 200,
         message: 'Get cart items success',
@@ -64,21 +66,39 @@ export default class CartsController {
   async update({ request, response, auth }: HttpContext) {
     try {
       const user = await auth.authenticate()
-      const cart = await Cart.findByOrFail('user_id', user.id)
-      const data = request.input('cartItems') as { id: number; quantity: number }[]
-
+      const cart = await Cart.findByOrFail('userId', user.id)
+      const data = request.body() as { id: number; quantity: number }[]
       for (const item of data) {
         const cartItem = await CartItem.find(item.id)
+        const product = await Product.findByOrFail('id', cartItem?.productId)
+        console.log('product.quantity', product.quantity)
+        console.log('item.quantity', item.quantity)
+        console.log('cartItem.quantity', cartItem?.quantity)
         if (!cartItem || cartItem.cartId !== cart.id) continue
-        cartItem.quantity = item.quantity
+
+        // check quantity
+        if (item.quantity > product.quantity) {
+          cartItem.quantity = product.quantity
+        } else {
+          cartItem.quantity = item.quantity
+        }
         await cartItem.save()
       }
+      const cartItems = await cart.related('cartItems').query()
+      const products = []
+      for (let cartItem of cartItems) {
+        const product = await cartItem.related('product').query().first()
+        products.push({
+          product: product?.$attributes,
+          quantity: cartItem.quantity,
+          id: cartItem.id,
+        })
+      }
 
-      const updatedCartItems = await CartItem.query().where('cart_id', cart.id)
       return response.ok({
         code: 200,
         message: 'Update cart success',
-        cartItems: updatedCartItems,
+        products,
       })
     } catch (error) {
       return response.badRequest({

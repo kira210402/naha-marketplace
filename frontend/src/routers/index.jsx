@@ -33,7 +33,7 @@ export const routes = [
         element: <PrivateRoute />,
         children: [
           {
-            path: '/user',
+            path: '/about',
             element: <UserProfilePage />,
           },
         ],
