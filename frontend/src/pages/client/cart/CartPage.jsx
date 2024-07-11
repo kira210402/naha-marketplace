@@ -21,8 +21,9 @@ const CartPage = () => {
           const userInfo = await getUser(decodedUser.id);
           dispatch(setUser(userInfo));
 
-          const cartResponse = await getCartItems(userInfo.id);
-          setCartItems(cartResponse.result);
+          const cartResponse = await getCartItems();
+          console.log('cartResponse:', cartResponse);
+          setCartItems(cartResponse.products);
         }
       } catch (error) {
         console.error('Failed to fetch data:', error);
@@ -39,16 +40,16 @@ const CartPage = () => {
   }
 
   const handleRemoveItem = (id) => {
-    setCartItems(cartItems.filter(item => item.cartItem.id !== id));
+    setCartItems(cartItems.filter(item => item.id !== id));
   };
 
   const handleQuantityChange = (id, delta) => {
     setCartItems(cartItems.map(item =>
-      item.cartItem.id === id ? { ...item, quantity: item.cartItem.quantity + delta } : item
+      item.id === id ? { ...item, quantity: item.quantity + delta } : item
     ));
   };
 
-  const totalPrice = cartItems.reduce((total, item) => total + item.product.price * item.cartItem.quantity, 0);
+  const totalPrice = cartItems.reduce((total, item) => total + item.product.price * item.quantity, 0);
 
   return (
     <>
@@ -61,25 +62,25 @@ const CartPage = () => {
                 <div key={item.product.id} className="flex justify-between items-center mb-4">
                   <div>
                     <h3 className="text-lg">{item.product.name}</h3>
-                    <p className="text-sm text-gray-600">${item.product.price} x {item.cartItem.quantity}</p>
+                    <p className="text-sm text-gray-600">${item.product.price} x {item.quantity}</p>
                   </div>
                   <div className="flex items-center">
                     <button
-                      onClick={() => handleQuantityChange(item.cartItem.id, -1)}
-                      disabled={item.cartItem.quantity <= 1}
+                      onClick={() => handleQuantityChange(item.product.id, -1)}
+                      disabled={item.quantity <= 1}
                       className="bg-red-500 text-white px-2 py-1 rounded"
                     >
                       -
                     </button>
-                    <span className="mx-2">{item.cartItem.quantity}</span>
+                    <span className="mx-2">{item.quantity}</span>
                     <button
-                      onClick={() => handleQuantityChange(item.cartItem.id, 1)}
+                      onClick={() => handleQuantityChange(item.product.id, 1)}
                       className="bg-green-500 text-white px-2 py-1 rounded"
                     >
                       +
                     </button>
                     <button
-                      onClick={() => handleRemoveItem(item.cartItem.id)}
+                      onClick={() => handleRemoveItem(item.product.id)}
                       className="bg-red-500 text-white px-2 py-1 rounded ml-4"
                     >
                       X
