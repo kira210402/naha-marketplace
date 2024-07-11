@@ -43,7 +43,7 @@ const Header = () => {
         if (token) {
           const decodedUser = jwtDecode(token);
           const userInfo = await getUser(decodedUser.id);
-          dispatch(setUser(userInfo));
+          dispatch(setUser(userInfo.user));
         }
       } catch (error) {
         console.error('Failed to fetch user:', error);

@@ -3,6 +3,7 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { loginUser } from '../../redux/features/user';
 import { useDispatch } from 'react-redux';
+import toast from 'react-hot-toast';
 const LoginPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -22,6 +23,7 @@ const LoginPage = () => {
     onSubmit: async (values) => {
       try {
         dispatch(loginUser(values));
+        toast.success('Login is successfully');
         navigate('/');
       } catch (error) {
         console.error('Đăng ký thất bại:', error);
