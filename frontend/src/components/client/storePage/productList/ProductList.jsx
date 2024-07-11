@@ -1,17 +1,18 @@
-import ProductCard from '../../productCard/ProductCard';
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
+import ProductCard from '../../productCard/ProductCard';
+
 const responsive = {
   superLargeDesktop: {
-    breakpoint: { max: 4000, min: 3000 },
-    items: 5,
+    breakpoint: { max: 4000, min: 1024 },
+    items: 4,
   },
   desktop: {
-    breakpoint: { max: 3000, min: 1024 },
+    breakpoint: { max: 1024, min: 768 },
     items: 3,
   },
   tablet: {
-    breakpoint: { max: 1024, min: 464 },
+    breakpoint: { max: 768, min: 464 },
     items: 2,
   },
   mobile: {
@@ -19,10 +20,15 @@ const responsive = {
     items: 1,
   },
 };
-const ProductList = ({ products }) => {
+
+const ProductCarousel = ({ products }) => {
   return (
-    <>
-      <div className='parent'>
+    <div className='bg-whitemx-auto max-w-2xl py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8'>
+      <h2 className='text-2xl font-bold tracking-tight text-gray-900'>
+        Customers also purchased
+      </h2>
+
+      <div className='mt-6'>
         <Carousel
           responsive={responsive}
           autoPlay={true}
@@ -38,9 +44,8 @@ const ProductList = ({ products }) => {
           ))}
         </Carousel>
       </div>
-      ;
-    </>
+    </div>
   );
 };
 
-export default ProductList;
+export default ProductCarousel;

@@ -61,6 +61,7 @@ export default class ProductsController {
     }
 
     const payload = await createProductValidator.validate(data)
+    console.log(payload)
     const product = await Product.create({
       storeId: store.id,
       ...payload,
