@@ -2,11 +2,15 @@ import { Link } from 'react-router-dom';
 import { addProductToCart } from '../../../services/cart';
 
 const ProductCard = ({ product }) => {
-
+  const productId = product.id;
   const handleAddToCart = async () => {
-    const response = await addProductToCart(product.id);
-    console.log('response', response);
-  }
+    const response = await addProductToCart(productId, {
+      name: product.name,
+      quantity: 1,
+    });
+    console.log(response);
+    return response;
+  };
 
   return (
     <>

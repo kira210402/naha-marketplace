@@ -1,6 +1,8 @@
 import axios from 'axios';
 import { getCookie } from '../helpers/cookie';
+
 const env = import.meta.env;
+
 const axiosInstance = axios.create({
   baseURL: env.VITE_API_BASE_URL,
   timeout: 10000,
@@ -25,7 +27,7 @@ axiosInstance.interceptors.response.use(
     return response;
   },
   (error) => {
-    if (error.response.status === 401) {
+    if (error.response && error.response.status === 401) {
       window.location = '/login';
     }
     return Promise.reject(error);
