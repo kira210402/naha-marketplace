@@ -28,13 +28,18 @@ export default class CartsController {
       cartItem: cartItem?.$attributes,
     })
   }
-  async index({ response, params }: HttpContext) {
+  async index({ response, auth }: HttpContext) {
     try {
-      const cart = await Cart.findOrFail(params.id)
-      const cartItems = await CartItem.query().where('cart_id', cart.id).preload('product')
-
-      const products = cartItems.map((cartItem) => cartItem.product)
-
+      const userId = await auth.user?.id
+      const cart = await Cart.findByOrFail('userId', userId)
+      console.log('cart', cart.id)
+      const cartItems = await cart.related('cartItems').query()
+      const products = []
+      for (let cartItem of cartItems) {
+        const product = await cartItem.related('product').query().first()
+        products.push({product: product?.$attributes, quantity: cartItem.quantity})
+      }
+      console.log('products', products)
       return response.ok({
         code: 200,
         message: 'Get cart items success',

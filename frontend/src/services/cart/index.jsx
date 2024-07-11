@@ -1,6 +1,7 @@
 import { get } from '../../utils/request';
 
 export const getCartItems = async () => {
+  console.log('ok')
   const response = await get(`/cart`);
   return response;
 };

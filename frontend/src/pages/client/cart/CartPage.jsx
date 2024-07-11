@@ -22,7 +22,9 @@ const CartPage = () => {
           dispatch(setUser(userInfo));
 
           const cartResponse = await getCartItems();
-          setCartItems(cartResponse.result);
+
+          setCartItems(cartResponse.products);
+
         }
       } catch (error) {
         console.error('Failed to fetch data:', error);
@@ -39,23 +41,17 @@ const CartPage = () => {
   }
 
   const handleRemoveItem = (id) => {
-    setCartItems(cartItems.filter((item) => item.cartItem.id !== id));
+
+    setCartItems(cartItems.filter(item => item.id !== id));
   };
 
   const handleQuantityChange = (id, delta) => {
-    setCartItems(
-      cartItems.map((item) =>
-        item.cartItem.id === id
-          ? { ...item, quantity: item.cartItem.quantity + delta }
-          : item,
-      ),
-    );
+    setCartItems(cartItems.map(item =>
+      item.id === id ? { ...item, quantity: item.quantity + delta } : item
+    ));
   };
 
-  const totalPrice = cartItems.reduce(
-    (total, item) => total + item.product.price * item.cartItem.quantity,
-    0,
-  );
+  const totalPrice = cartItems.reduce((total, item) => total + item.product.price * item.quantity, 0);
 
   return (
     <>
@@ -70,29 +66,32 @@ const CartPage = () => {
                   className='mb-4 flex items-center justify-between'
                 >
                   <div>
-                    <h3 className='text-lg'>{item.product.name}</h3>
-                    <p className='text-sm text-gray-600'>
-                      ${item.product.price} x {item.cartItem.quantity}
-                    </p>
+
+                    <h3 className="text-lg">{item.product.name}</h3>
+                    <p className="text-sm text-gray-600">${item.product.price} x {item.quantity}</p>
+
                   </div>
                   <div className='flex items-center'>
                     <button
-                      onClick={() => handleQuantityChange(item.cartItem.id, -1)}
-                      disabled={item.cartItem.quantity <= 1}
-                      className='rounded bg-red-500 px-2 py-1 text-white'
+
+                      onClick={() => handleQuantityChange(item.product.id, -1)}
+                      disabled={item.quantity <= 1}
+                      className="bg-red-500 text-white px-2 py-1 rounded"
                     >
                       -
                     </button>
-                    <span className='mx-2'>{item.cartItem.quantity}</span>
+                    <span className="mx-2">{item.quantity}</span>
                     <button
-                      onClick={() => handleQuantityChange(item.cartItem.id, 1)}
-                      className='rounded bg-green-500 px-2 py-1 text-white'
+                      onClick={() => handleQuantityChange(item.product.id, 1)}
+                      className="bg-green-500 text-white px-2 py-1 rounded"
+
                     >
                       +
                     </button>
                     <button
-                      onClick={() => handleRemoveItem(item.cartItem.id)}
-                      className='ml-4 rounded bg-red-500 px-2 py-1 text-white'
+
+                      onClick={() => handleRemoveItem(item.product.id)}
+                      className="bg-red-500 text-white px-2 py-1 rounded ml-4"
                     >
                       X
                     </button>

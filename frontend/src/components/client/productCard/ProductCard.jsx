@@ -4,10 +4,7 @@ import { addProductToCart } from '../../../services/cart';
 const ProductCard = ({ product }) => {
   const productId = product.id;
   const handleAddToCart = async () => {
-    const response = await addProductToCart(productId, {
-      name: product.name, 
-      quantity: 1,
-    });
+    const response = await addProductToCart(productId);
     console.log(response);
     return response;
   };

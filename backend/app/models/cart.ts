@@ -15,9 +15,7 @@ export default class Cart extends BaseModel {
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime
-
-  @hasMany(() => CartItem, {
-    foreignKey: 'cartItemId',
-  })
-  declare cartItem: HasMany<typeof CartItem>
+  
+  @hasMany(() => CartItem)
+  declare cartItems: HasMany<typeof CartItem>
 }

@@ -23,7 +23,8 @@ export default class CartItem extends BaseModel {
   declare updatedAt: DateTime
 
   @hasOne(() => Product, {
-    foreignKey: 'cartItemProductId',
+    localKey: 'productId',
+    foreignKey: 'id',
   })
   declare product: HasOne<typeof Product>
 }
