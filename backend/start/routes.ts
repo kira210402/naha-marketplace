@@ -16,6 +16,7 @@ import ProductsController from '#controllers/products_controller'
 import CartsController from '#controllers/carts_controller'
 import { EUserRole } from '../app/enums/EUserRole.js'
 import OrdersController from '#controllers/orders_controller'
+import CategoriesController from '#controllers/categories_controller'
 router.where('id', router.matchers.number())
 
 router
@@ -75,8 +76,6 @@ router
           })
           .prefix('/stores')
 
-        // product routers
-
         // cart routers
         router
           .group(() => {
@@ -110,6 +109,18 @@ router
             router.post('/', [OrdersController, 'store']).as('orders.store')
           })
           .prefix('/orders')
+
+        // category routers
+        router
+          .group(() => {
+            router.get('/', [CategoriesController, 'index']).as('categories.index')
+            router.get('/:id', [CategoriesController, 'show']).as('categories.show')
+            router.post('/', [CategoriesController, 'store']).as('categories.store')
+            router.put('/:id', [CategoriesController, 'update']).as('categories.update')
+            router.delete('/:id', [CategoriesController, 'destroy']).as('categories.destroy')
+          })
+          .prefix('/categories')
+          .use(middleware.author(EUserRole.ADMIN))
       })
       .use(middleware.auth({ guards: ['api'] }))
     router

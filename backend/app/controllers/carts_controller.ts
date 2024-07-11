@@ -36,7 +36,11 @@ export default class CartsController {
       const products = []
       for (let cartItem of cartItems) {
         const product = await cartItem.related('product').query().first()
-        products.push({ product: product?.$attributes, quantity: cartItem.quantity, id: cartItem.id })
+        products.push({
+          product: product?.$attributes,
+          quantity: cartItem.quantity,
+          id: cartItem.id,
+        })
       }
       return response.ok({
         code: 200,
@@ -84,7 +88,11 @@ export default class CartsController {
       const products = []
       for (let cartItem of cartItems) {
         const product = await cartItem.related('product').query().first()
-        products.push({ product: product?.$attributes, quantity: cartItem.quantity, id: cartItem.id })
+        products.push({
+          product: product?.$attributes,
+          quantity: cartItem.quantity,
+          id: cartItem.id,
+        })
       }
 
       return response.ok({
