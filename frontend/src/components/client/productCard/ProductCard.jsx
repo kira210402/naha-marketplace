@@ -5,7 +5,7 @@ const ProductCard = ({ product }) => {
   const productId = product.id;
   const handleAddToCart = async () => {
     const response = await addProductToCart(productId, {
-      name: product.name,
+      name: product.name, 
       quantity: 1,
     });
     console.log(response);

@@ -7,6 +7,7 @@ import RegisterPage from '../pages/client/RegisterPage';
 import StorePage from '../pages/client/store/StorePage';
 import PrivateRoute from '../components/client/AllRouter/privateRouter';
 import UserProfilePage from '../pages/client/UserProfilePage';
+import Logout from '../pages/client/Logout';
 export const routes = [
   {
     path: '/',
@@ -31,10 +32,10 @@ export const routes = [
       {
         element: <PrivateRoute />,
         children: [
-          { 
-            path: '/user', 
-            element: <UserProfilePage /> 
-          }
+          {
+            path: '/user',
+            element: <UserProfilePage />,
+          },
         ],
       },
       {
@@ -42,8 +43,12 @@ export const routes = [
         element: <StorePage />,
       },
       {
-        path: "/cart",
+        path: '/cart',
         element: <CartPage />,
+      },
+      {
+        path: '/logout',
+        element: <Logout />,
       },
       {
         path: '*',

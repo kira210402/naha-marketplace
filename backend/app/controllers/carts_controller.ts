@@ -4,7 +4,6 @@ import CartItem from '#models/cart_item'
 import Product from '#models/product'
 
 export default class CartsController {
-
   async addProduct({ response, auth, params }: HttpContext) {
     const { productId } = params
     const cart = await Cart.findByOrFail('userId', auth.user?.$attributes.id)
