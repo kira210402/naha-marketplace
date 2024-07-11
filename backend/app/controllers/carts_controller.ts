@@ -37,7 +37,7 @@ export default class CartsController {
       const products = []
       for (let cartItem of cartItems) {
         const product = await cartItem.related('product').query().first()
-        products.push({product: product?.$attributes, quantity: cartItem.quantity})
+        products.push({ product: product?.$attributes, quantity: cartItem.quantity })
       }
       console.log('products', products)
       return response.ok({
