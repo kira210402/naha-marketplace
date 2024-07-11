@@ -18,12 +18,12 @@ const ProductCard = ({ product }) => {
   };
 
   return (
-    <div className='product--item m-2 transform overflow-hidden rounded-lg border border-gray-200 bg-white shadow-md transition duration-300 ease-in-out hover:scale-105 dark:border-gray-700 dark:bg-gray-800'>
-      <div className='h-full w-full'>
+    <div key={product.id} className='group relative p-4'>
+      <div className='aspect-w-1 aspect-h-1 lg:aspect-none w-full overflow-hidden rounded-md bg-gray-200 group-hover:opacity-75 lg:h-80'>
         {product.images ? (
           <Link to={`/products/${product.id}`}>
             <img
-              className='h-full w-full rounded-t-lg object-cover'
+              className='w-full object-cover object-center lg:h-full lg:w-full'
               src={product.images[0]}
               alt={product.name}
             />
@@ -31,7 +31,7 @@ const ProductCard = ({ product }) => {
         ) : (
           <Link to={`/products/${product.id}`}>
             <img
-              className='h-auto w-full rounded-t-lg'
+              className='h-full w-full object-cover object-center lg:h-full lg:w-full'
               src={
                 'https://curie.pnnl.gov/sites/default/files/default_images/default-image_0.jpeg'
               }
@@ -40,39 +40,19 @@ const ProductCard = ({ product }) => {
           </Link>
         )}
       </div>
-      <div className='flex flex-col justify-between px-5 py-4'>
-        <div>
-          <Link to={`/products/${product.id}`}>
-            <h5 className='mb-2 text-xl font-semibold text-gray-900 transition duration-300 hover:text-blue-500 dark:text-white'>
-              {product.name}
-            </h5>
-          </Link>
-          <div className='mb-2 flex items-center justify-between'>
-            <span className='text-2xl font-bold text-gray-900 dark:text-white'>
-              ${product.price}
-            </span>
-            <span className='text-lg font-semibold text-gray-500 dark:text-gray-400'>
-              -{product.discount}%
-            </span>
-          </div>
-          <div className='mb-2 flex items-center justify-between'>
-            <span className='text-2xl font-bold text-gray-900 dark:text-white'>
-              ${product.price - product.price * (product.discount / 100)}
-            </span>
-          </div>
-          <div className='mb-2 flex items-center justify-between'>
-            <span className='text-sm text-gray-500 dark:text-gray-400'>
-              Còn: {product.quantity} sản phẩm
-            </span>
-          </div>
+      <div className='mt-4'>
+        <div className='flex justify-between'>
+          <h3>{product.name}</h3>
+          <p className='mt-1 text-sm text-gray-500'>- {product.discount} %</p>
         </div>
-        <button
-          className='flex-grow rounded-lg bg-blue-700 px-5 py-2.5 text-sm font-medium text-white transition duration-300 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'
-          onClick={handleAddToCart}
-        >
-          Add to cart
-        </button>
+        <p className='text-sm font-medium text-gray-900'>{product.price} $</p>
       </div>
+      <button
+        className='flex-grow rounded-lg bg-blue-700 px-5 py-2.5 text-sm font-medium text-white transition duration-300 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'
+        onClick={handleAddToCart}
+      >
+        Add to cart
+      </button>
     </div>
   );
 };

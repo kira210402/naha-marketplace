@@ -22,7 +22,7 @@ const HomePage = () => {
   return (
     <div>
       {loading ? (
-        <p>Loading...</p> // Optional: Add a loading indicator
+        <p>Loading...</p>
       ) : (
         <ProductList products={products} />
       )}
