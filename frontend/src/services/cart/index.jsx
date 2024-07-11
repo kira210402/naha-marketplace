@@ -1,11 +1,11 @@
-import { get } from '../../utils/request'
+import { get, post } from '../../utils/request';
 
 export const getCartItems = async () => {
-  const response = await get(`/cart`)
-  return response
-}
+  const response = await get(`/cart`);
+  return response;
+};
 
-export const addProductToCart = async (productId) => {
-  const response = await get(`/cart/add-product/${productId}`)
-  return response
-}
+export const addProductToCart = async (productId, productItem) => {
+  const response = await post(`/cart/add-product/${productId}`, productItem);
+  return response;
+};
