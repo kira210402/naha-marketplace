@@ -5,45 +5,56 @@ import { addProductToCartValidator } from '#validators/cart'
 import Product from '#models/product'
 
 export default class CartsController {
-  async index({ request, response, params }: HttpContext) {
+  async index({ request, response, params, auth }: HttpContext) {
     // const { page, perPage } = pagination
-    // const cart = await Cart.findByOrFail('userId', auth.user?.$attributes.id)
-    const cart = await Cart.findOrFail(params.id)
+    const cart = await Cart.findByOrFail('userId', auth.user?.$attributes.id)
+    // const cart = await Cart.findOrFail(params.id)
     // const sortField = request.input('sortField', 'id')
     // const sortOrder = request.input('sortOrder', 'asc')
-    const cartItems = await CartItem.query()
-      .where('cartId', cart.id)
-      // .orderBy(sortField, sortOrder)
-      // .paginate(page, perPage)
-    const products = []
-    for(let cartItem of cartItems) {
+    const cartItems = await CartItem.query().where('cartId', cart.id)
+    // .orderBy(sortField, sortOrder)
+    // .paginate(page, perPage)
+    const result = []
+    for (let cartItem of cartItems) {
       const product = await Product.find(cartItem.productId)
-      products.push(product?.$attributes)
+      result.push({ product: product?.$attributes, cartItem: cartItem.$attributes })
     }
-    console.log('products', products)
+
     return response.ok({
       code: 200,
       message: 'get cart items success',
-      products,
+      result,
     })
   }
 
-  async addProduct({ request, response, auth }: HttpContext) {
+  async addProduct({ response, auth, params }: HttpContext) {
+    const { productId } = params
     const cart = await Cart.findByOrFail('userId', auth.user?.$attributes.id)
-    const data = request.only(['productId', 'quantity'])
-    const payload = await addProductToCartValidator.validate(data)
-    const product = await Product.findOrFail(data.productId)
-    if (product.quantity < data.quantity) {
-      throw new Error('quantity exceeds stock')
+    const product = await Product.findOrFail(productId)
+    // await CartItem.create({
+    //   cartId: cart.id,
+    //   productId: product.id,
+    //   quantity: 1,
+    // })
+    // check if product already in cart, increase quantity, else add new item
+    let cartItem = await CartItem.query()
+      .where('cartId', cart.id)
+      .where('productId', product.id)
+      .first()
+    if (cartItem) {
+      await cartItem.merge({ quantity: cartItem.quantity + 1 }).save()
+    } else {
+      cartItem = await CartItem.create({
+        cartId: cart.id,
+        productId: product.id,
+        quantity: 1,
+      })
     }
-    const cartItem = await CartItem.create({
-      cartId: cart.id,
-      ...payload,
-    })
     return response.created({
       code: 201,
       message: 'add product to cart success',
-      cartItem,
+      product: product.$attributes,
+      cartItem: cartItem?.$attributes,
     })
   }
 

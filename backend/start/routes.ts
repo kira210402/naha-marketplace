@@ -88,7 +88,9 @@ router
               .get('/', [CartsController, 'index'])
               .as('cart.index')
               .use(middleware.pagination())
-            router.post('/add-product', [CartsController, 'addProduct']).as('cart.addProduct')
+            router
+              .get('/add-product/:productId', [CartsController, 'addProduct'])
+              .as('cart.addProduct')
             router.put('/', [CartsController, 'update']).as('cart.update')
           })
           .prefix('/cart')
