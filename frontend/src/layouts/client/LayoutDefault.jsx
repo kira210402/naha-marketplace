@@ -7,7 +7,10 @@ const LayoutDefault = () => {
     <>
       <Toaster position='top-center' reverseOrder={false} />
       <div className='min-h-screen bg-gray-100'>
-        <header className='bg-white shadow'>
+        <header
+          className='sticky top-0 bg-white shadow'
+          style={{ zIndex: 100 }}
+        >
           <Header />
         </header>
         <main>
