@@ -134,4 +134,22 @@ export default class ProductsController {
       message: 'delete product success',
     })
   }
+
+  async search({ request, response }: HttpContext) {
+    const { query } = request.qs()
+    try {
+      const products = await Product.query()
+        .where('name', 'ilike', `%${query}%`)
+        .orWhereRaw('CAST(price AS TEXT) ilike ?', [`%${query}%`])
+        .paginate(1, 10)
+
+      return response.ok({
+        code: 200,
+        message: 'search product success',
+        products,
+      })
+    } catch (error) {
+      console.log(error)
+    }
+  }
 }

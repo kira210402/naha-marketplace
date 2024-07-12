@@ -4,30 +4,6 @@ import CartItem from '#models/cart_item'
 import Product from '#models/product'
 
 export default class CartsController {
-  async addProduct({ response, auth, params }: HttpContext) {
-    const { productId } = params
-    const cart = await Cart.findByOrFail('userId', auth.user?.$attributes.id)
-    const product = await Product.findOrFail(productId)
-    let cartItem = await CartItem.query()
-      .where('cartId', cart.id)
-      .where('productId', product.id)
-      .first()
-    if (cartItem) {
-      await cartItem.merge({ quantity: cartItem.quantity + 1 }).save()
-    } else {
-      cartItem = await CartItem.create({
-        cartId: cart.id,
-        productId: product.id,
-        quantity: 1,
-      })
-    }
-    return response.created({
-      code: 201,
-      message: 'add product to cart success',
-      product: product.$attributes,
-      cartItem: cartItem?.$attributes,
-    })
-  }
   async index({ response, auth }: HttpContext) {
     try {
       const userId = await auth.user?.id
@@ -61,6 +37,30 @@ export default class CartsController {
         error: error.message,
       })
     }
+  }
+  async addProduct({ response, auth, params }: HttpContext) {
+    const { productId } = params
+    const cart = await Cart.findByOrFail('userId', auth.user?.$attributes.id)
+    const product = await Product.findOrFail(productId)
+    let cartItem = await CartItem.query()
+      .where('cartId', cart.id)
+      .where('productId', product.id)
+      .first()
+    if (cartItem) {
+      await cartItem.merge({ quantity: cartItem.quantity + 1 }).save()
+    } else {
+      cartItem = await CartItem.create({
+        cartId: cart.id,
+        productId: product.id,
+        quantity: 1,
+      })
+    }
+    return response.created({
+      code: 201,
+      message: 'add product to cart success',
+      product: product.$attributes,
+      cartItem: cartItem?.$attributes,
+    })
   }
 
   async update({ request, response, auth }: HttpContext) {

@@ -7,7 +7,7 @@ export default class CollectionsController {
 
   async show({ params }: HttpContext) {}
 
-  async update({ }: HttpContext) {}
+  async update({}: HttpContext) {}
 
   async destroy({ params }: HttpContext) {}
 }

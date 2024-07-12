@@ -124,13 +124,12 @@ router
           .use(middleware.author(EUserRole.ADMIN))
 
         // collection routers
-        router
-          .group(() => {
-            router.get('/', [CollectionsController, 'index']).as('collections.index')
-            router.get('/:id', [CollectionsController, 'show']).as('collections.show')
-            router.post('/', [CollectionsController, 'store']).as('collections.store')
-            router.put('/:id', [CollectionsController, 'update']).as('collections.update')
-            router.delete('/:id', [CollectionsController, 'destroy']).as('collections.destroy')
+        router.group(() => {
+          router.get('/', [CollectionsController, 'index']).as('collections.index')
+          router.get('/:id', [CollectionsController, 'show']).as('collections.show')
+          router.post('/', [CollectionsController, 'store']).as('collections.store')
+          router.put('/:id', [CollectionsController, 'update']).as('collections.update')
+          router.delete('/:id', [CollectionsController, 'destroy']).as('collections.destroy')
         })
       })
       .use(middleware.auth({ guards: ['api'] }))
@@ -159,6 +158,7 @@ router
           .as('products.destroy')
           .use(middleware.lockUser())
           .use(middleware.auth({ guards: ['api'] }))
+        router.get('/search', [ProductsController, 'search']).as('products.search')
       })
       .prefix('/products')
   })

@@ -6,8 +6,8 @@ export default class CategoriesController {
     const categories = await Category.all()
     return response.ok({
       code: 200,
-      message: "get all categories success",
-      categories
+      message: 'get all categories success',
+      categories,
     })
   }
 
@@ -16,7 +16,7 @@ export default class CategoriesController {
     const category = await Category.create({ name })
     return response.created({
       code: 201,
-      message: "category created success",
+      message: 'category created success',
       category,
     })
   }
@@ -25,8 +25,8 @@ export default class CategoriesController {
     const category = await Category.find(params.id)
     return response.ok({
       code: 200,
-      message: "get category success",
-      category
+      message: 'get category success',
+      category,
     })
   }
 
@@ -37,8 +37,8 @@ export default class CategoriesController {
     await category.save()
     return response.ok({
       code: 200,
-      message: "category update success",
-      category
+      message: 'category update success',
+      category,
     })
   }
 
@@ -47,7 +47,7 @@ export default class CategoriesController {
     await category.delete()
     return {
       code: 200,
-      message: "category delete success",
+      message: 'category delete success',
     }
-   }
+  }
 }
