@@ -1,4 +1,3 @@
-// components/UserProfilePage.js
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { jwtDecode } from 'jwt-decode';
