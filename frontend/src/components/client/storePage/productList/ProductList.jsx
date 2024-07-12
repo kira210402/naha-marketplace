@@ -23,7 +23,7 @@ const responsive = {
 
 const ProductList = ({ products }) => {
   return (
-    <div className='bg-whitemx-auto max-w-2xl py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8'>
+    <div className='mx-auto max-w-2xl bg-white py-6 sm:px-6 sm:py-8 lg:max-w-7xl lg:px-8'>
       <h2 className='text-2xl font-bold tracking-tight text-gray-900'>
         New Products
       </h2>

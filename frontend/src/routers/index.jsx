@@ -8,6 +8,7 @@ import StorePage from '../pages/client/store/StorePage';
 import PrivateRoute from '../components/client/AllRouter/privateRouter';
 import UserProfilePage from '../pages/client/UserProfilePage';
 import Logout from '../pages/client/Logout';
+import SearchResult from '../pages/client/search/SearchResult';
 export const routes = [
   {
     path: '/',
@@ -21,6 +22,7 @@ export const routes = [
         path: '/products/:id',
         element: <ProductDetailPage />,
       },
+      { path: '/search/result', element: <SearchResult /> },
       {
         element: <PrivateRoute />,
         children: [
