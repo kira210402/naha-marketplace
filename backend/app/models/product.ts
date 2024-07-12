@@ -11,7 +11,7 @@ export default class Product extends BaseModel {
   @column()
   declare cartItemId: number
 
-  @column({columnName: 'category_id'})
+  @column({ columnName: 'category_id' })
   declare categoryId: number
 
   @column()
