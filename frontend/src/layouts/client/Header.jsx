@@ -7,6 +7,7 @@ import { getUser } from '../../services/user';
 import { Avatar, Button, Dropdown, Flex, Spin } from 'antd';
 import { UserOutlined, DownOutlined } from '@ant-design/icons';
 import useUserStore from '../../zustandStore/UseUserStore';
+
 const iconCart = (
   <svg
     xmlns='http://www.w3.org/2000/svg'
@@ -37,7 +38,6 @@ const Header = () => {
   const setUser = useUserStore((state) => state.setUser);
   const user = useUserStore((state) => state.user);
   const [loading, setLoading] = useState(true);
-  const [onSearch, setOnSearch] = useState('');
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -91,7 +91,7 @@ const Header = () => {
         <Link to='/'>MyApp</Link>
       </div>
       <div className='w-2/6'>
-        <Search onSearch={onSearch} setOnSearch={setOnSearch} />
+        <Search />
       </div>
       <nav className='flex w-3/6 space-x-4'>
         <ul className='flex w-2/3 space-x-4'>

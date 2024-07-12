@@ -11,6 +11,6 @@ export const getListProduct = async () => {
 };
 
 export const getSearchProduct = async (keyword) => {
-  const result = await get(`/products/?query=${keyword}`);
+  const result = await get(`/products/search${keyword}`);
   return result;
 };

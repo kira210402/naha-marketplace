@@ -1,19 +1,15 @@
 import { useState } from 'react';
-import { getSearchProduct } from '../../../services/products';
-
-const Search = ({ setOnSearch }) => {
+import { useNavigate } from 'react-router-dom';
+const Search = () => {
   const [keyword, setKeyword] = useState('');
-
+  const navigate = useNavigate();
   const handleSearch = async (e) => {
     e.preventDefault();
-    const result = await getSearchProduct(keyword);
-    console.log(result.products.data);
-    setOnSearch(result.products.data);
+    navigate(`/search/result?query=${keyword}`);
   };
   const handleInputChange = (e) => {
     setKeyword(e.target.value);
   };
-
   return (
     <form className='max-w-sm' onSubmit={handleSearch}>
       <label
