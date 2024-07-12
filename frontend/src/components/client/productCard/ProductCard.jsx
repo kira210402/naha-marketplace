@@ -1,7 +1,6 @@
 import { Link } from 'react-router-dom';
 import { addProductToCart } from '../../../services/cart';
-import toast from 'react-hot-toast';
-// import './style.css';
+import { toast } from 'react-toastify';
 const ProductCard = ({ product }) => {
   const productId = product.id;
   const handleAddToCart = async () => {

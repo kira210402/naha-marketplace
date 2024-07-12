@@ -3,7 +3,7 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { loginUser } from '../../redux/features/user';
 import { useDispatch } from 'react-redux';
-import toast from 'react-hot-toast';
+import { toast } from 'react-toastify';
 const LoginPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
