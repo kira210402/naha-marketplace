@@ -37,6 +37,7 @@ const Header = () => {
   const setUser = useUserStore((state) => state.setUser);
   const user = useUserStore((state) => state.user);
   const [loading, setLoading] = useState(true);
+  const [onSearch, setOnSearch] = useState('');
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -90,7 +91,7 @@ const Header = () => {
         <Link to='/'>MyApp</Link>
       </div>
       <div className='w-2/6'>
-        <Search />
+        <Search onSearch={onSearch} setOnSearch={setOnSearch} />
       </div>
       <nav className='flex w-3/6 space-x-4'>
         <ul className='flex w-2/3 space-x-4'>

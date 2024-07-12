@@ -9,3 +9,8 @@ export const getListProduct = async () => {
   const result = await get(`/products`);
   return result;
 };
+
+export const getSearchProduct = async (keyword) => {
+  const result = await get(`/products/?query=${keyword}`);
+  return result;
+};
