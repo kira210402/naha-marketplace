@@ -69,21 +69,23 @@ const Header = () => {
       </Flex>
     );
   }
-
-  const items = [
-    {
-      key: '1',
-      label: <NavLink to={`/users/${user.id}`}>My Profile</NavLink>,
-    },
-    {
-      key: '2',
-      label: <NavLink to='#'>Settings</NavLink>,
-    },
-    {
-      key: '3',
-      label: <NavLink to='/logout'>Logout</NavLink>,
-    },
-  ];
+  let items = [];
+  if (user) {
+    items = [
+      {
+        key: '1',
+        label: <NavLink to={`/users/${user.id}`}>My Profile</NavLink>,
+      },
+      {
+        key: '2',
+        label: <NavLink to='#'>Settings</NavLink>,
+      },
+      {
+        key: '3',
+        label: <NavLink to='/logout'>Logout</NavLink>,
+      },
+    ];
+  }
 
   return (
     <div className='container mx-auto flex items-center justify-between px-6 py-3'>

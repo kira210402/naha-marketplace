@@ -41,7 +41,7 @@ router
               .post('/', [UsersController, 'store'])
               .as('users.store')
               .use(middleware.author(EUserRole.ADMIN))
-            router.put('/', [UsersController, 'update']).as('users.update')
+            router.patch('/', [UsersController, 'update']).as('users.update')
             router
               .delete('/:id', [UsersController, 'destroy'])
               .as('users.destroy')

@@ -4,6 +4,8 @@ import { jwtDecode } from 'jwt-decode';
 import { getCookie } from '../../helpers/cookie';
 import { setUser } from '../../redux/features/user';
 import { getUser } from './../../services/user/index';
+import UserProfile from '../../components/client/user/UserProfile';
+import { Flex, Spin } from 'antd';
 
 const UserProfilePage = () => {
   const dispatch = useDispatch();
@@ -31,22 +33,20 @@ const UserProfilePage = () => {
   const user = data?.user;
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <Flex
+        gap='small'
+        vertical
+        align='center'
+        justify='center'
+        style={{ minHeight: '100vh' }}
+      >
+        <Spin size='large' />
+      </Flex>
+    );
   }
 
-  return (
-    <div>
-      <h1>User Profile</h1>
-      {user ? (
-        <div>
-          <p>Name: {user.name}</p>
-          <p>Email: {user.email}</p>
-        </div>
-      ) : (
-        <p>No user data</p>
-      )}
-    </div>
-  );
+  return <div>{user ? <UserProfile user={user} /> : <p>No user data</p>}</div>;
 };
 
 export default UserProfilePage;
