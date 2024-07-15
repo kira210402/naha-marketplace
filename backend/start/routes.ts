@@ -82,7 +82,7 @@ router
               .as('cart.index')
               .use(middleware.pagination())
             router
-              .get('/add-product/:productId', [CartsController, 'addProduct'])
+              .post('/add-product/:productId', [CartsController, 'addProduct'])
               .as('cart.addProduct')
             router.put('/', [CartsController, 'update']).as('cart.update')
           })
