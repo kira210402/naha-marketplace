@@ -11,7 +11,7 @@ const LayoutDefault = () => {
         >
           <Header />
         </header>
-        <main className='container mx-auto'>
+        <main className='container mx-auto h-screen'>
           <Outlet />
         </main>
         <footer>
