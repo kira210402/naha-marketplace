@@ -93,12 +93,13 @@ export default class ProductsController {
     let cloudResponse = await UploadCloudinary.uploadFiles(files)
     const imagesUrl = (cloudResponse.files as { url: string }[]).map((file) => file.url)
 
-    const { name, description, price, quantity, discount } = request.only([
+    const { name, description, price, quantity, discount, status } = request.only([
       'name',
       'description',
       'price',
       'quantity',
       'discount',
+      'status',
     ])
     const data = {
       name,
@@ -107,6 +108,7 @@ export default class ProductsController {
       quantity,
       discount,
       images: JSON.stringify(imagesUrl),
+      status
     }
 
     const payload = await updateProductValidator.validate(data)

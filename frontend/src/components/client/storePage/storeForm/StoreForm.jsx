@@ -1,105 +1,131 @@
+import { UploadOutlined } from '@ant-design/icons';
+import { Button, Form, Input, message, Upload } from 'antd';
 import { useState } from 'react';
+import {useNavigate} from 'react-router-dom'
+import { createNewStore } from '../../../../services/stores';
+const StoreForm = () => {
+  const [form] = Form.useForm();
+  const [fileList, setFileList] = useState([]);
+  const navigate = useNavigate()
 
-const StoreForm = ({ setIsFormOpen, currentStore, setStores, stores, handleCreateStore }) => {
-  const [name, setName] = useState(currentStore ? currentStore.name : '');
-  const [description, setDescription] = useState(currentStore ? currentStore.description : '');
-  const [phoneNumber, setPhoneNumber] = useState(currentStore ? currentStore.phoneNumber : '');
-  const [address, setAddress] = useState(currentStore ? currentStore.address : '');
-  const [avatar, setAvatar] = useState(currentStore ? currentStore.avatar : '');
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const newStore = {
-      id: currentStore ? currentStore.id : Date.now(),
-      name,
-      description,
-      phoneNumber,
-      address,
-      avatar,
-      productCount: currentStore ? currentStore.productCount : 0
-    };
-
-    if (currentStore) {
-      setStores(stores.map(store => store.id === currentStore.id ? newStore : store));
-    } else {
-      handleCreateStore(newStore);
+  const handleSubmit = async (values) => {
+    try {
+      const formData = new FormData();
+      formData.append('name', values.name);
+      formData.append('description', values.description);
+      formData.append('phoneNumber', values.phoneNumber);
+      formData.append('address', values.address);
+      if (fileList.length > 0) {
+        formData.append('avatar', fileList[0].originFileObj);
+      }
+      console.log('values', values);
+      const response = await createNewStore(formData);
+      if (response) {
+        message.success('create store success!');
+        navigate('/stores/my')
+        return response;
+      } else message.error('Create store fail');
+    } catch (error) {
+      message.error('Có lỗi xảy ra!');
     }
+  }
 
-    setIsFormOpen(false);
-  };
-
-  const handleAvatarChange = (e) => {
-    const file = e.target.files[0];
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      setAvatar(file);
-    };
-    reader.readAsDataURL(file);
+  const handleUploadChange = ({ fileList }) => {
+    setFileList(fileList);
   };
 
   return (
-    <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center">
-      <div className="bg-white p-4 rounded">
-        <form onSubmit={handleSubmit}>
-          <div className="mb-4">
-            <label className="block text-sm font-bold mb-2">Name</label>
-            <input 
-              type="text" 
-              value={name} 
-              onChange={(e) => setName(e.target.value)} 
-              className="w-full p-2 border rounded" 
-              required 
-            />
-          </div>
-          <div className="mb-4">
-            <label className="block text-sm font-bold mb-2">Description</label>
-            <textarea 
-              value={description} 
-              onChange={(e) => setDescription(e.target.value)} 
-              className="w-full p-2 border rounded" 
-              required 
-            ></textarea>
-          </div>
-          <div className="mb-4">
-            <label className="block text-sm font-bold mb-2">Phone Number</label>
-            <input 
-              type="text" 
-              value={phoneNumber} 
-              onChange={(e) => setPhoneNumber(e.target.value)} 
-              className="w-full p-2 border rounded" 
-              required 
-            />
-          </div>
-          <div className="mb-4">
-            <label className="block text-sm font-bold mb-2">Address</label>
-            <input 
-              type="text" 
-              value={address} 
-              onChange={(e) => setAddress(e.target.value)} 
-              className="w-full p-2 border rounded" 
-              required 
-            />
-          </div>
-          <div className="mb-4">
-            <label className="block text-sm font-bold mb-2">Avatar</label>
-            <input 
-              type="file" 
-              onChange={handleAvatarChange} 
-              className="w-full p-2 border rounded" 
-              accept="image/*" 
-              required 
-            />
-          </div>
-          {avatar && <img src={avatar} alt="Avatar" className="w-16 h-16 rounded-full mb-4" />}
-          <div className="flex space-x-2">
-            <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded">Save</button>
-            <button type="button" onClick={() => setIsFormOpen(false)} className="bg-gray-500 text-white px-4 py-2 rounded">Cancel</button>
-          </div>
-        </form>
-      </div>
-    </div>
-  );
-};
+    <div
+      style={{
+        padding: '20px',
+        maxWidth: '600px',
+        margin: '0 auto',
+        backgroundColor: '#fff',
+        borderRadius: '8px',
+        boxShadow: '0 4px 8px rgba(0,0,0,0.1)',
+      }}
+    >
+      <h2 style={{ textAlign: 'center', margin: 10 }}><b>Register a new store</b></h2>
+      <Form
+        form={form}
+        labelCol={{ span: 5 }}
+        wrapperCol={{ span: 14 }}
+        layout='horizontal'
+        onFinish={handleSubmit}
+      >
+        <Form.Item label='Avatar'>
+          <Upload
+            listType='picture'
+            fileList={fileList}
+            onChange={handleUploadChange}
+            beforeUpload={() => false}
+          >
+            <Button icon={<UploadOutlined />}>Chọn ảnh</Button>
+          </Upload>
+        </Form.Item>
+        <Form.Item
+          label="Name"
+          name="name"
+          rules={[
+            {
+              required: true,
+              message: "Please input your store's name!",
+            },
+          ]}
+        >
+          <Input />
+        </Form.Item>
 
+        <Form.Item
+          label="Description"
+          name="description"
+          rules={[
+            {
+              required: true,
+              message: 'Please input description!',
+            },
+          ]}
+        >
+          <Input.TextArea />
+        </Form.Item>
+        <Form.Item
+          label="Phone Number"
+          name="phoneNumber"
+          rules={[
+            {
+              required: true,
+              message: 'Please input phone number!',
+            },
+          ]}
+        >
+          <Input />
+        </Form.Item>
+        <Form.Item
+          label="Address"
+          name="address"
+          rules={[
+            {
+              required: true,
+              message: 'Please input address!',
+            },
+          ]}
+        >
+          <Input />
+        </Form.Item>
+
+        <Form.Item
+          wrapperCol={{
+            offset: 8,
+            span: 16,
+          }}
+        >
+          <Button type="primary" htmlType="submit">
+            Create
+          </Button>
+        </Form.Item>
+      </Form>
+    </div>
+  )
+}
 
 export default StoreForm;

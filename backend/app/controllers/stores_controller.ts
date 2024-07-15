@@ -19,11 +19,11 @@ export default class StoresController {
   }
 
   async indexByUser({ auth, response }: HttpContext) {
-    const stores = await Store.query().where('userId', auth.user?.$attributes.id)
+    const store = await Store.query().where('userId', auth.user?.$attributes.id).first()
     return response.ok({
       code: 200,
       message: 'get stores by user success',
-      stores,
+      store,
     })
   }
 
@@ -73,10 +73,22 @@ export default class StoresController {
     if (store.userId !== auth.user?.$attributes.id) {
       throw new Error('You are not authorized to perform this action')
     }
+
     await store.merge(payload).save()
     return response.ok({
       code: 200,
       message: 'update store success',
+      store,
+    })
+  }
+
+  async verify({ params, response }: HttpContext) {
+    const store = await Store.findOrFail(params.id)
+    store.status = true
+    await store.save()
+    return response.ok({
+      code: 200,
+      message: 'verify store success',
       store,
     })
   }

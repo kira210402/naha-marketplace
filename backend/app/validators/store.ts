@@ -41,5 +41,6 @@ export const updateStoreValidator = vine.compile(
       .optional(),
     address: vine.string().trim().optional(),
     avatar: vine.string().optional(),
+    status: vine.boolean().optional(),
   })
 )

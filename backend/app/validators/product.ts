@@ -32,5 +32,6 @@ export const updateProductValidator = vine.compile(
     quantity: vine.number().min(0).optional(),
     discount: vine.number().min(0).max(100).optional(),
     images: vine.any().optional(),
+    status: vine.boolean().optional(),
   })
 )
