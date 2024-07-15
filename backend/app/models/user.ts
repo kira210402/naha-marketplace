@@ -54,8 +54,8 @@ export default class User extends compose(BaseModel, AuthFinder) {
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime | null
 
-  @hasMany(() => Store)
-  declare user: HasMany<typeof Store>
+  @hasOne(() => Store)
+  declare user: HasOne<typeof Store>
 
   @hasOne(() => Cart)
   declare cart: HasOne<typeof Cart>
