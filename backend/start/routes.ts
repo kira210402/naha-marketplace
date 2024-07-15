@@ -37,10 +37,6 @@ router
               .use(middleware.pagination())
               .use(middleware.author(EUserRole.ADMIN))
             router.get('/:id', [UsersController, 'show']).as('users.show')
-            router
-              .post('/', [UsersController, 'store'])
-              .as('users.store')
-              .use(middleware.author(EUserRole.ADMIN))
             router.patch('/', [UsersController, 'update']).as('users.update')
             router
               .delete('/:id', [UsersController, 'destroy'])
@@ -85,7 +81,7 @@ router
               .as('cart.index')
               .use(middleware.pagination())
             router
-              .get('/add-product/:productId', [CartsController, 'addProduct'])
+              .post('/add-product/:productId', [CartsController, 'addProduct'])
               .as('cart.addProduct')
             router.put('/', [CartsController, 'update']).as('cart.update')
           })
