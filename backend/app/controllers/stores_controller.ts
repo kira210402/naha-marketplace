@@ -1,5 +1,6 @@
 import StoreException from '#exceptions/store_exception'
 import Store from '#models/store'
+import { UploadCloudinary } from '#services/upload_cloudinary_service'
 import { createStoreValidator, updateStoreValidator } from '#validators/store'
 import type { HttpContext } from '@adonisjs/core/http'
 
@@ -27,9 +28,24 @@ export default class StoresController {
   }
 
   async store({ request, auth, response }: HttpContext) {
-    const data = request.only(['name', 'description', 'phoneNumber', 'address'])
+    const file = request.file('avatar')
+    let cloudinary_response = await UploadCloudinary.upload(file)
+    const { url } = cloudinary_response as { url: string }
+
+    const { name, description, phoneNumber, address } = request.only([
+      'name',
+      'description',
+      'phoneNumber',
+      'address',
+    ])
+    const data = {
+      name,
+      description,
+      phoneNumber,
+      address,
+      avatar: url,
+    }
     const payload = await createStoreValidator.validate(data)
-    console.log('auth.user ', auth.user?.$attributes.id)
     const store = await Store.create({
       userId: auth.user?.$attributes.id,
       ...payload,

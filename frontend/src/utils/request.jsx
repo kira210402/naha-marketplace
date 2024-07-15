@@ -23,8 +23,8 @@ export const post = async (path, options) => {
   try {
     const response = await axiosInstance.post(path, options, {
       headers: {
-        Accept: 'application/json',
-        'Content-type': 'application/json',
+        Accept: '*/*',
+        'Content-type': 'multipart/form-data',
       },
     });
     return response.data;

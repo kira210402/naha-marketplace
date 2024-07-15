@@ -5,7 +5,7 @@ import type { HttpContext } from '@adonisjs/core/http'
 
 export default class AuthController {
   async register({ request, response }: HttpContext) {
-    const data = request.only(['username', 'email', 'password'])
+    const data = request.only(['username', 'email', 'password', 'fullName'])
 
     const existingEmail = await User.findBy('email', data.email)
     if (existingEmail) {
