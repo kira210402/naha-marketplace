@@ -45,7 +45,7 @@ const UserProfilePage = () => {
       </Flex>
     );
   }
-
+  console.log('ok');
   return <div>{user ? <UserProfile user={user} /> : <p>No user data</p>}</div>;
 };
 
