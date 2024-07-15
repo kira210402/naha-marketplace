@@ -1,10 +1,9 @@
-import { Button, Flex, Form, Input, Spin, Upload, message } from 'antd';
+import { Button, Form, Input, Upload, message } from 'antd';
 import { useState } from 'react';
 import { UploadOutlined } from '@ant-design/icons';
 import { updateUser } from '../../../services/user';
 const UserProfile = ({ user }) => {
   const [form] = Form.useForm();
-  const [loading, setLoading] = useState(true);
   const [fileList, setFileList] = useState([]);
 
   const handleUploadChange = ({ fileList }) => {
@@ -27,23 +26,9 @@ const UserProfile = ({ user }) => {
       } else message.error('Update user fail');
     } catch (error) {
       message.error('Có lỗi xảy ra!');
-    } finally {
-      setLoading(false);
     }
-  };
-  if (loading) {
-    return (
-      <Flex
-        gap='small'
-        vertical
-        align='center'
-        justify='center'
-        style={{ minHeight: '100vh' }}
-      >
-        <Spin size='large' />
-      </Flex>
-    );
   }
+
   return (
     <div
       style={{
@@ -84,41 +69,42 @@ const UserProfile = ({ user }) => {
           label='Email'
           name='email'
         >
-        <Input disabled />
-      </Form.Item>
-      <Form.Item
-        label='FullName'
-        name='fullName'
-        rules={[{ required: true, message: 'Please input your fullName!' }]}
-      >
-        <Input value={user.fullName} />
-      </Form.Item>
-      <Form.Item
-        label='Phone'
-        name='phoneNumber'
-        rules={[
-          { required: true, message: 'Please input your phone number!' },
-        ]}
-      >
-        <Input />
-      </Form.Item>
-      <Form.Item
-        label='Address'
-        name='address'
-        rules={[
-          { required: true, message: 'Please input your address!' },
-        ]}
-      >
-        <Input />
-      </Form.Item>
-      <Form.Item wrapperCol={{ offset: 4, span: 14 }}>
-        <Button type='primary' htmlType='submit' style={{ width: '100%' }}>
-          Update Profile
-        </Button>
-      </Form.Item>
-    </Form>
+          <Input disabled />
+        </Form.Item>
+        <Form.Item
+          label='FullName'
+          name='fullName'
+          rules={[{ required: true, message: 'Please input your fullName!' }]}
+        >
+          <Input value={user.fullName} />
+        </Form.Item>
+        <Form.Item
+          label='Phone'
+          name='phoneNumber'
+          rules={[
+            { required: true, message: 'Please input your phone number!' },
+          ]}
+        >
+          <Input />
+        </Form.Item>
+        <Form.Item
+          label='Address'
+          name='address'
+          rules={[
+            { required: true, message: 'Please input your address!' },
+          ]}
+        >
+          <Input />
+        </Form.Item>
+        <Form.Item wrapperCol={{ offset: 4, span: 14 }}>
+          <Button type='primary' htmlType='submit' style={{ width: '100%' }}>
+            Update Profile
+          </Button>
+        </Form.Item>
+      </Form>
     </div >
   );
 };
+
 
 export default UserProfile;
