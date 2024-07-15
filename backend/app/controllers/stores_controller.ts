@@ -19,11 +19,11 @@ export default class StoresController {
   }
 
   async indexByUser({ auth, response }: HttpContext) {
-    const stores = await Store.query().where('userId', auth.user?.$attributes.id)
+    const store = await Store.query().where('userId', auth.user?.$attributes.id).first()
     return response.ok({
       code: 200,
       message: 'get stores by user success',
-      stores,
+      store,
     })
   }
 

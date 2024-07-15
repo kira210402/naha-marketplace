@@ -30,7 +30,7 @@ const navLinks = [
   { to: '/cart', label: iconCart },
   { to: '/about', label: 'About' },
   { to: '/contact', label: 'Contact' },
-  { to: '/stores', label: 'Stores' },
+  { to: '/stores/my', label: 'My Store' },
 ];
 
 const Header = () => {

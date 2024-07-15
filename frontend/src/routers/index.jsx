@@ -9,7 +9,7 @@ import UserProfilePage from '../pages/client/UserProfilePage';
 import Logout from '../pages/client/Logout';
 import SearchResult from '../pages/client/search/SearchResult';
 import StoreDetailPage from '../pages/client/store/StoreDetailPage';
-import StoresPage from '../pages/client/store/StoresPage';
+import MyStore from '../pages/client/store/MyStore';
 export const routes = [
   {
     path: '/',
@@ -34,12 +34,12 @@ export const routes = [
         ],
       },
       {
-        path: '/stores',
-        element: <StoresPage />
-      },
-      {
         path: '/stores/:id',
         element: <StoreDetailPage />,
+      },
+      {
+        path: '/stores/my',
+        element: <MyStore />,
       },
       {
         path: '/cart',

@@ -10,7 +10,7 @@ export const getProductsOfStore = async (id) => {
   return results
 }
 
-export const getMyStores = async () => {
+export const getMyStore = async () => {
   const response = await get(`/stores/my`);
   return response
 }

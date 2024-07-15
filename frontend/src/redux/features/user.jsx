@@ -13,16 +13,12 @@ export const clearUser = () => ({
 });
 
 export const loginUser = (credentials) => async (dispatch) => {
-  try {
     const response = await login(credentials);
+    console.log('response', response);
     const { token } = response.accessToken;
     setCookie('token', token, 1);
     const user = jwtDecode(token);
     dispatch(setUser(user));
-  } catch (error) {
-    console.error('Login failed:', error);
-    throw error;
-  }
 };
 
 export const fetchUserFromToken = () => (dispatch) => {
