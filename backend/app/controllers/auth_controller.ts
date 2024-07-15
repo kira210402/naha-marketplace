@@ -5,7 +5,23 @@ import type { HttpContext } from '@adonisjs/core/http'
 
 export default class AuthController {
   async register({ request, response }: HttpContext) {
-    const data = await request.only(['username', 'email', 'password'])
+    const data = request.only(['username', 'email', 'password'])
+
+    const existingEmail = await User.findBy('email', data.email)
+    if (existingEmail) {
+      return response.status(400).send({
+        code: 400,
+        message: 'Email already exists',
+      })
+    }
+
+    const existingUsername = await User.findBy('username', data.username)
+    if (existingUsername) {
+      return response.status(400).send({
+        code: 400,
+        message: 'Username already exists',
+      })
+    }
     const payload = await registerValidator.validate(data)
     const user = await User.create(payload)
     await Cart.create({ userId: user.id })

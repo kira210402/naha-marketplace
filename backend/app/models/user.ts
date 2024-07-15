@@ -36,7 +36,7 @@ export default class User extends compose(BaseModel, AuthFinder) {
   @column()
   declare avatar: string
 
-  @column()
+  @column({ columnName: 'phone' })
   declare phoneNumber: string | null
 
   @column()

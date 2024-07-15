@@ -2,7 +2,7 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { register } from '../../services/auth';
-
+import { toast } from 'react-toastify';
 const RegisterPage = () => {
   const navigate = useNavigate();
 
@@ -30,12 +30,16 @@ const RegisterPage = () => {
     onSubmit: async (values) => {
       try {
         const response = await register(values);
-        console.log(response);
-        if (response) {
-          navigate('/');
+        if (response.code !== 400) {
+          toast.success('You have successfully registered an account');
+          navigate('/login');
+        } else {
+          toast.error(`${response.message}`);
+          return; 
         }
       } catch (error) {
-        console.error('Đăng ký thất bại:', error);
+        console.log('error', error);
+        toast.error('You have failed to register your account');
       }
     },
   });

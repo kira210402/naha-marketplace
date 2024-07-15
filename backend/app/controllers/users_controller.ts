@@ -38,36 +38,42 @@ export default class UsersController {
   }
 
   async update({ request, response, auth }: HttpContext) {
-    const { username, email, password, phoneNumber, address } = request.only([
-      'username',
-      'email',
-      'password',
-      'phoneNumber',
-      'address',
-    ])
-    const user = await User.findOrFail(auth.user?.$attributes.id)
-    let avatar: string = user.avatar
-    if (request.file('avatar')) {
-      const file = request.file('avatar')
-      let cloudinary_response = await UploadCloudinary.upload(file)
-      const { url } = cloudinary_response as { url: string }
-      avatar = url
+    try {
+      const { username, email, password, phoneNumber, address } = request.only([
+        'username',
+        'email',
+        'password',
+        'phoneNumber',
+        'address',
+      ])
+      const user = await User.findOrFail(auth.user?.$attributes.id)
+      let avatar: string = user.avatar
+      if (request.file('avatar')) {
+        const file = request.file('avatar')
+        let cloudinary_response = await UploadCloudinary.upload(file)
+        const { url } = cloudinary_response as { url: string }
+        avatar = url
+      }
+      console.log('avatar', avatar)
+      const data = {
+        username,
+        email,
+        password,
+        avatar,
+        phoneNumber,
+        address,
+      }
+      const payload = await updateUserValidator.validate(data)
+      await user.merge(payload).save()
+
+      return response.ok({
+        code: 200,
+        message: 'success',
+        user,
+      })
+    } catch (error) {
+      console.log('error', error)
     }
-    const data = {
-      username,
-      email,
-      password,
-      avatar,
-      phoneNumber,
-      address,
-    }
-    const payload = await updateUserValidator.validate(data)
-    const updatedUser = await user.merge(payload).save()
-    return response.ok({
-      code: 200,
-      message: 'success',
-      user: updatedUser,
-    })
   }
 
   async destroy({ response, params }: HttpContext) {
