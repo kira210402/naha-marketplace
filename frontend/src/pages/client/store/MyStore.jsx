@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { getMyStore } from '../../../services/stores';
 import StoreForm from '../../../components/client/storePage/storeForm/StoreForm';
 import { Flex, Spin } from 'antd';
+import MyStoreDetailPage from './MyStoreDetailPage';
 
 const MyStore = () => {
   const [store, setStore] = useState(null);
@@ -40,10 +41,7 @@ const MyStore = () => {
       {
         store ?
           store.status === true ?
-            <div>
-              <h1>{store.name}</h1>
-              <p>{store.description}</p>
-            </div>
+            <MyStoreDetailPage store={store}/>
             :
             <div>Wait for admin to verify</div>
           :
