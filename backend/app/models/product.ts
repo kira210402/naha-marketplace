@@ -32,6 +32,9 @@ export default class Product extends BaseModel {
   @column()
   declare images: string[]
 
+  @column()
+  declare status: boolean
+
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
 
