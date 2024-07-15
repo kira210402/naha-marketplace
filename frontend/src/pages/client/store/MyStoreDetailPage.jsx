@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import {
+  DatabaseOutlined,
   MenuFoldOutlined,
   MenuUnfoldOutlined,
-  UploadOutlined,
-  UserOutlined,
-  VideoCameraOutlined,
+  ProductOutlined,
+  SettingOutlined,
 } from '@ant-design/icons';
 import { Button, Layout, Menu, theme } from 'antd';
 import ProductManagementPage from './ProductManagementPage';
@@ -43,17 +43,17 @@ const App = () => {
           items={[
             {
               key: '1',
-              icon: <UserOutlined />,
+              icon: <ProductOutlined />,
               label: 'Products',
             },
             {
               key: '2',
-              icon: <VideoCameraOutlined />,
+              icon: <DatabaseOutlined />,
               label: 'Collections',
             },
             {
               key: '3',
-              icon: <UploadOutlined />,
+              icon: <SettingOutlined />,
               label: 'Settings',
             },
           ]}
