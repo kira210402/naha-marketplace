@@ -5,6 +5,7 @@ import { updateUser } from '../../../services/user';
 const UserProfile = ({ user }) => {
   const [form] = Form.useForm();
   const [fileList, setFileList] = useState([]);
+  console.log(user);
 
   const handleUploadChange = ({ fileList }) => {
     setFileList(fileList);
@@ -27,8 +28,6 @@ const UserProfile = ({ user }) => {
     } catch (error) {
       message.error('Có lỗi xảy ra!');
     }
-  }
-
   return (
     <div
       style={{
@@ -59,16 +58,10 @@ const UserProfile = ({ user }) => {
             <Button icon={<UploadOutlined />}>Chọn ảnh</Button>
           </Upload>
         </Form.Item>
-        <Form.Item
-          label='Username'
-          name='username'
-        >
+        <Form.Item label='Username' name='username'>
           <Input disabled />
         </Form.Item>
-        <Form.Item
-          label='Email'
-          name='email'
-        >
+        <Form.Item label='Email' name='email'>
           <Input disabled />
         </Form.Item>
         <Form.Item
