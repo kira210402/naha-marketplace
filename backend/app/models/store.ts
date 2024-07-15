@@ -26,6 +26,9 @@ export default class Store extends BaseModel {
   @column()
   declare avatar: string
 
+  @column()
+  declare status: boolean
+
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
 
