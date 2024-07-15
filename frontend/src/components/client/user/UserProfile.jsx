@@ -4,7 +4,7 @@ import { UploadOutlined } from '@ant-design/icons';
 import { updateUser } from '../../../services/user';
 const UserProfile = ({ user }) => {
   const [form] = Form.useForm();
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [fileList, setFileList] = useState([]);
 
   const handleUploadChange = ({ fileList }) => {
@@ -12,7 +12,6 @@ const UserProfile = ({ user }) => {
   };
 
   const handleSubmit = async (values) => {
-    setLoading(true);
     try {
       const formData = new FormData();
       formData.append('username', values.username);
@@ -22,9 +21,10 @@ const UserProfile = ({ user }) => {
       }
 
       const response = await updateUser(formData);
-      if (response) message.success('Update user success!');
-      console.log('response', response);
-      return response;
+      if (response) {
+        message.success('Update user success!');
+        return response;
+      } else message.error('Update user fail');
     } catch (error) {
       message.error('Có lỗi xảy ra!');
     } finally {

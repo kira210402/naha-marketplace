@@ -23,10 +23,12 @@ const LoginPage = () => {
     onSubmit: async (values) => {
       try {
         dispatch(loginUser(values));
-        toast.success('Login is successfully');
+        toast.success('Logged in successfully');
         navigate('/');
       } catch (error) {
-        console.error('Đăng ký thất bại:', error);
+        console.error('Đăng nhập thất bại:', error);
+        toast.error('login failed');
+        navigate('/login');
       }
     },
   });
