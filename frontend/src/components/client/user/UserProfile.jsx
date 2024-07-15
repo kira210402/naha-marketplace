@@ -10,12 +10,12 @@ const UserProfile = ({ user }) => {
   const handleUploadChange = ({ fileList }) => {
     setFileList(fileList);
   };
-
   const handleSubmit = async (values) => {
     try {
       const formData = new FormData();
-      formData.append('username', values.username);
-      formData.append('email', values.email);
+      formData.append('fullName', values.fullName);
+      formData.append('phoneNumber', values.phoneNumber);
+      formData.append('address', values.address);
       if (fileList.length > 0) {
         formData.append('avatar', fileList[0].originFileObj);
       }
@@ -77,55 +77,47 @@ const UserProfile = ({ user }) => {
         <Form.Item
           label='Username'
           name='username'
-          rules={[{ required: true, message: 'Please input your username!' }]}
         >
-          <Input />
+          <Input disabled />
         </Form.Item>
         <Form.Item
           label='Email'
           name='email'
-          rules={[
-            {
-              required: true,
-              type: 'email',
-              message: 'Please input a valid email!',
-            },
-          ]}
         >
-          <Input />
-        </Form.Item>
-        <Form.Item
-          label='Password'
-          name='password'
-          rules={[{ required: true, message: 'Please input your password!' }]}
-        >
-          <Input.Password />
-        </Form.Item>
-        {/* <Form.Item
-          label='Date of Birth'
-          name='birthDate'
-          rules={[
-            { required: true, message: 'Please select your date of birth!' },
-          ]}
-        >
-          <DatePicker style={{ width: '100%' }} />
-        </Form.Item> */}
-        <Form.Item
-          label='Phone'
-          name='phoneNumber'
-          rules={[
-            { required: true, message: 'Please input your phone number!' },
-          ]}
-        >
-          <Input />
-        </Form.Item>
-        <Form.Item wrapperCol={{ offset: 4, span: 14 }}>
-          <Button type='primary' htmlType='submit' style={{ width: '100%' }}>
-            Update Profile
-          </Button>
-        </Form.Item>
-      </Form>
-    </div>
+        <Input disabled />
+      </Form.Item>
+      <Form.Item
+        label='FullName'
+        name='fullName'
+        rules={[{ required: true, message: 'Please input your fullName!' }]}
+      >
+        <Input value={user.fullName} />
+      </Form.Item>
+      <Form.Item
+        label='Phone'
+        name='phoneNumber'
+        rules={[
+          { required: true, message: 'Please input your phone number!' },
+        ]}
+      >
+        <Input />
+      </Form.Item>
+      <Form.Item
+        label='Address'
+        name='address'
+        rules={[
+          { required: true, message: 'Please input your address!' },
+        ]}
+      >
+        <Input />
+      </Form.Item>
+      <Form.Item wrapperCol={{ offset: 4, span: 14 }}>
+        <Button type='primary' htmlType='submit' style={{ width: '100%' }}>
+          Update Profile
+        </Button>
+      </Form.Item>
+    </Form>
+    </div >
   );
 };
 

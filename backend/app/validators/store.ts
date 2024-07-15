@@ -17,7 +17,7 @@ export const createStoreValidator = vine.compile(
       .maxLength(11)
       .regex(/0\d{9,10}/),
     address: vine.string().trim(),
-    avatar: vine.string().activeUrl().trim().optional(),
+    avatar: vine.string().optional(),
   })
 )
 
@@ -40,6 +40,6 @@ export const updateStoreValidator = vine.compile(
       .regex(/0\d{9,10}/)
       .optional(),
     address: vine.string().trim().optional(),
-    avatar: vine.string().activeUrl().trim().optional(),
+    avatar: vine.string().optional(),
   })
 )

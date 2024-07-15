@@ -5,7 +5,7 @@ import StoreHeader from '../../../components/client/storePage/storeHeader/StoreH
 import { useEffect, useState } from 'react';
 import { getProductsOfStore, getStore } from '../../../services/stores';
 
-const StorePage = () => {
+const StoreDetailPage = () => {
   const { id } = useParams();
   const [store, setStore] = useState(null)
   const [products, setProducts] = useState([])
@@ -34,4 +34,4 @@ const StorePage = () => {
   )
 }
 
-export default StorePage;
+export default StoreDetailPage;
