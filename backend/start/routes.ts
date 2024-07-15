@@ -37,10 +37,6 @@ router
               .use(middleware.pagination())
               .use(middleware.author(EUserRole.ADMIN))
             router.get('/:id', [UsersController, 'show']).as('users.show')
-            router
-              .post('/', [UsersController, 'store'])
-              .as('users.store')
-              .use(middleware.author(EUserRole.ADMIN))
             router.patch('/', [UsersController, 'update']).as('users.update')
             router
               .delete('/:id', [UsersController, 'destroy'])
@@ -66,6 +62,7 @@ router
               .post('/', [StoresController, 'store'])
               .as('stores.store')
               .use(middleware.lockUser())
+            router.put('/verify/:id', [StoresController, 'verify']).as('stores.verify').use(middleware.author(EUserRole.ADMIN))
             router
               .put('/:id', [StoresController, 'update'])
               .as('stores.update')

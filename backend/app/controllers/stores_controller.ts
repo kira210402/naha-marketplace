@@ -73,10 +73,22 @@ export default class StoresController {
     if (store.userId !== auth.user?.$attributes.id) {
       throw new Error('You are not authorized to perform this action')
     }
+
     await store.merge(payload).save()
     return response.ok({
       code: 200,
       message: 'update store success',
+      store,
+    })
+  }
+
+  async verify({ params, response }: HttpContext) {
+    const store = await Store.findOrFail(params.id)
+    store.status = true
+    await store.save()
+    return response.ok({
+      code: 200,
+      message: 'verify store success',
       store,
     })
   }
