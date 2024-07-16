@@ -70,20 +70,18 @@ export default class CollectionsController {
     }
   }
 
-  async addProduct({ request, params, response }: HttpContext) {
+  async addProduct({ request, params, response, auth }: HttpContext) {
     try {
+      const store = await Store.findByOrFail('userId', auth.user?.$attributes.id)
       const productIds = request.input('productIds')
+      console.log('productIds', productIds)
       const collection = await Collection.findOrFail(params.id)
 
-      const products = await Product.query().whereIn('id', productIds)
-      if (products.length !== productIds.length) {
-        return response.badRequest({
-          code: 400,
-          message: 'One or more products do not exist',
-        })
-      }
+      const products = await Product.query().where('storeId', store?.id).where('deleted', false).whereIn('id', productIds)
 
-      await collection.related('products').attach(productIds)
+      const productIdsOfStore = products.map((product) => product.id)
+
+      await collection.related('products').attach(productIdsOfStore)
 
       const result = await Collection.query().where('id', collection.id).preload('products').first()
 
