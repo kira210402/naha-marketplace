@@ -7,6 +7,7 @@ export const getStore = async (id) => {
 
 export const getProductsOfStore = async (options, filter) => {
   const queryParams = queryString.stringify({ ...options, ...filter });
+  console.log('queryParams', queryParams);
   const results = await get(`/stores/products?${queryParams}`);
   return results;
 };
