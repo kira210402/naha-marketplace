@@ -68,7 +68,8 @@ const MyStoreDetailPage = () => {
           ]}
         />
       </Sider>
-      <Layout style={{ minHeight: '100vh' }}>
+      <Layout style={{minHeight: '100vh'}}>
+
         <Header
           style={{
             padding: 0,

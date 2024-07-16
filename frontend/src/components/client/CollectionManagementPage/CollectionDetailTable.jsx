@@ -1,9 +1,38 @@
 import { Space, Table, Tag } from 'antd';
-import {NavLink} from 'react-router-dom';
+import { useState } from 'react';
+import { NavLink } from 'react-router-dom';
+import DeleteRecord from './DeleteRecord';
+import CreateRecord from './CreateRecord';
 
-const CollectionDetailTable = ({collection}) => {
-  const products = collection.products
-  console.log('collection', collection);
+const CollectionDetailTable = ({ collection }) => {
+  const initialProducts = collection.products.slice(0, 5);
+  const totalResult = collection.products.length;
+  const [products, setProducts] = useState(initialProducts);
+  const [pagination, setPagination] = useState({
+    limitPage: 5,
+    totalPage: 1,
+    currentPage: 1,
+    totalResult: 1,
+  });
+
+  const handleTotal = (total, range) => {
+    const start = (range[0] - 1) * range[1] + 1;
+    return (
+      <span>
+        Hiển thị từ&nbsp;
+        <span style={{ fontWeight: 'bold' }}>{start}</span> đến&nbsp;
+        <span style={{ fontWeight: 'bold' }}>
+          {Math.min(range[1] * range[0], pagination.totalResult)}
+        </span>
+        &nbsp;trong tổng số&nbsp;
+        <span style={{ fontWeight: 'bold' }}>{total}</span> bản ghi
+      </span>
+    );
+  }
+
+  const handleReload = () => {
+    // fetchData();
+  };
 
   const columns = [
     {
@@ -17,10 +46,17 @@ const CollectionDetailTable = ({collection}) => {
     },
     {
       title: <div style={{ fontSize: '1rem' }}>Hình ảnh</div>,
-      dataIndex: 'images[0]',
-      key: 'hình ảnh',
+      dataIndex: 'images',
+      width: 100,
+      key: 'images',
+      render: (text, record) => (
+        <img
+          src={record.images[0]}
+          alt='image'
+          style={{ width: 50, height: 50 }}
+        />
+      ),
       ellipsis: true,
-      render: (text) => <a>{text}</a>
     },
     {
       title: <div style={{ fontSize: '1rem' }}>Tên sản phẩm</div>,
@@ -65,24 +101,18 @@ const CollectionDetailTable = ({collection}) => {
       }
     },
 
-    // {
-    //   title: <div style={{ fontSize: '1rem' }}>Hành động</div>,
-    //   key: 'actions',
-    //   width: 120,
-    //   render: (_, record) => {
-    //     return (
-    //       <>
-    //         <ViewRecord record={record} departments={departments} />
-    //         <EditRecord
-    //           record={record}
-    //           onReload={handleReload}
-    //           departments={departments}
-    //         />
-    //         <DeleteRecord record={record} onReload={handleReload} />
-    //       </>
-    //     );
-    //   },
-    // },
+    {
+      title: <div style={{ fontSize: '1rem' }}>Hành động</div>,
+      key: 'actions',
+      width: 120,
+      render: (_, record) => {
+        return (
+          <>
+            <DeleteRecord data={record} onReload={handleReload} />
+          </>
+        );
+      },
+    },
   ];
   return (
     <>
@@ -92,47 +122,41 @@ const CollectionDetailTable = ({collection}) => {
             marginBottom: 16,
           }}
         >
-          {/* <CreateRecord
-            onReload={handleReload}
-          ></CreateRecord> */}
-          {/* <Button onClick={clearFilters}>Xóa bộ lọc</Button>
-          <Button onClick={clearAll}>Xóa bộ lọc và sắp xếp</Button> */}
+          <CreateRecord onReload={handleReload} />
         </Space>
 
         <Table
-          // onChange={handleChange}
-          // dataSource={products}
           columns={columns}
           rowKey={'id'}
           size='small'
           dataSource={products}
-        // pagination={{
-        //   current: pagination.current,
-        //   total: pagination.totalResult,
-        //   onChange: (page, pageSize) => {
-        //     setPagination((prevPagination) => ({
-        //       ...prevPagination,
-        //       current: page,
-        //       limitPage: pageSize,
-        //     }));
-        //     const option = {};
-        //     const filter = {};
-        //     option['limit'] = pageSize;
-        //     option['page'] = page;
-        //     fetchData(option, filter);
-        //   },
-        //   pageSizeOptions: ['10', '30', '50'],
-        //   position: ['bottomRight'],
-        //   hideOnSinglePage: false,
-        //   showSizeChanger: true,
-        //   showPrevNextJumpers: false,
-        //   showLessItems: true,
-        //   showTotal: () =>
-        //     handleTotal(pagination.totalResult, [
-        //       pagination.current,
-        //       pagination.limitPage,
-        //     ]),
-        // }}
+          pagination={{
+            current: pagination.currentPage,
+            pageSize: pagination.limitPage,
+            total: totalResult,
+            onChange: (page, pageSize) => {
+              setPagination((prevPagination) => ({
+                ...prevPagination,
+                currentPage: page,
+                limitPage: pageSize,
+              }));
+              const option = {};
+              option['limit'] = pageSize;
+              option['page'] = page;
+              setProducts(collection.products.slice((page - 1) * pageSize, page * pageSize));
+            },
+            pageSizeOptions: ['5', '10', '20', '30', '50'],
+            position: ['bottomRight'],
+            hideOnSinglePage: false,
+            showSizeChanger: true,
+            showPrevNextJumpers: false,
+            showLessItems: true,
+            showTotal: (total) =>
+              handleTotal(total, [
+                pagination.currentPage,
+                pagination.limitPage,
+              ]),
+          }}
         />
       </div>
     </>

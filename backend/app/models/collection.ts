@@ -13,6 +13,12 @@ export default class Collection extends BaseModel {
   @column()
   declare description: string
 
+  @column()
+  declare status: boolean
+
+  @column()
+  declare deleted: boolean
+
   @column({ columnName: 'store_id' })
   declare storeId: number
 
