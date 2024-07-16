@@ -73,6 +73,7 @@ router
             router
               .get('/products', [StoresController, 'getListProductByStore'])
               .as('stores.getListProductByStore')
+              .use(middleware.pagination())
             router
               .delete('/:id', [StoresController, 'destroy'])
               .as('stores.destroy')
@@ -149,7 +150,7 @@ router
           .use(middleware.pagination())
         router.get('/:id', [ProductsController, 'show']).as('products.show')
         router
-          .post('/:storeId', [ProductsController, 'store'])
+          .post('/create', [ProductsController, 'store'])
           .as('products.store')
           .use(middleware.lockUser())
           .use(middleware.auth({ guards: ['api'] }))

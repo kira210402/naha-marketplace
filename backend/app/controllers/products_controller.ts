@@ -21,9 +21,8 @@ export default class ProductsController {
     })
   }
 
-  async store({ request, auth, response, params }: HttpContext) {
-    const stores = await Store.query().where('userId', auth.user?.$attributes.id)
-    const store = stores.find((store) => store.$attributes.id === parseInt(params.storeId))
+  async store({ request, auth, response }: HttpContext) {
+    const store = await Store.findByOrFail('userId', auth.user?.$attributes.id)
     if (!store) throw new StoreException()
     if (store.userId !== auth.user?.$attributes.id)
       throw new Error('You are not authorized to perform this action')
@@ -47,17 +46,17 @@ export default class ProductsController {
       quantity,
       discount,
       images: JSON.stringify(imagesUrl),
+      status: true,
     }
 
     const payload = await createProductValidator.validate(data)
-    console.log(payload)
     const product = await Product.create({
       storeId: store.id,
       ...payload,
     })
 
     return response.created({
-      code: 201,
+      code: 200,
       message: 'create product success',
       product,
     })
@@ -97,7 +96,7 @@ export default class ProductsController {
       quantity,
       discount,
       images: JSON.stringify(imagesUrl),
-      status
+      status,
     }
 
     const payload = await updateProductValidator.validate(data)

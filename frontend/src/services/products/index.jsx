@@ -1,4 +1,4 @@
-import { get } from '../../utils/request';
+import { get, post } from '../../utils/request';
 
 export const getProduct = async (id) => {
   const result = await get(`/products/${id}`);
@@ -12,5 +12,10 @@ export const getListProduct = async () => {
 
 export const getSearchProduct = async (keyword) => {
   const result = await get(`/products/search${keyword}`);
+  return result;
+};
+
+export const createProduct = async (options) => {
+  const result = await post(`/products/create`, options);
   return result;
 };
