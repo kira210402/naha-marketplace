@@ -62,11 +62,17 @@ router
               .post('/', [StoresController, 'store'])
               .as('stores.store')
               .use(middleware.lockUser())
-            router.put('/verify/:id', [StoresController, 'verify']).as('stores.verify').use(middleware.author(EUserRole.ADMIN))
+            router
+              .put('/verify/:id', [StoresController, 'verify'])
+              .as('stores.verify')
+              .use(middleware.author(EUserRole.ADMIN))
             router
               .put('/:id', [StoresController, 'update'])
               .as('stores.update')
               .use(middleware.lockUser())
+            router
+              .get('/products', [StoresController, 'getListProductByStore'])
+              .as('stores.getListProductByStore')
             router
               .delete('/:id', [StoresController, 'destroy'])
               .as('stores.destroy')
@@ -136,9 +142,6 @@ router
           .get('/', [ProductsController, 'index'])
           .as('products.index')
           .use(middleware.pagination())
-        router
-          .get('/store/:storeId', [ProductsController, 'indexByStore'])
-          .as('products.indexByStore')
         router.get('/:id', [ProductsController, 'show']).as('products.show')
         router
           .post('/:storeId', [ProductsController, 'store'])

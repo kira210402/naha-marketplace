@@ -21,17 +21,6 @@ export default class ProductsController {
     })
   }
 
-  async indexByStore({ response, params }: HttpContext) {
-    const store = await Store.findOrFail(params.storeId)
-    const products = await Product.query().where('storeId', params.storeId)
-    return response.ok({
-      code: 200,
-      message: 'get products by store success',
-      store: store.name,
-      products,
-    })
-  }
-
   async store({ request, auth, response, params }: HttpContext) {
     const stores = await Store.query().where('userId', auth.user?.$attributes.id)
     const store = stores.find((store) => store.$attributes.id === parseInt(params.storeId))
