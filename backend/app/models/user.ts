@@ -1,9 +1,9 @@
 import { DateTime } from 'luxon'
 import hash from '@adonisjs/core/services/hash'
 import { compose } from '@adonisjs/core/helpers'
-import { BaseModel, column, hasMany, hasOne } from '@adonisjs/lucid/orm'
+import { BaseModel, column, hasOne } from '@adonisjs/lucid/orm'
 import { withAuthFinder } from '@adonisjs/auth/mixins/lucid'
-import type { HasMany, HasOne } from '@adonisjs/lucid/types/relations'
+import type { HasOne } from '@adonisjs/lucid/types/relations'
 
 import Store from './store.js'
 import { JwtAccessTokenProvider, JwtSecret } from '#providers/jwt_access_token_provider'
@@ -21,7 +21,7 @@ export default class User extends compose(BaseModel, AuthFinder) {
   @column({ isPrimary: true })
   declare id: number
 
-  @column({columnName: "full_name"})
+  @column({ columnName: 'full_name' })
   declare fullName: string | null
 
   @column()
@@ -55,7 +55,7 @@ export default class User extends compose(BaseModel, AuthFinder) {
   declare updatedAt: DateTime | null
 
   @hasOne(() => Store)
-  declare user: HasOne<typeof Store>
+  declare store: HasOne<typeof Store>
 
   @hasOne(() => Cart)
   declare cart: HasOne<typeof Cart>
