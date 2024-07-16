@@ -1,9 +1,11 @@
+import Page from '../../../components/client/ProductManagementPage/Page';
+
 const ProductManagementPage = () => {
   return (
     <div>
-      ProductManagementPage
+      <Page />
     </div>
   );
-}
+};
 
 export default ProductManagementPage;

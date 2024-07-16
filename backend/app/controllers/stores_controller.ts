@@ -1,4 +1,5 @@
 import StoreException from '#exceptions/store_exception'
+import Product from '#models/product'
 import Store from '#models/store'
 import { UploadCloudinary } from '#services/upload_cloudinary_service'
 import { createStoreValidator, updateStoreValidator } from '#validators/store'
@@ -102,6 +103,16 @@ export default class StoresController {
     return response.ok({
       code: 200,
       message: 'delete store success',
+    })
+  }
+
+  async getListProductByStore({ response, auth }: HttpContext) {
+    const store = await Store.findByOrFail('userId', auth.user?.$attributes.id)
+    const products = await Product.query().where('storeId', store.id)
+    return response.ok({
+      code: 200,
+      message: 'get products by store success',
+      products,
     })
   }
 }
