@@ -21,6 +21,10 @@ const Page = () => {
     fetchData();
   }, []);
 
+  const handleReload = () => {
+    fetchData();
+  }
+
   return (
     <div>
       <BreadCrumb
@@ -31,7 +35,7 @@ const Page = () => {
       />
       <Tabs defaultActiveKey='1'>
         <TabPane tab='Tất cả' key='1'>
-          <DataTable collections={collections} />
+          <DataTable collections={collections} handleReload={handleReload}/>
         </TabPane>
         {collections.map((collection) => (
           <TabPane tab={collection.name} key={collection.id}>

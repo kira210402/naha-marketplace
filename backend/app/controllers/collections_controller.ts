@@ -6,11 +6,10 @@ import type { HttpContext } from '@adonisjs/core/http'
 export default class CollectionsController {
   async index({ response, auth }: HttpContext) {
     const store = await Store.findByOrFail('userId', auth.user?.$attributes.id)
-    const collections = await Collection.query().where('storeId', store.id).preload('products')
+    const collections = await Collection.query().where('storeId', store.id).where('deleted', false).preload('products')
     const result = collections.map((collection) => {
       return {
         ...collection.toJSON(),
-        status: collection.$extras.status,
         productCount: collection.products.length,
       }
     }
@@ -23,6 +22,7 @@ export default class CollectionsController {
   }
 
   async store({ request, response, auth }: HttpContext) {
+
     const store = await Store.findByOrFail('userId', auth.user?.$attributes.id)
     const data = request.only(['name', 'description'])
     const payload = await createCollectionValidator.validate(data)
@@ -38,7 +38,7 @@ export default class CollectionsController {
   }
 
   async show({ params }: HttpContext) {
-    const collection = await Collection.findOrFail(params.id)
+    const collection = await Collection.query().where('id', params.id).where('deleted', false).firstOrFail()
     await collection.load('products')
     return {
       code: 200,
@@ -62,7 +62,8 @@ export default class CollectionsController {
 
   async destroy({ params }: HttpContext) {
     const collection = await Collection.findOrFail(params.id)
-    await collection.delete()
+    collection.deleted = true;
+    await collection.save()
     return {
       code: 200,
       message: 'delete collection success',

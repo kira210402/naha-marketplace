@@ -36,8 +36,8 @@ const MyStoreDetailPage = () => {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
   return (
-    <Layout style={{ height: '100vh' }}>
-      <Sider trigger={null} collapsible collapsed={collapsed}>
+    <Layout>
+      <Sider  trigger={null} collapsible collapsed={collapsed}>
         <div className='demo-logo-vertical' />
         <Menu
           theme='dark'
@@ -68,7 +68,7 @@ const MyStoreDetailPage = () => {
           ]}
         />
       </Sider>
-      <Layout>
+      <Layout style={{minHeight: '100vh'}}>
         <Header
           style={{
             padding: 0,
