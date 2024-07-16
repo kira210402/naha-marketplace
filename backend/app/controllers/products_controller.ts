@@ -118,7 +118,8 @@ export default class ProductsController {
     ) {
       throw new Error('You are not authorized to perform this action')
     }
-    await product.delete()
+    product.deleted = true
+    await product.save()
     return response.ok({
       code: 200,
       message: 'delete product success',
