@@ -28,6 +28,7 @@ const UserProfile = ({ user }) => {
     } catch (error) {
       message.error('Có lỗi xảy ra!');
     }
+  };
   return (
     <div
       style={{
@@ -83,9 +84,7 @@ const UserProfile = ({ user }) => {
         <Form.Item
           label='Address'
           name='address'
-          rules={[
-            { required: true, message: 'Please input your address!' },
-          ]}
+          rules={[{ required: true, message: 'Please input your address!' }]}
         >
           <Input />
         </Form.Item>
@@ -95,9 +94,8 @@ const UserProfile = ({ user }) => {
           </Button>
         </Form.Item>
       </Form>
-    </div >
+    </div>
   );
-};
-
+};    
 
 export default UserProfile;
