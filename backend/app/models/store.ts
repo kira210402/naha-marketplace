@@ -39,5 +39,5 @@ export default class Store extends BaseModel {
   declare product: HasMany<typeof Product>
 
   @hasMany(() => Collection)
-  declare collection: HasMany<typeof Collection>
+  declare collections: HasMany<typeof Collection>
 }
