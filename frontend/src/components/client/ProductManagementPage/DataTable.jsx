@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { getProductsOfStore } from '../../../services/stores';
 import { Space, Table } from 'antd';
+import CreateRecord from './CreateRecord';
 
 const DataTable = () => {
   const [products, setProducts] = useState([]);
@@ -17,9 +18,9 @@ const DataTable = () => {
   }, []);
   console.log('products', products);
 
-  // const handleReload = () => {
-  //   fetchData();
-  // };
+  const handleReload = () => {
+    fetchData();
+  };
 
   const columns = [
     {
@@ -75,11 +76,11 @@ const DataTable = () => {
     //   render: (_, record) => {
     //     return (
     //       <>
-    //         <ViewRecord record={record} departments={departments} />
+    //         <ViewRecord record={record} />
     //         <EditRecord
     //           record={record}
     //           onReload={handleReload}
-    //           departments={departments}
+    //
     //         />
     //         <DeleteRecord record={record} onReload={handleReload} />
     //       </>
@@ -95,9 +96,7 @@ const DataTable = () => {
             marginBottom: 16,
           }}
         >
-          {/* <CreateRecord
-            onReload={handleReload}
-          ></CreateRecord> */}
+          <CreateRecord onReload={handleReload} />
           {/* <Button onClick={clearFilters}>Xóa bộ lọc</Button>
           <Button onClick={clearAll}>Xóa bộ lọc và sắp xếp</Button> */}
         </Space>
