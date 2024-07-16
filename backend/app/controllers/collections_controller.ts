@@ -7,10 +7,18 @@ export default class CollectionsController {
   async index({ response, auth }: HttpContext) {
     const store = await Store.findByOrFail('userId', auth.user?.$attributes.id)
     const collections = await Collection.query().where('storeId', store.id).preload('products')
+    const result = collections.map((collection) => {
+      return {
+        ...collection.toJSON(),
+        status: collection.$extras.status,
+        productCount: collection.products.length,
+      }
+    }
+    )
     return response.ok({
       code: 200,
       message: 'get collections success',
-      collections,
+      result,
     })
   }
 

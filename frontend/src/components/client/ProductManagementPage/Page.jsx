@@ -11,7 +11,7 @@ const Page = () => {
         title_1='Quản trị hệ thống'
         title_2='Quản lý sản phẩm'
       />
-      <Tabs defaultActiveKey='1' onChange={(key) => console.log(key)}>
+      <Tabs defaultActiveKey='1'>
         <TabPane tab='Tất cả' key='1'>
           <DataTable />
         </TabPane>

@@ -1,10 +1,11 @@
-const CollectionManagementPage = () => {
+import Page from '../../../components/client/CollectionManagementPage/Page';
+
+const ProductManagementPage = () => {
   return (
     <div>
-      Collection Management Page
+      <Page />
     </div>
   );
+};
 
-}
-
-export default CollectionManagementPage;
+export default ProductManagementPage;
