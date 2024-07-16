@@ -2,7 +2,7 @@ import { Space, Table, Tag } from 'antd';
 import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import DeleteRecord from './DeleteRecord';
-import CreateRecord from './CreateRecord';
+import AddProduct from './AddProduct';
 
 const CollectionDetailTable = ({ collection }) => {
   const initialProducts = collection.products.slice(0, 5);
@@ -123,7 +123,7 @@ const CollectionDetailTable = ({ collection }) => {
             marginBottom: 16,
           }}
         >
-          <CreateRecord onReload={handleReload} />
+          <AddProduct onReload={handleReload} />
         </Space>
 
         <Table
