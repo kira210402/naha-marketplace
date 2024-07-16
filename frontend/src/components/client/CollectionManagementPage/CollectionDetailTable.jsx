@@ -7,9 +7,10 @@ import CreateRecord from './CreateRecord';
 const CollectionDetailTable = ({ collection }) => {
   const initialProducts = collection.products.slice(0, 5);
   const totalResult = collection.products.length;
+  const limit = totalResult < 5 ? totalResult : 5;
   const [products, setProducts] = useState(initialProducts);
   const [pagination, setPagination] = useState({
-    limitPage: 5,
+    limitPage: parseInt(limit),
     totalPage: 1,
     currentPage: 1,
     totalResult: 1,
