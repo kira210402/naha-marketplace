@@ -13,7 +13,15 @@ const Page = () => {
       />
       <Tabs defaultActiveKey='1'>
         <TabPane tab='Tất cả' key='1'>
-          <DataTable />
+          <DataTable tab='1' />
+        </TabPane>
+
+        <TabPane tab='Hoạt động' key='2'>
+          <DataTable tab='2' />
+        </TabPane>
+
+        <TabPane tab='Dừng hoạt động' key='3'>
+          <DataTable tab='3' />
         </TabPane>
       </Tabs>
     </div>
