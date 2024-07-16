@@ -37,7 +37,7 @@ const MyStoreDetailPage = () => {
   } = theme.useToken();
   return (
     <Layout>
-      <Sider  trigger={null} collapsible collapsed={collapsed}>
+      <Sider trigger={null} collapsible collapsed={collapsed}>
         <div className='demo-logo-vertical' />
         <Menu
           theme='dark'
@@ -69,6 +69,7 @@ const MyStoreDetailPage = () => {
         />
       </Sider>
       <Layout style={{minHeight: '100vh'}}>
+
         <Header
           style={{
             padding: 0,

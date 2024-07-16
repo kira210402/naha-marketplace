@@ -108,17 +108,29 @@ export default class StoresController {
 
   async getListProductByStore({ request, pagination, response, auth }: HttpContext) {
     const { page, perPage } = pagination
+    const filter = request.input('status', ' all')
     const sortField = request.input('sortField', 'id')
     const sortOrder = request.input('sortOrder', 'asc')
     const store = await Store.findByOrFail('userId', auth.user?.$attributes.id)
-    const products = await Product.query()
-      .where('storeId', store.id)
-      .orderBy(sortField, sortOrder)
-      .paginate(page, perPage)
+    const productsQuery = Product.query().where('deleted', false).where('storeId', store.id)
+    switch (filter) {
+      case 'active':
+        productsQuery.where('status', true)
+        break
+      case 'inactive':
+        productsQuery.where('status', false)
+        break
+      default:
+        break
+    }
+
+    productsQuery.orderBy(sortField, sortOrder)
+
+    const products = await productsQuery.paginate(page, perPage)
 
     return response.ok({
       code: 200,
-      message: 'get products by store success',
+      message: 'Get products by store success',
       products,
     })
   }

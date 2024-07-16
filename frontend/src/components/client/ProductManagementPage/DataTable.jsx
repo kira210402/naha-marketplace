@@ -6,7 +6,8 @@ import DeleteRecord from './DeleteRecord';
 import ViewRecord from './ViewRecord';
 import EditRecord from './EditRecord';
 
-const DataTable = () => {
+const DataTable = (props) => {
+  const { tab } = props;
   const [products, setProducts] = useState([]);
   const [pagination, setPagination] = useState({
     limitPage: 5,
@@ -15,12 +16,25 @@ const DataTable = () => {
     totalResult: 1,
   });
 
-  const fetchData = async (options = {}) => {
+  const fetchData = async (options = {}, filter = {}) => {
     try {
-      const rawData = await getProductsOfStore({
-        limit: options.limit || pagination.limitPage,
-        page: options.page || pagination.currentPage,
-      });
+      switch (tab) {
+        case '2':
+          filter['status'] = 'active';
+          break;
+        case '3':
+          filter['status'] = 'inactive';
+          break;
+        default:
+          break;
+      }
+      const rawData = await getProductsOfStore(
+        {
+          limit: options.limit || pagination.limitPage,
+          page: options.page || pagination.currentPage,
+        },
+        filter,
+      );
 
       setProducts(rawData.products?.data || []);
       setPagination({
@@ -29,6 +43,7 @@ const DataTable = () => {
         currentPage: rawData.products?.meta.currentPage,
         totalResult: rawData.products?.meta.total,
       });
+      console.log('filter', filter);
     } catch (error) {
       message.error('Có lỗi xảy ra!');
     }
@@ -159,9 +174,10 @@ const DataTable = () => {
                 limitPage: pageSize,
               }));
               const option = {};
+              const filter = {};
               option['limit'] = pageSize;
               option['page'] = page;
-              fetchData(option);
+              fetchData(option, filter);
             },
             pageSizeOptions: ['5', '10', '20', '30', '50'],
             position: ['bottomRight'],
