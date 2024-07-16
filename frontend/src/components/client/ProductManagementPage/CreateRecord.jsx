@@ -4,7 +4,7 @@ import {
   Form,
   Input,
   InputNumber,
-  // message,
+  message,
   Modal,
   Space,
   Upload,
@@ -12,8 +12,10 @@ import {
 // import Swal from 'sweetalert2';
 
 import { useState } from 'react';
+import { createProduct } from '../../../services/products';
 
-export default function CreateRecord() {
+export default function CreateRecord(props) {
+  const { onReload } = props;
   const { TextArea } = Input;
   const [showModal, setShowModal] = useState(false);
   const [form] = Form.useForm();
@@ -38,6 +40,34 @@ export default function CreateRecord() {
 
   const handleUploadChange = ({ fileList }) => {
     setFileList(fileList);
+  };
+
+  const handleSubmit = async (values) => {
+    try {
+      const formData = new FormData();
+      formData.append('name', values.name);
+      formData.append('price', values.price);
+      formData.append('discount', values.discount);
+      formData.append('quantity', values.quantity);
+      formData.append('description', values.description);
+
+      if (fileList.length > 0) {
+        fileList.forEach((file) => {
+          formData.append('images', file.originFileObj);
+        });
+      }
+
+      const response = await createProduct(formData);
+      if (response.code === 200) {
+        message.success('Create product success!');
+        onReload();
+        setShowModal(false);
+        form.resetFields();
+        return response;
+      } else message.error('Create product fail');
+    } catch (error) {
+      message.error('Có lỗi xảy ra!');
+    }
   };
 
   // const handleSubmit = async (values) => {
@@ -95,20 +125,10 @@ export default function CreateRecord() {
           layout='horizontal'
           style={{ maxWidth: 600 }}
           form={form}
-          // onFinish={handleSubmit}
+          onFinish={handleSubmit}
         >
           <Form.Item label='Tên sản phẩm' name='name' rules={rules}>
             <Input />
-          </Form.Item>
-
-          <Form.Item label='Collections' name='collections' rules={rules}>
-            {/* <Select>
-              {departments?.map((department) => (
-                <Select.Option key={department.id} value={department.id}>
-                  {department ? department.name : 'Chưa xét khoa'}
-                </Select.Option>
-              ))}
-            </Select> */}
           </Form.Item>
 
           <Form.Item label='Số lượng' name='quantity' rules={rules}>
@@ -123,19 +143,20 @@ export default function CreateRecord() {
             <InputNumber />
           </Form.Item>
 
-          <Form.Item label='Mô tả' name='description'>
-            <TextArea rows={4} />
-          </Form.Item>
-
           <Form.Item label='Images'>
             <Upload
               listType='picture'
               fileList={fileList}
               onChange={handleUploadChange}
               beforeUpload={() => false}
+              multiple
             >
               <Button icon={<UploadOutlined />}>Chọn ảnh</Button>
             </Upload>
+          </Form.Item>
+
+          <Form.Item label='Mô tả' name='description'>
+            <TextArea rows={4} />
           </Form.Item>
 
           <Form.Item>

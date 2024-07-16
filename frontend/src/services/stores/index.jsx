@@ -1,12 +1,13 @@
 import { del, get, post, put } from '../../utils/request';
-
+import queryString from 'query-string';
 export const getStore = async (id) => {
   const result = await get(`/stores/${id}`);
   return result;
 };
 
-export const getProductsOfStore = async () => {
-  const results = await get(`/stores/products`);
+export const getProductsOfStore = async (options, filter) => {
+  const queryParams = queryString.stringify({ ...options, ...filter });
+  const results = await get(`/stores/products?${queryParams}`);
   return results;
 };
 

@@ -37,6 +37,9 @@ export default class Product extends BaseModel {
   @column()
   declare status: boolean
 
+  @column()
+  declare deleted: boolean
+
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
 

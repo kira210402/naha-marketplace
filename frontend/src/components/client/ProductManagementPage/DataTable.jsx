@@ -1,25 +1,60 @@
 import { useEffect, useState } from 'react';
 import { getProductsOfStore } from '../../../services/stores';
-import { Space, Table } from 'antd';
+import { Space, Table, message } from 'antd';
 import CreateRecord from './CreateRecord';
+import DeleteRecord from './DeleteRecord';
+import ViewRecord from './ViewRecord';
+import EditRecord from './EditRecord';
 
 const DataTable = () => {
   const [products, setProducts] = useState([]);
-  const fetchData = async () => {
+  const [pagination, setPagination] = useState({
+    limitPage: 5,
+    totalPage: 1,
+    currentPage: 1,
+    totalResult: 1,
+  });
+
+  const fetchData = async (options = {}) => {
     try {
-      const data = await getProductsOfStore();
-      setProducts(data);
+      const rawData = await getProductsOfStore({
+        limit: options.limit || pagination.limitPage,
+        page: options.page || pagination.currentPage,
+      });
+
+      setProducts(rawData.products?.data || []);
+      setPagination({
+        limitPage: rawData.products?.meta.perPage,
+        totalPage: rawData.products?.meta.lastPage,
+        currentPage: rawData.products?.meta.currentPage,
+        totalResult: rawData.products?.meta.total,
+      });
     } catch (error) {
-      console.log('error', error);
+      message.error('Có lỗi xảy ra!');
     }
   };
+
   useEffect(() => {
     fetchData();
   }, []);
-  console.log('products', products);
 
   const handleReload = () => {
     fetchData();
+  };
+
+  const handleTotal = (total, range) => {
+    const start = (range[0] - 1) * range[1] + 1;
+    return (
+      <span>
+        Hiển thị từ&nbsp;
+        <span style={{ fontWeight: 'bold' }}>{start}</span> đến&nbsp;
+        <span style={{ fontWeight: 'bold' }}>
+          {Math.min(range[1] * range[0], pagination.totalResult)}
+        </span>
+        &nbsp;trong tổng số&nbsp;
+        <span style={{ fontWeight: 'bold' }}>{total}</span> bản ghi
+      </span>
+    );
   };
 
   const columns = [
@@ -33,9 +68,17 @@ const DataTable = () => {
       ),
     },
     {
-      title: <div style={{ fontSize: '1rem' }}>Tên sản phẩm</div>,
-      dataIndex: 'hình ảnh',
-      key: 'hình ảnh',
+      title: <div style={{ fontSize: '1rem' }}>Hình ảnh</div>,
+      dataIndex: 'images',
+      width: 100,
+      key: 'images',
+      render: (text, record) => (
+        <img
+          src={record.images[0]}
+          alt='image'
+          style={{ width: 50, height: 50 }}
+        />
+      ),
       ellipsis: true,
     },
     {
@@ -43,7 +86,6 @@ const DataTable = () => {
       dataIndex: 'name',
       key: 'name',
       sorter: (a, b) => a.name.localeCompare(b.name),
-      // sortOrder: sortedInfo.columnKey === 'name' ? sortedInfo.order : null,
       ellipsis: true,
     },
     {
@@ -51,7 +93,6 @@ const DataTable = () => {
       dataIndex: 'quantity',
       key: 'quantity',
       sorter: (a, b) => parseInt(a.quantity, 10) - parseInt(b.quantity, 10),
-      // sortOrder: sortedInfo.columnKey === 'experience' ? sortedInfo.order : null,
       ellipsis: true,
     },
     {
@@ -59,7 +100,6 @@ const DataTable = () => {
       dataIndex: 'price',
       key: 'price',
       sorter: (a, b) => parseInt(a.price, 10) - parseInt(b.price, 10),
-      // sortOrder: sortedInfo.columnKey === 'experience' ? sortedInfo.order : null,
       ellipsis: true,
     },
     {
@@ -67,27 +107,31 @@ const DataTable = () => {
       dataIndex: 'status',
       key: 'status',
       ellipsis: true,
+      render: (text, record) => {
+        const status = record.status;
+        return (
+          <div style={{ fontSize: '1rem' }}>
+            {status ? 'active' : 'inactive'}
+          </div>
+        );
+      },
     },
-
-    // {
-    //   title: <div style={{ fontSize: '1rem' }}>Hành động</div>,
-    //   key: 'actions',
-    //   width: 120,
-    //   render: (_, record) => {
-    //     return (
-    //       <>
-    //         <ViewRecord record={record} />
-    //         <EditRecord
-    //           record={record}
-    //           onReload={handleReload}
-    //
-    //         />
-    //         <DeleteRecord record={record} onReload={handleReload} />
-    //       </>
-    //     );
-    //   },
-    // },
+    {
+      title: <div style={{ fontSize: '1rem' }}>Hành động</div>,
+      key: 'actions',
+      width: 120,
+      render: (_, record) => {
+        return (
+          <>
+            <ViewRecord data={record} />
+            <EditRecord data={record} onReload={handleReload} />
+            <DeleteRecord data={record} onReload={handleReload} />
+          </>
+        );
+      },
+    },
   ];
+
   return (
     <>
       <div>
@@ -97,46 +141,44 @@ const DataTable = () => {
           }}
         >
           <CreateRecord onReload={handleReload} />
-          {/* <Button onClick={clearFilters}>Xóa bộ lọc</Button>
-          <Button onClick={clearAll}>Xóa bộ lọc và sắp xếp</Button> */}
         </Space>
 
         <Table
-          // onChange={handleChange}
-          // dataSource={products}
+          dataSource={products}
           columns={columns}
           rowKey={'id'}
           size='small'
-          // pagination={{
-          //   current: pagination.current,
-          //   total: pagination.totalResult,
-          //   onChange: (page, pageSize) => {
-          //     setPagination((prevPagination) => ({
-          //       ...prevPagination,
-          //       current: page,
-          //       limitPage: pageSize,
-          //     }));
-          //     const option = {};
-          //     const filter = {};
-          //     option['limit'] = pageSize;
-          //     option['page'] = page;
-          //     fetchData(option, filter);
-          //   },
-          //   pageSizeOptions: ['10', '30', '50'],
-          //   position: ['bottomRight'],
-          //   hideOnSinglePage: false,
-          //   showSizeChanger: true,
-          //   showPrevNextJumpers: false,
-          //   showLessItems: true,
-          //   showTotal: () =>
-          //     handleTotal(pagination.totalResult, [
-          //       pagination.current,
-          //       pagination.limitPage,
-          //     ]),
-          // }}
+          pagination={{
+            current: pagination.currentPage,
+            pageSize: pagination.limitPage,
+            total: pagination.totalResult,
+            onChange: (page, pageSize) => {
+              setPagination((prevPagination) => ({
+                ...prevPagination,
+                currentPage: page,
+                limitPage: pageSize,
+              }));
+              const option = {};
+              option['limit'] = pageSize;
+              option['page'] = page;
+              fetchData(option);
+            },
+            pageSizeOptions: ['5', '10', '20', '30', '50'],
+            position: ['bottomRight'],
+            hideOnSinglePage: false,
+            showSizeChanger: true,
+            showPrevNextJumpers: false,
+            showLessItems: true,
+            showTotal: (total) =>
+              handleTotal(total, [
+                pagination.currentPage,
+                pagination.limitPage,
+              ]),
+          }}
         />
       </div>
     </>
   );
 };
+
 export default DataTable;
