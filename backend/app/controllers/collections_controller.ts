@@ -1,21 +1,35 @@
 import Collection from '#models/collection'
 import Product from '#models/product'
+import Store from '#models/store'
 import { createCollectionValidator, updateCollectionValidator } from '#validators/collection'
 import type { HttpContext } from '@adonisjs/core/http'
 export default class CollectionsController {
-  async index({ response }: HttpContext) {
-    const collections = await Collection.query().preload('products')
+  async index({ response, auth }: HttpContext) {
+    const store = await Store.findByOrFail('userId', auth.user?.$attributes.id)
+    const collections = await Collection.query().where('storeId', store.id).preload('products')
+    const result = collections.map((collection) => {
+      return {
+        ...collection.toJSON(),
+        status: collection.$extras.status,
+        productCount: collection.products.length,
+      }
+    }
+    )
     return response.ok({
       code: 200,
       message: 'get collections success',
-      collections,
+      result,
     })
   }
 
-  async store({ request, response }: HttpContext) {
-    const data = request.only(['name', 'description', 'storeId'])
+  async store({ request, response, auth }: HttpContext) {
+    const store = await Store.findByOrFail('userId', auth.user?.$attributes.id)
+    const data = request.only(['name', 'description'])
     const payload = await createCollectionValidator.validate(data)
-    const collection = await Collection.create(payload)
+    const collection = await Collection.create({
+      ...payload,
+      storeId: store.id,
+    })
     return response.created({
       code: 201,
       message: 'create collection success',
@@ -34,7 +48,7 @@ export default class CollectionsController {
   }
 
   async update({ request, params }: HttpContext) {
-    const data = request.only(['name', 'description', 'storeId'])
+    const data = request.only(['name', 'description'])
     const payload = await updateCollectionValidator.validate(data)
     const collection = await Collection.findOrFail(params.id)
     collection.merge(payload)
