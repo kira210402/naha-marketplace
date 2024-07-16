@@ -112,7 +112,7 @@ export default class StoresController {
     const sortField = request.input('sortField', 'id')
     const sortOrder = request.input('sortOrder', 'asc')
     const store = await Store.findByOrFail('userId', auth.user?.$attributes.id)
-    const productsQuery = Product.query().where('storeId', store.id)
+    const productsQuery = Product.query().where('deleted', false).where('storeId', store.id)
     switch (filter) {
       case 'active':
         productsQuery.where('status', true)
