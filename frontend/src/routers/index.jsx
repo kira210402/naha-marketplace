@@ -38,10 +38,6 @@ export const routes = [
         element: <StoreDetailPage />,
       },
       {
-        path: '/stores/my',
-        element: <MyStore />,
-      },
-      {
         path: '/cart',
         element: <CartPage />,
       },
@@ -54,6 +50,10 @@ export const routes = [
         redirectTo: '/',
       },
     ],
+  },
+  {
+    path: '/stores/my',
+    element: <MyStore />,
   },
   {
     path: '/login',

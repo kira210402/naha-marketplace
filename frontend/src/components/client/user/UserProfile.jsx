@@ -28,7 +28,7 @@ const UserProfile = ({ user }) => {
     } catch (error) {
       message.error('Có lỗi xảy ra!');
     }
-  };
+  }
   return (
     <div
       style={{
