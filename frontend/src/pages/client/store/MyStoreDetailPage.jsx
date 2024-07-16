@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import {
+  DashboardOutlined,
   DatabaseOutlined,
   MenuFoldOutlined,
   MenuUnfoldOutlined,
@@ -10,14 +11,17 @@ import { Button, Layout, Menu, theme } from 'antd';
 import ProductManagementPage from './ProductManagementPage';
 import CollectionManagementPage from './CollectionManagementPage';
 import SettingStorePage from './SettingStorePage';
+import DashBoardPage from './DashBoardPage';
 const { Header, Sider, Content } = Layout;
 
-const App = () => {
+const MyStoreDetailPage = () => {
   const [collapsed, setCollapsed] = useState(false);
   const [selectedMenuItem, setSelectedMenuItem] = useState('1');
 
   const renderContent = () => {
     switch (selectedMenuItem) {
+      case '0':
+        return <DashBoardPage />;
       case '1':
         return <ProductManagementPage />;
       case '2':
@@ -32,15 +36,20 @@ const App = () => {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
   return (
-    <Layout style={{height: '100vh'}}>
+    <Layout style={{ height: '100vh' }}>
       <Sider trigger={null} collapsible collapsed={collapsed}>
-        <div className="demo-logo-vertical" />
+        <div className='demo-logo-vertical' />
         <Menu
-          theme="dark"
-          mode="inline"
+          theme='dark'
+          mode='inline'
           defaultSelectedKeys={['1']}
           onClick={({ key }) => setSelectedMenuItem(key)}
           items={[
+            {
+              key: '0',
+              icon: <DashboardOutlined />,
+              label: 'DashBoard',
+            },
             {
               key: '1',
               icon: <ProductOutlined />,
@@ -67,7 +76,7 @@ const App = () => {
           }}
         >
           <Button
-            type="text"
+            type='text'
             icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
             onClick={() => setCollapsed(!collapsed)}
             style={{
@@ -92,4 +101,4 @@ const App = () => {
     </Layout>
   );
 };
-export default App;
+export default MyStoreDetailPage;

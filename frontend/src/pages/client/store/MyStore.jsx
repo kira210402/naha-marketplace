@@ -14,13 +14,13 @@ const MyStore = () => {
         const response = await getMyStore();
         setStore(response.store);
       } catch (error) {
-        console.log(error)
+        console.log(error);
       } finally {
         setLoading(false);
       }
-    }
+    };
     fetchData();
-  }, [])
+  }, []);
 
   if (loading) {
     return (
@@ -38,21 +38,17 @@ const MyStore = () => {
 
   return (
     <>
-      {
-        store ?
-          store.status === true ?
-            <MyStoreDetailPage store={store}/>
-            :
-            <div>Wait for admin to verify</div>
-          :
-          <StoreForm />
-
-
-
-      }
-
+      {store ? (
+        store.status === true ? (
+          <MyStoreDetailPage store={store} />
+        ) : (
+          <div>Wait for admin to verify</div>
+        )
+      ) : (
+        <StoreForm />
+      )}
     </>
-  )
-}
+  );
+};
 
 export default MyStore;
