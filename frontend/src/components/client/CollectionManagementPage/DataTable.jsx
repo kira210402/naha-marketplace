@@ -7,11 +7,9 @@ import { useState } from 'react';
 const DataTable = ({ data, handleReload }) => {
   const initialCollections = data.slice(0, 5)
   const [collections, setCollections] = useState(initialCollections);
-  console.log('data', data)
   const totalResult = data.length
-  const limit = totalResult < 5 ? totalResult : 5;
   const [pagination, setPagination] = useState({
-    limitPage: parseInt(limit),
+    limitPage: 3,
     totalPage: 1,
     currentPage: 1,
     totalResult: 1,
@@ -115,7 +113,7 @@ const DataTable = ({ data, handleReload }) => {
               option['page'] = page;
               setCollections(data.slice((page - 1) * pageSize, page * pageSize));
             },
-            pageSizeOptions: ['5', '10', '20', '30', '50'],
+            pageSizeOptions: ['2', '5', '10', '20', '30', '50'],
             position: ['bottomRight'],
             hideOnSinglePage: false,
             showSizeChanger: true,

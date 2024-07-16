@@ -1,8 +1,8 @@
 import { Space, Table, Tag } from 'antd';
 import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
-import DeleteRecord from './DeleteRecord';
 import AddProduct from './AddProduct';
+import RemoveProduct from './RemoveProduct';
 
 const CollectionDetailTable = ({ collection }) => {
   const initialProducts = collection.products.slice(0, 5);
@@ -109,7 +109,7 @@ const CollectionDetailTable = ({ collection }) => {
       render: (_, record) => {
         return (
           <>
-            <DeleteRecord data={record} onReload={handleReload} />
+            <RemoveProduct product={record} onReload={handleReload} collection={collection}/>
           </>
         );
       },
