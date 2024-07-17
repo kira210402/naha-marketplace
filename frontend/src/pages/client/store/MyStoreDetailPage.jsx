@@ -2,31 +2,37 @@ import { useState } from 'react';
 import {
   DashboardOutlined,
   DatabaseOutlined,
+  HomeOutlined,
   MenuFoldOutlined,
   MenuUnfoldOutlined,
   ProductOutlined,
   SettingOutlined,
+  UserOutlined,
 } from '@ant-design/icons';
-import { Button, Layout, Menu, theme } from 'antd';
+import { Avatar, Button, Layout, Menu, theme, Typography } from 'antd';
 import ProductManagementPage from './ProductManagementPage';
 import CollectionManagementPage from './CollectionManagementPage';
 import SettingStorePage from './SettingStorePage';
 import DashBoardPage from './DashBoardPage';
+import { useNavigate } from 'react-router-dom';
 const { Header, Sider, Content } = Layout;
 
-const MyStoreDetailPage = () => {
+const MyStoreDetailPage = ({ store }) => {
   const [collapsed, setCollapsed] = useState(false);
   const [selectedMenuItem, setSelectedMenuItem] = useState('1');
+  const navigate = useNavigate();
+
+  const { Text } = Typography;
 
   const renderContent = () => {
     switch (selectedMenuItem) {
-      case '0':
-        return <DashBoardPage />;
       case '1':
-        return <ProductManagementPage />;
+        return <DashBoardPage />;
       case '2':
-        return <CollectionManagementPage />;
+        return <ProductManagementPage />;
       case '3':
+        return <CollectionManagementPage />;
+      case '4':
         return <SettingStorePage />;
       default:
         return <div>Content</div>;
@@ -43,36 +49,50 @@ const MyStoreDetailPage = () => {
           theme='dark'
           mode='inline'
           defaultSelectedKeys={['1']}
-          onClick={({ key }) => setSelectedMenuItem(key)}
+          onClick={({ key }) => {
+            if (key === '0') {
+              navigate('/');
+            } else {
+              setSelectedMenuItem(key);
+            }
+          }}
           items={[
             {
               key: '0',
+              icon: <HomeOutlined />,
+              label: 'Home',
+            },
+            {
+              key: '1',
               icon: <DashboardOutlined />,
               label: 'DashBoard',
             },
             {
-              key: '1',
+              key: '2',
               icon: <ProductOutlined />,
               label: 'Products',
             },
             {
-              key: '2',
+              key: '3',
               icon: <DatabaseOutlined />,
               label: 'Collections',
             },
             {
-              key: '3',
+              key: '4',
               icon: <SettingOutlined />,
               label: 'Settings',
             },
           ]}
         />
       </Sider>
-      <Layout style={{minHeight: '100vh'}}>
+      <Layout style={{ minHeight: '100vh' }}>
 
         <Header
           style={{
-            padding: 0,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            padding: '0 16px',
             background: colorBgContainer,
           }}
         >
@@ -86,6 +106,14 @@ const MyStoreDetailPage = () => {
               height: 64,
             }}
           />
+          <div style={{ display: 'flex', alignItems: 'center' }}>
+            <Avatar
+              size='small'
+              src={store.avatar}
+              icon={!store.avatar && <UserOutlined />}
+            />
+            <Text style={{ marginLeft: 8 }}>{store.name}</Text>
+          </div>
         </Header>
         <Content
           style={{
