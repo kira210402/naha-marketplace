@@ -156,7 +156,7 @@ router
           .use(middleware.lockUser())
           .use(middleware.auth({ guards: ['api'] }))
         router
-          .put('/:id', [ProductsController, 'update'])
+          .patch('/:id', [ProductsController, 'update'])
           .as('products.update')
           .use(middleware.lockUser())
           .use(middleware.auth({ guards: ['api'] }))

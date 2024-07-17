@@ -72,10 +72,11 @@ export default class ProductsController {
   }
 
   async update({ params, request, response, auth }: HttpContext) {
-    const stores = await Store.query().where('userId', auth.user?.$attributes.id)
+    const store = await Store.findByOrFail('userId', auth.user?.$attributes.id)
+    if (!store) throw new StoreException()
+    if (store.userId !== auth.user?.$attributes.id)
+      throw new Error('You are not authorized to perform this action')
     const product = await Product.findOrFail(params.id)
-    const store = stores.find((store) => store.$attributes.id === product.storeId)
-    if (!store) throw new Error('You are not authorized to perform this action')
 
     const files = request.files('images') as any[]
     let cloudResponse = await UploadCloudinary.uploadFiles(files)
