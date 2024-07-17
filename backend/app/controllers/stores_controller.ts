@@ -138,11 +138,13 @@ export default class StoresController {
     productsQuery.orderBy(sortField, sortOrder)
 
     const products = await productsQuery.paginate(page, perPage)
+    const allProducts = await Product.query().where('deleted', false).where('storeId', store.id)
 
     return response.ok({
       code: 200,
       message: 'Get products by store success',
       products,
+      allProducts,
     })
   }
 }

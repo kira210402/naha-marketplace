@@ -9,7 +9,7 @@ export const createCollectionValidator = vine.compile(
 
 export const updateCollectionValidator = vine.compile(
   vine.object({
-    name: vine.string().trim().minLength(3).maxLength(255).optional(),
-    description: vine.string().trim().minLength(3).optional(),
+    name: vine.string().trim().minLength(3).maxLength(255),
+    description: vine.string().trim().minLength(3),
   })
 )

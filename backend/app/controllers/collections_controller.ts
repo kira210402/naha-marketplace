@@ -27,6 +27,13 @@ export default class CollectionsController {
     const store = await Store.findByOrFail('userId', auth.user?.$attributes.id)
     const data = request.only(['name', 'description'])
     const payload = await createCollectionValidator.validate(data)
+    const existedCollection = await Collection.findByOrFail('name', payload.name)
+    if (existedCollection) {
+      return response.badRequest({
+        code: 400,
+        message: 'Collection name already exists',
+      })
+    }
     const collection = await Collection.create({
       ...payload,
       storeId: store.id,
@@ -54,7 +61,20 @@ export default class CollectionsController {
   async update({ request, params }: HttpContext) {
     const data = request.only(['name', 'description'])
     const payload = await updateCollectionValidator.validate(data)
+    // variable existedCollection to check if the collection name already exists, and the name is not the same as the current collection
+    const existedCollection = await Collection.query()
+      .where('id', '!=', params.id)
+      .where('name', payload.name)
+      .first()
+
+    if(existedCollection) {
+      return {
+        code: 400,
+        message: 'Collection name already exists',
+      }
+    }
     const collection = await Collection.findOrFail(params.id)
+
     collection.merge(payload)
     await collection.save()
     return {
@@ -78,7 +98,6 @@ export default class CollectionsController {
     try {
       const store = await Store.findByOrFail('userId', auth.user?.$attributes.id)
       const productIds = request.input('productIds')
-      console.log('productIds', productIds)
       const collection = await Collection.findOrFail(params.id)
 
       const products = await Product.query()

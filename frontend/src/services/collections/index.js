@@ -29,3 +29,8 @@ export const removeProduct = async (collectionId, productId) => {
   const response = await del(`/collections/${collectionId}/remove-product/${productId}`)
   return response
 }
+
+export const addProduct = async (collectionId, productIds) => {
+  const response = await put(`/collections/${collectionId}/add-product`, productIds)
+  return response
+}

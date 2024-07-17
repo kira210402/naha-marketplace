@@ -5,7 +5,6 @@ import { updateUser } from '../../../services/user';
 const UserProfile = ({ user }) => {
   const [form] = Form.useForm();
   const [fileList, setFileList] = useState([]);
-  console.log(user);
 
   const handleUploadChange = ({ fileList }) => {
     setFileList(fileList);
