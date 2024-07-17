@@ -123,7 +123,7 @@ const CollectionDetailTable = ({ collection }) => {
             marginBottom: 16,
           }}
         >
-          <AddProduct onReload={handleReload} />
+          <AddProduct onReload={handleReload} collection={collection} />
         </Space>
 
         <Table
