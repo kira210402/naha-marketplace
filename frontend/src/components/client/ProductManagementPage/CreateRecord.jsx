@@ -9,7 +9,6 @@ import {
   Space,
   Upload,
 } from 'antd';
-// import Swal from 'sweetalert2';
 
 import { useState } from 'react';
 import { createProduct } from '../../../services/products';
@@ -19,8 +18,6 @@ export default function CreateRecord(props) {
   const { TextArea } = Input;
   const [showModal, setShowModal] = useState(false);
   const [form] = Form.useForm();
-  // const [messageApi, contextHolder] = message.useMessage();
-  // const [newFileListAvatar, setNewFileListAvatar] = useState([]);
   const rules = [
     {
       required: true,
@@ -59,65 +56,26 @@ export default function CreateRecord(props) {
 
       const response = await createProduct(formData);
       if (response.code === 200) {
-        message.success('Create product success!');
+        message.success('Successfully edited the product!');
         onReload();
         setShowModal(false);
         form.resetFields();
         return response;
-      } else message.error('Create product fail');
+      } else message.error('Create failed');
     } catch (error) {
-      message.error('Có lỗi xảy ra!');
+      message.warning('An error occurred!');
     }
   };
 
-  // const handleSubmit = async (values) => {
-  //   const formData = new FormData();
-  //   for (const key in values) {
-  //     if (values.hasOwnProperty(key) && values[key]) {
-  //       const value = values[key];
-  //       if (Array.isArray(value)) {
-  //         value.forEach((val) => {
-  //           formData.append(`${key}[]`, val);
-  //         });
-  //       } else {
-  //         formData.append(key, value);
-  //       }
-  //     }
-  //   }
-  //   if (newFileListAvatar.length > 0) {
-  //     formData.append('avatar', newFileListAvatar[0].originFileObj);
-  //   }
-  //   const response = await createRecord(formData);
-  //   if (response.data?.code === 201) {
-  //     Swal.fire({
-  //       title: 'Thông báo!',
-  //       text: response.data?.message,
-  //       icon: 'success',
-  //     });
-  //     onReload();
-  //     setShowModal(false);
-  //     form.resetFields();
-  //   } else {
-  //     Swal.fire({
-  //       title: 'Thông báo!',
-  //       text: response.response?.data.message,
-  //       icon: 'error',
-  //     });
-  //   }
-  // };
-
   return (
     <>
-      <Button htmlType='submit' onClick={handleShowModal}>
-        + Thêm mới
-      </Button>
+      <Button onClick={handleShowModal}>+ Thêm mới</Button>
       <Modal
         open={showModal}
         onCancel={handleCancel}
         title='Thêm mới sản phẩm'
         footer={null}
       >
-        {/* {contextHolder} */}
         <Form
           name='create'
           labelCol={{ span: 7 }}
