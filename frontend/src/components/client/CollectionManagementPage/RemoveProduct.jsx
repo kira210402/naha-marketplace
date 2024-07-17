@@ -1,9 +1,9 @@
 import { Button } from 'antd';
-import { deleteCollection } from '../../../services/collections';
+import { removeProduct } from '../../../services/collections';
 import { DeleteOutlined } from '@ant-design/icons';
 import Swal from 'sweetalert2';
 
-const DeleteRecord = ({ collection, onReload }) => {
+const RemoveProduct = ({ product, collection, onReload }) => {
   const handleDelete = () => {
     Swal.fire({
       title: 'Bạn có chắc chắn?',
@@ -16,7 +16,7 @@ const DeleteRecord = ({ collection, onReload }) => {
       cancelButtonText: 'Hủy',
     }).then(async (result) => {
       if (result.isConfirmed) {
-        const response = await deleteCollection(collection.id);
+        const response = await removeProduct(collection.id, product.id);
         if (response?.code === 200) {
           Swal.fire({
             title: 'Thông báo',
@@ -48,4 +48,4 @@ const DeleteRecord = ({ collection, onReload }) => {
   );
 }
 
-export default DeleteRecord;
+export default RemoveProduct;

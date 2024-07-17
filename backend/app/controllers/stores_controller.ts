@@ -67,13 +67,24 @@ export default class StoresController {
     })
   }
 
-  async update({ params, request, response, auth }: HttpContext) {
-    const data = request.only(['name', 'description', 'phoneNumber', 'address', 'avatar'])
-    const payload = await updateStoreValidator.validate(data)
-    const store = await Store.findOrFail(params.id)
-    if (store.userId !== auth.user?.$attributes.id) {
-      throw new Error('You are not authorized to perform this action')
+  async update({ request, response, auth }: HttpContext) {
+    const { name, description, phoneNumber, address } = request.only(['name', 'description', 'phoneNumber', 'address'])
+    const store = await Store.findByOrFail('userId', auth.user?.$attributes.id)
+    let avatar: string = store.avatar
+    if (request.file('avatar')) {
+      const file = request.file('avatar')
+      let cloudinary_response = await UploadCloudinary.upload(file)
+      const { url } = cloudinary_response as { url: string }
+      avatar = url
     }
+    const data = {
+      name,
+      description,
+      phoneNumber,
+      address,
+      avatar
+    }
+    const payload = await updateStoreValidator.validate(data)
 
     await store.merge(payload).save()
     return response.ok({

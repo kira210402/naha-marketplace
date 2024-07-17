@@ -26,10 +26,6 @@ export const updateStoreValidator = vine.compile(
     name: vine
       .string()
       .trim()
-      .unique(async (db, value) => {
-        const match = await db.from('stores').select('id').where('name', value).first()
-        return !match
-      })
       .optional(),
     description: vine.string().trim().optional(),
     phoneNumber: vine
@@ -41,6 +37,5 @@ export const updateStoreValidator = vine.compile(
       .optional(),
     address: vine.string().trim().optional(),
     avatar: vine.string().optional(),
-    status: vine.boolean().optional(),
   })
 )

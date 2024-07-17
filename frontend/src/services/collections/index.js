@@ -24,3 +24,8 @@ export const deleteCollection = async (id) => {
   const response = await del(`/collections/${id}`)
   return response
 }
+
+export const removeProduct = async (collectionId, productId) => {
+  const response = await del(`/collections/${collectionId}/remove-product/${productId}`)
+  return response
+}

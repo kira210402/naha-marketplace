@@ -7,6 +7,5 @@ export const getUser = async (id) => {
 
 export const updateUser = async (options) => {
   const result = await patch(`/users`, options);
-  console.log(result);
   return result;
 };

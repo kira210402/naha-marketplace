@@ -67,7 +67,7 @@ router
               .as('stores.verify')
               .use(middleware.author(EUserRole.ADMIN))
             router
-              .put('/:id', [StoresController, 'update'])
+              .put('/', [StoresController, 'update'])
               .as('stores.update')
               .use(middleware.lockUser())
             router
@@ -138,6 +138,7 @@ router
             router
               .put('/:id/add-product', [CollectionsController, 'addProduct'])
               .as('collections.addProduct')
+            router.delete('/:id/remove-product/:productId', [CollectionsController, 'removeProduct']).as('collections.removeProduct')
           })
           .prefix('/collections')
       })

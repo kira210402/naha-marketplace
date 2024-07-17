@@ -1,15 +1,16 @@
 import { Space, Table, Tag } from 'antd';
 import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
-import DeleteRecord from './DeleteRecord';
-import CreateRecord from './CreateRecord';
+import AddProduct from './AddProduct';
+import RemoveProduct from './RemoveProduct';
 
 const CollectionDetailTable = ({ collection }) => {
   const initialProducts = collection.products.slice(0, 5);
   const totalResult = collection.products.length;
+  const limit = totalResult < 5 ? totalResult : 5;
   const [products, setProducts] = useState(initialProducts);
   const [pagination, setPagination] = useState({
-    limitPage: 5,
+    limitPage: parseInt(limit),
     totalPage: 1,
     currentPage: 1,
     totalResult: 1,
@@ -108,7 +109,7 @@ const CollectionDetailTable = ({ collection }) => {
       render: (_, record) => {
         return (
           <>
-            <DeleteRecord data={record} onReload={handleReload} />
+            <RemoveProduct product={record} onReload={handleReload} collection={collection}/>
           </>
         );
       },
@@ -122,7 +123,7 @@ const CollectionDetailTable = ({ collection }) => {
             marginBottom: 16,
           }}
         >
-          <CreateRecord onReload={handleReload} />
+          <AddProduct onReload={handleReload} />
         </Space>
 
         <Table
