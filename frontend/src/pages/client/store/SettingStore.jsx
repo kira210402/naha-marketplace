@@ -1,11 +1,10 @@
 import { Button, Form, Input, Upload, message } from 'antd';
 import { useState } from 'react';
 import { UploadOutlined } from '@ant-design/icons';
-import { updateUser } from '../../../services/user';
-const UserProfile = ({ user }) => {
+import { updateStore } from '../../../services/stores';
+const SettingStore = ({ store }) => {
   const [form] = Form.useForm();
   const [fileList, setFileList] = useState([]);
-  console.log(user);
 
   const handleUploadChange = ({ fileList }) => {
     setFileList(fileList);
@@ -13,19 +12,21 @@ const UserProfile = ({ user }) => {
   const handleSubmit = async (values) => {
     try {
       const formData = new FormData();
-      formData.append('fullName', values.fullName);
+      console.log('values', values)
+      formData.append('name', values.name);
+      formData.append('description', values.description);
       formData.append('phoneNumber', values.phoneNumber);
       formData.append('address', values.address);
+      console.log('formData', formData)
       if (fileList.length > 0) {
         formData.append('avatar', fileList[0].originFileObj);
       }
-      
-      console.log('formData User', formData)
-      const response = await updateUser(formData);
+
+      const response = await updateStore(formData);
       if (response) {
-        message.success('Update user success!');
+        message.success('Update store success!');
         return response;
-      } else message.error('Update user fail');
+      } else message.error('Update store fail');
     } catch (error) {
       message.error('Có lỗi xảy ra!');
     }
@@ -41,13 +42,13 @@ const UserProfile = ({ user }) => {
         boxShadow: '0 4px 8px rgba(0,0,0,0.1)',
       }}
     >
-      <h2 style={{ textAlign: 'center' }}>My Profile</h2>
+      <h2 style={{ textAlign: 'center' }}><b>My store: {store.name}</b></h2>
       <Form
         form={form}
         labelCol={{ span: 4 }}
         wrapperCol={{ span: 14 }}
         layout='horizontal'
-        initialValues={{ ...user }}
+        initialValues={{ ...store }}
         onFinish={handleSubmit}
       >
         <Form.Item label='Avatar'>
@@ -60,18 +61,19 @@ const UserProfile = ({ user }) => {
             <Button icon={<UploadOutlined />}>Chọn ảnh</Button>
           </Upload>
         </Form.Item>
-        <Form.Item label='Username' name='username'>
-          <Input disabled />
-        </Form.Item>
-        <Form.Item label='Email' name='email'>
-          <Input disabled />
+        <Form.Item
+          label='name'
+          name='name'
+          rules={[{ required: true, message: "Please input your store's name!" }]}
+        >
+          <Input />
         </Form.Item>
         <Form.Item
-          label='FullName'
-          name='fullName'
-          rules={[{ required: true, message: 'Please input your fullName!' }]}
+          label='description'
+          name='description'
+          rules={[{ required: true, message: "Please input your store's description!" }]}
         >
-          <Input value={user.fullName} />
+          <Input />
         </Form.Item>
         <Form.Item
           label='Phone'
@@ -91,12 +93,12 @@ const UserProfile = ({ user }) => {
         </Form.Item>
         <Form.Item wrapperCol={{ offset: 4, span: 14 }}>
           <Button type='primary' htmlType='submit' style={{ width: '100%' }}>
-            Update Profile
+            Update Store
           </Button>
         </Form.Item>
       </Form>
     </div>
   );
-};    
+};
 
-export default UserProfile;
+export default SettingStore;

@@ -22,8 +22,8 @@ export const createNewStore = async (newStore) => {
   return response;
 };
 
-export const updateStore = async (id, updatedStore) => {
-  const response = await put(`/stores/${id}`, updatedStore);
+export const updateStore = async ( updatedStore) => {
+  const response = await put(`/stores`, updatedStore);
   return response;
 };
 

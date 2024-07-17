@@ -67,7 +67,7 @@ router
               .as('stores.verify')
               .use(middleware.author(EUserRole.ADMIN))
             router
-              .put('/:id', [StoresController, 'update'])
+              .put('/', [StoresController, 'update'])
               .as('stores.update')
               .use(middleware.lockUser())
             router
