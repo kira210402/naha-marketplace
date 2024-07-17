@@ -5,9 +5,11 @@ import EditRecord from './EditRecord';
 import { useState } from 'react';
 
 const DataTable = ({ data, handleReload }) => {
-  const initialCollections = data.slice(0, 5)
+  console.log('data', data);
+  const initialCollections = data.slice(0, 5);
   const [collections, setCollections] = useState(initialCollections);
-  const totalResult = data.length
+  console.log(collections);
+  const totalResult = data.length;
   const [pagination, setPagination] = useState({
     limitPage: 3,
     totalPage: 1,
@@ -28,7 +30,7 @@ const DataTable = ({ data, handleReload }) => {
         <span style={{ fontWeight: 'bold' }}>{total}</span> bản ghi
       </span>
     );
-  }
+  };
 
   const columns = [
     {
@@ -43,13 +45,13 @@ const DataTable = ({ data, handleReload }) => {
     {
       title: <div style={{ fontSize: '1rem' }}>Tên collection</div>,
       dataIndex: 'name',
-      key: 'hình ảnh',
+      key: 'name',
       ellipsis: true,
     },
     {
       title: <div style={{ fontSize: '1rem' }}>Số lượng SP</div>,
       dataIndex: 'productCount',
-      key: 'name',
+      key: 'productCount',
       sorter: (a, b) => a.name.localeCompare(b.name),
       ellipsis: true,
     },
@@ -64,8 +66,8 @@ const DataTable = ({ data, handleReload }) => {
           <Tag style={{ color: status === true ? 'green' : 'red' }}>
             {status === true ? 'Active' : 'Inactive'}
           </Tag>
-        )
-      }
+        );
+      },
     },
 
     {
@@ -97,7 +99,8 @@ const DataTable = ({ data, handleReload }) => {
           columns={columns}
           rowKey={'id'}
           size='small'
-          dataSource={collections}
+          // dataSource={collections}
+          dataSource={data}
           pagination={{
             current: pagination.currentPage,
             pageSize: pagination.limitPage,
@@ -111,7 +114,9 @@ const DataTable = ({ data, handleReload }) => {
               const option = {};
               option['limit'] = pageSize;
               option['page'] = page;
-              setCollections(data.slice((page - 1) * pageSize, page * pageSize));
+              setCollections(
+                data.slice((page - 1) * pageSize, page * pageSize),
+              );
             },
             pageSizeOptions: ['2', '5', '10', '20', '30', '50'],
             position: ['bottomRight'],
@@ -124,7 +129,6 @@ const DataTable = ({ data, handleReload }) => {
                 pagination.currentPage,
                 pagination.limitPage,
               ]),
-
           }}
         />
       </div>
