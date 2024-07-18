@@ -12,12 +12,13 @@ const StoreDetailPage = () => {
   useEffect(() => {
     const fetchData = async () => {
       const responseStore = await getStore(id);
-      const responseProducts = await getProductsOfStore(id);
+      const responseProducts = await getProductsOfStore();
       setStore( responseStore.store)
-      setProducts( responseProducts.products)
+      console.log('responseProducts', responseProducts)
+      setProducts( responseProducts.allProducts)
     };
     fetchData()
-  }, [id])
+  }, [])
 
   return (
     <>
