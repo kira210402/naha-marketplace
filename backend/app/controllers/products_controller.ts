@@ -6,6 +6,7 @@ import { createProductValidator, updateProductValidator } from '#validators/prod
 import type { HttpContext } from '@adonisjs/core/http'
 import { EUserRole } from '../enums/EUserRole.js'
 import { UploadCloudinary } from '#services/upload_cloudinary_service'
+import { messages } from '@vinejs/vine/defaults'
 
 export default class ProductsController {
   async index({ request, response, pagination }: HttpContext) {
@@ -142,6 +143,30 @@ export default class ProductsController {
       })
     } catch (error) {
       console.log(error)
+    }
+  }
+
+  async changeStatus({ request, response, auth, params }: HttpContext) {
+    const listStatus = ['active', 'inactive']
+    const status = request.input('status')
+    const store = await Store.findByOrFail('userId', auth.user?.$attributes.id)
+    if (!store) throw new StoreException()
+    if (store.userId !== auth.user?.$attributes.id)
+      throw new Error('You are not authorized to perform this action')
+    const product = await Product.findOrFail(params.id)
+    if (listStatus.includes(status)) {
+      product.status = status
+      await product.save()
+      return response.ok({
+        code: 200,
+        messages: 'Success',
+        data: product,
+      })
+    } else {
+      return response.abort({
+        code: 400,
+        messages: 'Failed',
+      })
     }
   }
 }
