@@ -16,10 +16,12 @@ const ProductDetailPage = () => {
   const fetchProduct = async () => {
     try {
       const response = await getProduct(id);
-      await setProduct(response.product);
-      await setImages(response.product.images);
-      if (response.product.images.length > 0) {
+      setProduct(response.product);
+      setImages(response.product.images);
+      if (response.product.images !== null) {
         setActiveImg(response.product.images[0]);
+      } else {
+        setActiveImg('')
       }
     } catch (error) {
       console.error('Failed to fetch product:', error);
@@ -67,7 +69,7 @@ const ProductDetailPage = () => {
                 className='aspect-square h-full w-full rounded-xl object-cover'
               />
               <div className='flex h-24 flex-row justify-between'>
-                {images.map((img, index) => (
+                {images && images.map((img, index) => (
                   <img
                     key={index}
                     src={img}

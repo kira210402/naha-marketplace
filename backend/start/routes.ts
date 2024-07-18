@@ -74,6 +74,7 @@ router
               .get('/products', [StoresController, 'getListProductByStore'])
               .as('stores.getListProductByStore')
               .use(middleware.pagination())
+            
             router
               .delete('/:id', [StoresController, 'destroy'])
               .as('stores.destroy')

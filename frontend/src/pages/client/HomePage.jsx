@@ -1,4 +1,4 @@
-import ProductList from '../../components/client/storePage/productList/ProductList';
+import ProductList from '../../components/client/homepage/ProductList';
 import { useEffect, useState } from 'react';
 import { getListProduct } from '../../services/products';
 import { Flex, Spin } from 'antd';

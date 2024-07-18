@@ -1,6 +1,6 @@
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
-import ProductCard from '../../productCard/ProductCard';
+import ProductCard from '../productCard/ProductCard';
 
 const responsive = {
   superLargeDesktop: {
