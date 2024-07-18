@@ -71,39 +71,17 @@ export default class CartsController {
   async update({ request, response, auth }: HttpContext) {
     try {
       const user = await auth.authenticate()
-      const cart = await Cart.findByOrFail('userId', user.id)
-      const data = request.body() as { id: number; quantity: number }[]
-      for (const item of data) {
-        const cartItem = await CartItem.find(item.id)
-        const product = await Product.findByOrFail('id', cartItem?.productId)
-        console.log('product.quantity', product.quantity)
-        console.log('item.quantity', item.quantity)
-        console.log('cartItem.quantity', cartItem?.quantity)
+      const cart = await Cart.findByOrFail('userId', user?.id)
+      const data = request.body()
+      for (const item in data) {
+        const dataCartItem = data[item]
+        const cartItem = await CartItem.find(dataCartItem.id)
         if (!cartItem || cartItem.cartId !== cart.id) continue
-
-        // check quantity
-        if (item.quantity > product.quantity) {
-          cartItem.quantity = product.quantity
-        } else {
-          cartItem.quantity = item.quantity
-        }
-        await cartItem.save()
+        await cartItem.merge(dataCartItem).save()
       }
-      const cartItems = await cart.related('cartItems').query()
-      const products = []
-      for (let cartItem of cartItems) {
-        const product = await cartItem.related('product').query().first()
-        products.push({
-          product: product?.$attributes,
-          quantity: cartItem.quantity,
-          id: cartItem.id,
-        })
-      }
-
       return response.ok({
         code: 200,
         message: 'Update cart success',
-        products,
       })
     } catch (error) {
       return response.badRequest({
