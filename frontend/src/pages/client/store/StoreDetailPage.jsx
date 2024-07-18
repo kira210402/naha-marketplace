@@ -2,24 +2,26 @@ import { useParams } from 'react-router-dom';
 // import CategoryBar from '../../../components/client/storePage/categoryBar/CategoryBar';
 import StoreHeader from '../../../components/client/storePage/storeHeader/StoreHeader';
 import { useEffect, useState } from 'react';
-import { getProductsOfStore, getStore } from '../../../services/stores';
+import { getStore } from '../../../services/stores';
 import StoreProductList from '../../../components/client/storePage/productList/StoreProductList';
 import CollectionNavBar from '../../../components/client/storePage/collectionNavBar/CollectionNavBar';
 import { getCollectionById } from '../../../services/collections';
+import { Flex, Spin } from 'antd';
 
 const StoreDetailPage = () => {
   const { id } = useParams();
   const [store, setStore] = useState(null)
   const [products, setProducts] = useState([])
   const [filteredProducts, setFilteredProducts] = useState([])
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     const fetchData = async () => {
       const responseStore = await getStore(id);
-      // const responseProducts = await getProductsOfStore();
       setStore(responseStore.store)
       setProducts(responseStore.store.products)
       setFilteredProducts(responseStore.store.products)
+      setLoading(false)
     };
     fetchData()
   }, [])
@@ -33,6 +35,20 @@ const StoreDetailPage = () => {
     }
   }
 
+  if(loading) {
+    return (
+      <Flex
+        gap='small'
+        vertical
+        align='center'
+        justify='center'
+        style={{ minHeight: '100vh' }}
+      >
+        <Spin size='large' />
+      </Flex>
+    );
+  }
+
   return (
     <>
       {
@@ -44,7 +60,6 @@ const StoreDetailPage = () => {
           </>
           : <div>store not found</div>
       }
-      {/* <CategoryBar categories={ } onSelectCategory={ } /> */}
     </>
   )
 }
