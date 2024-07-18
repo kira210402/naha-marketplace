@@ -1,7 +1,7 @@
 const Footer = () => {
 
   return (
-    <>
+    <div className="relative bottom-0 left-0 w-full">
       <footer
         className="flex flex-col items-center bg-zinc-50 text-center text-surface dark:bg-neutral-700 dark:text-white">
         <div className="container pt-9">
@@ -109,7 +109,7 @@ const Footer = () => {
           <a href="https://tw-elements.com/">TW Elements</a>
         </div>
       </footer>
-    </>)
+    </div>)
 }
 
 export default Footer;
