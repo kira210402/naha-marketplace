@@ -36,7 +36,7 @@ export default class Store extends BaseModel {
   declare updatedAt: DateTime
 
   @hasMany(() => Product)
-  declare product: HasMany<typeof Product>
+  declare products: HasMany<typeof Product>
 
   @hasMany(() => Collection)
   declare collections: HasMany<typeof Collection>

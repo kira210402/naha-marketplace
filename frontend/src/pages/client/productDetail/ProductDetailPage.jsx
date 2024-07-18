@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { NavLink, useParams } from 'react-router-dom';
 import { getProduct } from './../../../services/products/index';
 import { addProductToCart } from '../../../services/cart';
 import { toast } from 'react-toastify';
+import { getStore } from '../../../services/stores';
 
 const ProductDetailPage = () => {
   const { id } = useParams();
@@ -10,22 +11,37 @@ const ProductDetailPage = () => {
   const [images, setImages] = useState([]);
   const [activeImg, setActiveImg] = useState(null);
   const [amount, setAmount] = useState(1);
+  const [store, setStore] = useState(null);
+
+  const fetchProduct = async () => {
+    try {
+      const response = await getProduct(id);
+      setProduct(response.product);
+      setImages(response.product.images);
+      if (response.product.images !== null) {
+        setActiveImg(response.product.images[0]);
+      } else {
+        setActiveImg('')
+      }
+    } catch (error) {
+      console.error('Failed to fetch product:', error);
+    }
+  };
+
+  const fetchStore = async (id) => {
+    const response = await getStore(id);
+    setStore(response.store)
+  }
 
   useEffect(() => {
-    const fetchProduct = async () => {
-      try {
-        const response = await getProduct(id);
-        setImages(response.product.images);
-        setProduct(response.product);
-        if (response.product.images.length > 0) {
-          setActiveImg(response.product.images[0]);
-        }
-      } catch (error) {
-        console.error('Failed to fetch product:', error);
-      }
-    };
     fetchProduct();
   }, [id]);
+
+  useEffect(() => {
+    if (product && product.storeId) {
+      fetchStore(product.storeId)
+    }
+  }, [product])
 
   const handleAddToCart = async () => {
     try {
@@ -53,7 +69,7 @@ const ProductDetailPage = () => {
                 className='aspect-square h-full w-full rounded-xl object-cover'
               />
               <div className='flex h-24 flex-row justify-between'>
-                {images.map((img, index) => (
+                {images && images.map((img, index) => (
                   <img
                     key={index}
                     src={img}
@@ -113,10 +129,29 @@ const ProductDetailPage = () => {
               </div>
             </div>
           </div>
-          {/* description */}
-          <div>
-            <p className='text-gray-700'>{product.description}</p>
-          </div>
+          {/* store */}
+          {store && (
+            <>
+              <NavLink to={`/stores/${store.id}`}>
+                <div className='mt-8 flex items-start gap-4 rounded-lg bg-white p-4 shadow-md'>
+                  <img
+                    src={store.avatar}
+                    alt={store.name}
+                    className='h-24 w-24 rounded-full object-cover'
+                  />
+                  <div>
+                    <h2 className='text-xl font-bold'>{store.name}</h2>
+                    <p>Number of products: {store.products.length}</p>
+                  </div>
+                </div>
+              </NavLink>
+              <div className='mt-4'>
+                <div><b>Description</b>: {product.description}</div>
+                <div><b>Stock</b>: {product.quantity}</div>
+                <div><b>Sent from</b>: {store.address}</div>
+              </div>
+            </>
+          )}
         </>
       )}
     </div>
