@@ -59,7 +59,7 @@ export default class StoresController {
   }
 
   async show({ params, response }: HttpContext) {
-    const store = await Store.findOrFail(params.id)
+    const store = await Store.query().where('id', params.id).preload('products').firstOrFail()
     return response.ok({
       code: 200,
       message: 'get store success',
