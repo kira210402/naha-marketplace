@@ -93,6 +93,7 @@ router
               .post('/add-product/:productId', [CartsController, 'addProduct'])
               .as('cart.addProduct')
             router.put('/', [CartsController, 'update']).as('cart.update')
+            router.delete('/cart-item/:cartItemId', [CartsController, 'destroy']).as('cart.destroy')
           })
           .prefix('/cart')
 
@@ -139,7 +140,9 @@ router
             router
               .put('/:id/add-product', [CollectionsController, 'addProduct'])
               .as('collections.addProduct')
-            router.delete('/:id/remove-product/:productId', [CollectionsController, 'removeProduct']).as('collections.removeProduct')
+            router
+              .delete('/:id/remove-product/:productId', [CollectionsController, 'removeProduct'])
+              .as('collections.removeProduct')
           })
           .prefix('/collections')
       })
