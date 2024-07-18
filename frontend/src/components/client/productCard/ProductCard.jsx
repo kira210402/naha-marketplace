@@ -5,7 +5,7 @@ const ProductCard = ({ product }) => {
   const productId = product.id;
   const handleAddToCart = async () => {
     try {
-      const response = await addProductToCart(productId);
+      const response = await addProductToCart(productId, 1);
       if (response) {
         toast.success('Product added to cart successfully!');
       } else {
