@@ -1,4 +1,4 @@
-import { get, post, put } from '../../utils/request';
+import { del, get, post, put } from '../../utils/request';
 
 export const getCartItems = async () => {
   const response = await get(`/cart`);
@@ -14,5 +14,10 @@ export const addProductToCart = async (productId, quantity) => {
 
 export const updateCart = async (cartItems) => {
   const response = await put(`/cart`, cartItems);
+  return response;
+};
+
+export const deleteCartItem = async (cartItemId) => {
+  const response = await del(`/cart/cart-item/${cartItemId}`);
   return response;
 };

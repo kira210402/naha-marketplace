@@ -38,6 +38,7 @@ export default class CartsController {
       })
     }
   }
+
   async addProduct({ request, response, auth, params }: HttpContext) {
     const { productId } = params
     const quantity = Math.max(1, parseInt(request.qs().quantity || '1', 10))
@@ -88,6 +89,30 @@ export default class CartsController {
         code: 400,
         message: 'Failed to update cart',
         error: error.message,
+      })
+    }
+  }
+
+  async destroy({ response, auth, params }: HttpContext) {
+    try {
+      const user = await auth.authenticate()
+      const cart = await Cart.findByOrFail('userId', user?.id)
+      const cartItemId = params.cartItemId
+      const cartItem = await CartItem.findOrFail(cartItemId)
+      if (cartItem.cartId !== cart.id) {
+        return response.status(403).json({
+          message: 'Bạn không có quyền xóa item này khỏi giỏ hàng.',
+        })
+      }
+      await cartItem.delete()
+      return response.ok({
+        code: 200,
+        message: 'Delete successfully',
+      })
+    } catch (error) {
+      return response.abort({
+        code: 400,
+        message: 'Delete failed',
       })
     }
   }
