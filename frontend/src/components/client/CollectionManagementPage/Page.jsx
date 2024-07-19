@@ -1,13 +1,15 @@
-import { Tabs } from 'antd';
+import { message, Tabs } from 'antd';
 const { TabPane } = Tabs;
 import DataTable from './DataTable';
 import BreadCrumb from '../Breadcrumb/Breadcrumb';
 import { getAllCollections } from '../../../services/collections';
 import { useEffect, useState } from 'react';
 import CollectionDetailTable from './CollectionDetailTable';
+import { getProductsOfStore } from '../../../services/stores';
 
 const Page = () => {
   const [collections, setCollections] = useState([]);
+  const [storeProducts, setStoreProducts] = useState([]);
 
   const fetchData = async () => {
     try {
@@ -17,12 +19,26 @@ const Page = () => {
       console.log('error', error);
     }
   };
+
+  const fetchStoreProducts = async () => {
+    try {
+      const response = await getProductsOfStore();
+      if (response.code === 200) {
+        setStoreProducts(response.allProducts);
+      }
+    } catch (error) {
+      message.error('Có lỗi xảy ra!');
+    }
+  };
+
   useEffect(() => {
     fetchData();
+    fetchStoreProducts();
   }, []);
 
   const handleReload = () => {
     fetchData();
+    fetchStoreProducts();
   }
 
   return (
@@ -39,7 +55,7 @@ const Page = () => {
         </TabPane>
         {collections.map((collection) => (
           <TabPane tab={collection.name} key={collection.id}>
-            <CollectionDetailTable collection={collection} />
+            <CollectionDetailTable collection={collection} storeProducts={storeProducts}/>
           </TabPane>
         ))
         }

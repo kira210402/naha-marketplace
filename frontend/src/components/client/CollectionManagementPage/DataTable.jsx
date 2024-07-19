@@ -5,13 +5,11 @@ import EditRecord from './EditRecord';
 import { useState } from 'react';
 
 const DataTable = ({ data, handleReload }) => {
-  console.log('data', data);
-  const initialCollections = data.slice(0, 5);
-  const [collections, setCollections] = useState(initialCollections);
-  console.log(collections);
+  const [collections, setCollections] = useState(data);
+  console.log('collections', collections)
   const totalResult = data.length;
   const [pagination, setPagination] = useState({
-    limitPage: 3,
+    limitPage: 5,
     totalPage: 1,
     currentPage: 1,
     totalResult: 1,
@@ -99,7 +97,6 @@ const DataTable = ({ data, handleReload }) => {
           columns={columns}
           rowKey={'id'}
           size='small'
-          // dataSource={collections}
           dataSource={data}
           pagination={{
             current: pagination.currentPage,

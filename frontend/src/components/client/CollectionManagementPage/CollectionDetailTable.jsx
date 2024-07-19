@@ -1,20 +1,38 @@
 import { Space, Table, Tag } from 'antd';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import AddProduct from './AddProduct';
 import RemoveProduct from './RemoveProduct';
+import { getCollectionById } from '../../../services/collections';
 
-const CollectionDetailTable = ({ collection }) => {
-  const initialProducts = collection.products.slice(0, 5);
+const CollectionDetailTable = ({ collection, storeProducts }) => {
   const totalResult = collection.products.length;
-  const limit = totalResult < 5 ? totalResult : 5;
-  const [products, setProducts] = useState(initialProducts);
+  const [products, setProducts] = useState(collection.products);
+  const [updatedCollection, setUpdatedCollection] = useState(collection);
   const [pagination, setPagination] = useState({
-    limitPage: parseInt(limit),
+    limitPage: 5,
     totalPage: 1,
     currentPage: 1,
     totalResult: 1,
   });
+
+  const fetchData = async () => {
+    try {
+      const response = await getCollectionById(collection.id);
+      setProducts(response.collection.products);
+      setUpdatedCollection(response.collection);
+    } catch (error) {
+      console.log('error', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, [collection.id])
+
+  const onReload = () => {
+    fetchData();
+  }
 
   const handleTotal = (total, range) => {
     const start = (range[0] - 1) * range[1] + 1;
@@ -31,9 +49,6 @@ const CollectionDetailTable = ({ collection }) => {
     );
   }
 
-  const handleReload = () => {
-    // fetchData();
-  };
 
   const columns = [
     {
@@ -50,7 +65,7 @@ const CollectionDetailTable = ({ collection }) => {
       dataIndex: 'images',
       width: 100,
       key: 'images',
-      render: (text, record) => (
+      render: (_, record) => (
         <img
           src={record.images[0]}
           alt='image'
@@ -109,7 +124,7 @@ const CollectionDetailTable = ({ collection }) => {
       render: (_, record) => {
         return (
           <>
-            <RemoveProduct product={record} onReload={handleReload} collection={collection}/>
+            <RemoveProduct product={record} onReload={onReload} collection={collection}/>
           </>
         );
       },
@@ -123,7 +138,7 @@ const CollectionDetailTable = ({ collection }) => {
             marginBottom: 16,
           }}
         >
-          <AddProduct onReload={handleReload} collection={collection} />
+          <AddProduct onReload={onReload} collection={updatedCollection} storeProducts={storeProducts} />
         </Space>
 
         <Table

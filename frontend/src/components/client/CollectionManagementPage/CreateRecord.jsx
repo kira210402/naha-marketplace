@@ -33,6 +33,7 @@ export default function CreateRecord(props) {
   const handleSubmit = async (values) => {
     try {
       const response = await createCollection(values);
+      console.log('response', response);
       if (response.code === 201) {
         message.success('Create product success!');
         onReload();

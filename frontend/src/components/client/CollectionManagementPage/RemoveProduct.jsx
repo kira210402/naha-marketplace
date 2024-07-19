@@ -7,7 +7,7 @@ const RemoveProduct = ({ product, collection, onReload }) => {
   const handleDelete = () => {
     Swal.fire({
       title: 'Bạn có chắc chắn?',
-      text: 'Muốn xóa collection này!',
+      text: 'Muốn xóa sản phẩm này!',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
