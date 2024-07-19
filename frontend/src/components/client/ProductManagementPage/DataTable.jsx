@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { getProductsOfStore } from '../../../services/stores';
-import { Space, Table, message } from 'antd';
+import { Flex, Space, Spin, Table, message } from 'antd';
 import CreateRecord from './CreateRecord';
 import DeleteRecord from './DeleteRecord';
 import ViewRecord from './ViewRecord';
@@ -9,6 +9,8 @@ import EditRecord from './EditRecord';
 const DataTable = (props) => {
   const { tab } = props;
   const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+
   const [pagination, setPagination] = useState({
     limitPage: 5,
     totalPage: 1,
@@ -16,42 +18,45 @@ const DataTable = (props) => {
     totalResult: 1,
   });
 
-  const fetchData = async (options = {}, filter = {}) => {
-    try {
-      switch (tab) {
-        case '2':
-          filter['status'] = 'active';
-          break;
-        case '3':
-          filter['status'] = 'inactive';
-          break;
-        default:
-          break;
-      }
-      const rawData = await getProductsOfStore(
-        {
-          limit: options.limit || pagination.limitPage,
-          page: options.page || pagination.currentPage,
-        },
-        filter,
-      );
+  const fetchData = useCallback(
+    async (options = {}, filter = {}) => {
+      try {
+        switch (tab) {
+          case '2':
+            filter['status'] = 'active';
+            break;
+          case '3':
+            filter['status'] = 'inactive';
+            break;
+          default:
+            break;
+        }
+        const rawData = await getProductsOfStore(
+          {
+            limit: options.limit || pagination.limitPage,
+            page: options.page || pagination.currentPage,
+          },
+          filter,
+        );
 
-      setProducts(rawData.products?.data || []);
-      setPagination({
-        limitPage: rawData.products?.meta.perPage,
-        totalPage: rawData.products?.meta.lastPage,
-        currentPage: rawData.products?.meta.currentPage,
-        totalResult: rawData.products?.meta.total,
-      });
-      console.log('filter', filter);
-    } catch (error) {
-      message.error('Có lỗi xảy ra!');
-    }
-  };
+        setProducts(rawData.products?.data || []);
+        setPagination({
+          limitPage: rawData.products?.meta.perPage,
+          totalPage: rawData.products?.meta.lastPage,
+          currentPage: rawData.products?.meta.currentPage,
+          totalResult: rawData.products?.meta.total,
+        });
+        setLoading(false);
+      } catch (error) {
+        message.error('Có lỗi xảy ra!');
+      }
+    },
+    [tab, pagination.limitPage, pagination.currentPage],
+  );
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [fetchData]);
 
   const handleReload = () => {
     fetchData();
@@ -71,6 +76,20 @@ const DataTable = (props) => {
       </span>
     );
   };
+
+  if (loading) {
+    return (
+      <Flex
+        gap='small'
+        vertical
+        align='center'
+        justify='center'
+        style={{ minHeight: '100vh' }}
+      >
+        <Spin size='large' />
+      </Flex>
+    );
+  }
 
   const columns = [
     {

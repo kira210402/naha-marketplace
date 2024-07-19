@@ -16,6 +16,7 @@ const EditRecord = (props) => {
   const { onReload, data } = props;
   const { TextArea } = Input;
   const [showModal, setShowModal] = useState(false);
+
   const [form] = Form.useForm();
   const rules = [
     {

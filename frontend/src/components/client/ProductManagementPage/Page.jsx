@@ -1,9 +1,26 @@
 import { Tabs } from 'antd';
-const { TabPane } = Tabs;
 import DataTable from './DataTable';
 import BreadCrumb from '../Breadcrumb/Breadcrumb';
 
 const Page = () => {
+  const items = [
+    {
+      key: '1',
+      label: 'Tất cả',
+      children: <DataTable tab='1' />,
+    },
+    {
+      key: '2',
+      label: 'Hoạt động',
+      children: <DataTable tab='2' />,
+    },
+    {
+      key: '3',
+      label: 'Dừng hoạt động',
+      children: <DataTable tab='3' />,
+    },
+  ];
+
   return (
     <div>
       <BreadCrumb
@@ -11,20 +28,9 @@ const Page = () => {
         title_1='Quản trị hệ thống'
         title_2='Quản lý sản phẩm'
       />
-      <Tabs defaultActiveKey='1'>
-        <TabPane tab='Tất cả' key='1'>
-          <DataTable tab='1' />
-        </TabPane>
-
-        <TabPane tab='Hoạt động' key='2'>
-          <DataTable tab='2' />
-        </TabPane>
-
-        <TabPane tab='Dừng hoạt động' key='3'>
-          <DataTable tab='3' />
-        </TabPane>
-      </Tabs>
+      <Tabs defaultActiveKey='1' items={items} />
     </div>
   );
 };
+
 export default Page;
