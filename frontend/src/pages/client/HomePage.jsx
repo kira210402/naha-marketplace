@@ -12,7 +12,6 @@ const HomePage = () => {
       try {
         const response = await getListProduct();
         setProducts(response.products.data);
-        console.log(response.products.data)
         setLoading(false);
       } catch (error) {
         console.log('Error fetching products:', error);
