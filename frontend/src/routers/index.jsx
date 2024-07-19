@@ -10,6 +10,7 @@ import Logout from '../pages/client/Logout';
 import SearchResult from '../pages/client/search/SearchResult';
 import StoreDetailPage from '../pages/client/store/StoreDetailPage';
 import MyStore from '../pages/client/store/MyStore';
+import ListStorePage from '../pages/client/listStore/ListStorePage';
 export const routes = [
   {
     path: '/',
@@ -34,8 +35,16 @@ export const routes = [
         ],
       },
       {
-        path: '/stores/:id',
-        element: <StoreDetailPage />,
+        children: [
+          {
+            path: '/stores',
+            element: <ListStorePage />,
+          },
+          {
+            path: '/stores/:id',
+            element: <StoreDetailPage />,
+          },
+        ],
       },
       {
         path: '/cart',
