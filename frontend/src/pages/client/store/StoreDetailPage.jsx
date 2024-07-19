@@ -61,7 +61,7 @@ const StoreDetailPage = () => {
           : <div>store not found</div>
       }
     </>
-  )
-}
+  );
+};
 
 export default StoreDetailPage;

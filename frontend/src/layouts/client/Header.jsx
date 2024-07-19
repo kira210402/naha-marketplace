@@ -30,7 +30,7 @@ const navLinks = [
   { to: '/cart', label: iconCart },
   { to: '/about', label: 'About' },
   { to: '/contact', label: 'Contact' },
-  { to: '/stores/my', label: 'My Store' },
+  { to: '/stores', label: 'List Stores' },
 ];
 
 const Header = () => {
@@ -78,10 +78,14 @@ const Header = () => {
       },
       {
         key: '2',
-        label: <NavLink to='#'>Settings</NavLink>,
+        label: <NavLink to={`/stores/my`}>My Store</NavLink>,
       },
       {
         key: '3',
+        label: <NavLink to='#'>Settings</NavLink>,
+      },
+      {
+        key: '4',
         label: <NavLink to='/logout'>Logout</NavLink>,
       },
     ];

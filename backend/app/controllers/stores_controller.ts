@@ -76,7 +76,12 @@ export default class StoresController {
   }
 
   async update({ request, response, auth }: HttpContext) {
-    const { name, description, phoneNumber, address } = request.only(['name', 'description', 'phoneNumber', 'address'])
+    const { name, description, phoneNumber, address } = request.only([
+      'name',
+      'description',
+      'phoneNumber',
+      'address',
+    ])
     const store = await Store.findByOrFail('userId', auth.user?.$attributes.id)
     let avatar: string = store.avatar
     if (request.file('avatar')) {
@@ -90,7 +95,7 @@ export default class StoresController {
       description,
       phoneNumber,
       address,
-      avatar
+      avatar,
     }
     const payload = await updateStoreValidator.validate(data)
 

@@ -21,12 +21,17 @@ export const createNewStore = async (newStore) => {
   return response;
 };
 
-export const updateStore = async ( updatedStore) => {
+export const updateStore = async (updatedStore) => {
   const response = await put(`/stores`, updatedStore);
   return response;
 };
 
 export const deleteStore = async (id) => {
   const response = await del(`/stores/${id}`);
+  return response;
+};
+
+export const getListStores = async () => {
+  const response = await get(`/stores`);
   return response;
 };
