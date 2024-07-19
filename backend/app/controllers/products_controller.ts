@@ -12,7 +12,7 @@ export default class ProductsController {
     const { page, perPage } = pagination
     const sortField = request.input('sortField', 'createdAt')
     const sortOrder = request.input('sortOrder', 'desc')
-    const products = await Product.query().orderBy(sortField, sortOrder).paginate(page, perPage)
+    const products = await Product.query().where('deleted', false).orderBy(sortField, sortOrder).paginate(page, perPage)
     if (!products) throw new ProductException()
     return response.ok({
       code: 200,

@@ -87,13 +87,17 @@ const DataTable = (props) => {
       dataIndex: 'images',
       width: 100,
       key: 'images',
-      render: (text, record) => (
-        <img
-          src={record.images[0]}
-          alt='image'
-          style={{ width: 50, height: 50 }}
-        />
-      ),
+      render: (text, record) => {
+        return (
+          record.images ?
+            <img
+              src={record.images[0]}
+              alt='image'
+              style={{ width: 50, height: 50 }}
+            />
+            : <></>
+        );
+      },
       ellipsis: true,
     },
     {
