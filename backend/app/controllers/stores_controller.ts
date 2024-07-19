@@ -133,8 +133,8 @@ export default class StoresController {
   async getListProductByStore({ request, pagination, response, auth }: HttpContext) {
     const { page, perPage } = pagination
     const filter = request.input('status', ' all')
-    const sortField = request.input('sortField', 'id')
-    const sortOrder = request.input('sortOrder', 'asc')
+    const sortField = request.input('sortField', 'createdAt')
+    const sortOrder = request.input('sortOrder', 'desc')
     const store = await Store.findByOrFail('userId', auth.user?.$attributes.id)
     const productsQuery = Product.query().where('deleted', false).where('storeId', store.id)
     switch (filter) {
