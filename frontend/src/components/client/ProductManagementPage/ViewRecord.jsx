@@ -62,7 +62,7 @@ const ViewRecord = (props) => {
 
           <Form.Item label='Images'>
             <Row gutter={[16, 16]}>
-              {data.images.map((image, index) => (
+              {data.images?.map((image, index) => (
                 <Col key={index} xs={24} sm={12} md={8} lg={6}>
                   <Image src={image} alt={data.name} />
                 </Col>

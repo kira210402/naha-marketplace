@@ -35,12 +35,12 @@ export default function CreateRecord(props) {
       const response = await createCollection(values);
       console.log('response', response);
       if (response.code === 201) {
-        message.success('Create product success!');
+        message.success('Create collection success!');
         onReload();
         setShowModal(false);
         form.resetFields();
         return response;
-      } else message.error('Create product fail');
+      } else message.error('Create collection fail');
     } catch (error) {
       message.error('Có lỗi xảy ra!');
     }

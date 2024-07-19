@@ -35,7 +35,7 @@ const RegisterPage = () => {
           navigate('/login');
         } else {
           toast.error(`${response.message}`);
-          return; 
+          return;
         }
       } catch (error) {
         console.log('error', error);
@@ -57,15 +57,34 @@ const RegisterPage = () => {
                 Username
               </label>
               <input
+                id='fullName'
+                name='fullName'
+                type='text'
+                autoComplete='fullName'
+                className={`relative block w-full rounded-md border ${formik.touched.fullName && formik.errors.fullName
+                  ? 'border-red-500'
+                  : 'border-gray-300'
+                  } px-3 py-2 text-gray-900 placeholder-gray-500 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm`}
+                placeholder='Full Name'
+                value={formik.values.fullName}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+              />
+            </div>
+            <div className='mt-4'>
+              <label htmlFor='username' className='sr-only'>
+                Username
+              </label>
+
+              <input
                 id='username'
                 name='username'
                 type='text'
                 autoComplete='username'
-                className={`relative block w-full rounded-md border ${
-                  formik.touched.username && formik.errors.username
-                    ? 'border-red-500'
-                    : 'border-gray-300'
-                } px-3 py-2 text-gray-900 placeholder-gray-500 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm`}
+                className={`relative block w-full rounded-md border ${formik.touched.username && formik.errors.username
+                  ? 'border-red-500'
+                  : 'border-gray-300'
+                  } px-3 py-2 text-gray-900 placeholder-gray-500 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm`}
                 placeholder='Username'
                 value={formik.values.username}
                 onChange={formik.handleChange}
@@ -86,11 +105,10 @@ const RegisterPage = () => {
                 name='email'
                 type='email'
                 autoComplete='email'
-                className={`relative block w-full rounded-md border ${
-                  formik.touched.email && formik.errors.email
-                    ? 'border-red-500'
-                    : 'border-gray-300'
-                } px-3 py-2 text-gray-900 placeholder-gray-500 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm`}
+                className={`relative block w-full rounded-md border ${formik.touched.email && formik.errors.email
+                  ? 'border-red-500'
+                  : 'border-gray-300'
+                  } px-3 py-2 text-gray-900 placeholder-gray-500 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm`}
                 placeholder='Địa chỉ email'
                 value={formik.values.email}
                 onChange={formik.handleChange}
@@ -111,11 +129,10 @@ const RegisterPage = () => {
                 name='password'
                 type='password'
                 autoComplete='current-password'
-                className={`relative block w-full rounded-md border ${
-                  formik.touched.password && formik.errors.password
-                    ? 'border-red-500'
-                    : 'border-gray-300'
-                } px-3 py-2 text-gray-900 placeholder-gray-500 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm`}
+                className={`relative block w-full rounded-md border ${formik.touched.password && formik.errors.password
+                  ? 'border-red-500'
+                  : 'border-gray-300'
+                  } px-3 py-2 text-gray-900 placeholder-gray-500 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm`}
                 placeholder='Mật khẩu'
                 value={formik.values.password}
                 onChange={formik.handleChange}
