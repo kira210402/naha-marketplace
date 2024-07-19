@@ -27,7 +27,10 @@ export const updateUserValidator = vine.compile(
   vine.object({
     fullName: vine.string().trim().optional(),
     avatar: vine.string().optional(),
-    phoneNumber: vine.string().regex(/0\d{9,10}/).optional(),
+    phoneNumber: vine
+      .string()
+      .regex(/0\d{9,10}/)
+      .optional(),
     address: vine.string().trim().optional(),
   })
 )

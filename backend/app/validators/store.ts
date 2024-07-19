@@ -23,10 +23,7 @@ export const createStoreValidator = vine.compile(
 
 export const updateStoreValidator = vine.compile(
   vine.object({
-    name: vine
-      .string()
-      .trim()
-      .optional(),
+    name: vine.string().trim().optional(),
     description: vine.string().trim().optional(),
     phoneNumber: vine
       .string()

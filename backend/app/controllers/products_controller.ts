@@ -6,13 +6,12 @@ import { createProductValidator, updateProductValidator } from '#validators/prod
 import type { HttpContext } from '@adonisjs/core/http'
 import { EUserRole } from '../enums/EUserRole.js'
 import { UploadCloudinary } from '#services/upload_cloudinary_service'
-import { messages } from '@vinejs/vine/defaults'
 
 export default class ProductsController {
   async index({ request, response, pagination }: HttpContext) {
     const { page, perPage } = pagination
-    const sortField = request.input('sortField', 'id')
-    const sortOrder = request.input('sortOrder', 'asc')
+    const sortField = request.input('sortField', 'createdAt')
+    const sortOrder = request.input('sortOrder', 'desc')
     const products = await Product.query().orderBy(sortField, sortOrder).paginate(page, perPage)
     if (!products) throw new ProductException()
     return response.ok({
