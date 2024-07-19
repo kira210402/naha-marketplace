@@ -62,12 +62,12 @@ export default class StoresController {
     const store = await Store.query()
       .where('id', params.id)
       .preload('products', (query) => {
-        query.where('status', true).where('deleted', false);
+        query.where('status', true).where('deleted', false)
       })
       .preload('collections', (query) => {
-        query.where('status', true).where('deleted', false);
+        query.where('status', true).where('deleted', false)
       })
-      .firstOrFail();
+      .firstOrFail()
     return response.ok({
       code: 200,
       message: 'get store success',

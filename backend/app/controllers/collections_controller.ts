@@ -67,7 +67,7 @@ export default class CollectionsController {
       .where('name', payload.name)
       .first()
 
-    if(existedCollection) {
+    if (existedCollection) {
       return {
         code: 400,
         message: 'Collection name already exists',
