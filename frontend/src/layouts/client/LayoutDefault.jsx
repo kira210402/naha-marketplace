@@ -1,6 +1,7 @@
 import { Outlet } from 'react-router-dom';
 import Footer from '../../components/client/footer/Footer';
 import Header from './Header';
+import AddressInput from '../../components/client/Address/AddressInput';
 const LayoutDefault = () => {
   return (
     <>
@@ -11,12 +12,16 @@ const LayoutDefault = () => {
         >
           <Header />
         </header>
-        <main className='container mx-auto min-h-screen flex flex-col'>
+        <main className='container mx-auto flex min-h-screen flex-col'>
           <Outlet />
         </main>
         <footer>
           <Footer />
         </footer>
+
+        <div>
+          <AddressInput />
+        </div>
       </div>
     </>
   );

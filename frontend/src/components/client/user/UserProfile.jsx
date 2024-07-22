@@ -18,8 +18,8 @@ const UserProfile = ({ user }) => {
       if (fileList.length > 0) {
         formData.append('avatar', fileList[0].originFileObj);
       }
-      
-      console.log('formData User', formData)
+
+      console.log('formData User', formData);
       const response = await updateUser(formData);
       if (response) {
         message.success('Update user success!');
@@ -28,7 +28,7 @@ const UserProfile = ({ user }) => {
     } catch (error) {
       message.error('Có lỗi xảy ra!');
     }
-  }
+  };
   return (
     <div
       style={{
@@ -96,6 +96,6 @@ const UserProfile = ({ user }) => {
       </Form>
     </div>
   );
-};    
+};
 
 export default UserProfile;
