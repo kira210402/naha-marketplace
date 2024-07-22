@@ -1,7 +1,8 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column, hasOne } from '@adonisjs/lucid/orm'
+import { BaseModel, belongsTo, column, hasOne } from '@adonisjs/lucid/orm'
 import Product from './product.js'
-import type { HasOne } from '@adonisjs/lucid/types/relations'
+import type { BelongsTo, HasOne } from '@adonisjs/lucid/types/relations'
+import Order from './order.js'
 
 export default class CartItem extends BaseModel {
   @column({ isPrimary: true })
@@ -9,6 +10,9 @@ export default class CartItem extends BaseModel {
 
   @column()
   declare cartId: number
+
+  @column()
+  declare orderId: number
 
   @column()
   declare productId: number
@@ -27,4 +31,7 @@ export default class CartItem extends BaseModel {
     foreignKey: 'id',
   })
   declare product: HasOne<typeof Product>
+
+  @belongsTo(() => Order)
+  declare order: BelongsTo<typeof Order>
 }

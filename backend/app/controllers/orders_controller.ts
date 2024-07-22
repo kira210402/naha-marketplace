@@ -4,8 +4,7 @@ import { EOrderPayment } from '../enums/EOrderPayment.js'
 import { EOrderStatus } from '../enums/EOrderStatus.js'
 import Store from '#models/store'
 import StoreException from '#exceptions/store_exception'
-import { createOrderValidator } from '#validators/order'
-import Product from '#models/product'
+import CartItem from '#models/cart_item'
 
 export default class OrdersController {
   async indexByStore({ response, auth, pagination, params }: HttpContext) {
@@ -79,32 +78,35 @@ export default class OrdersController {
   }
 
   async store({ response, request, auth }: HttpContext) {
-    // const data = request.only(['cartItemId', 'status', 'payment', 'phoneNumber', 'address'])
-    const data: {
-      cartItemId: number
-      payment: EOrderPayment
-      phoneNumber: string
-      address: string
-    }[] = request.body() as {
-      cartItemId: number
-      payment: EOrderPayment
-      phoneNumber: string
-      address: string
-    }[]
-    for (let cartItem of data) {
-      const item = await createOrderValidator.validate(cartItem)
-      await Order.create({
-        userId: auth.user?.$attributes.id,
-        cartItemId: item.cartItemId,
-        status: EOrderStatus.Pending,
-        payment: item.payment,
-        phoneNumber: item.phoneNumber,
-        address: item.address,
-      })
-    }
+    const { cartItemIds, receiverName, phoneNumber, address, payment }: {
+      cartItemIds: number[],
+      receiverName: string,
+      phoneNumber: string,
+      address: string,
+      payment: EOrderPayment,
+    } = request.only(['cartItemIds', 'receiverName', 'phoneNumber', 'address', 'payment'])
+
+    const order = await Order.create({
+      userId: auth.user?.$attributes.id,
+      status: EOrderStatus.Pending,
+      receiverName,
+      phoneNumber,
+      address,
+      payment,
+    })
+
+    await CartItem.query().whereIn('id', cartItemIds).update({ orderId: order.id })
+
+    // return order with preload cartItems, then cartItems preload product
+    await order.preload('cartItems', (query) => {
+      query.preload('product')
+      }
+    )
+
     return response.ok({
       code: 200,
       message: 'Create orders success',
+      order,
     })
   }
 }
