@@ -1,4 +1,4 @@
 export enum EOrderPayment {
-  Cash = 'Cash',
-  VNPay = 'VNPay',
+  Cash = 'CASH',
+  VNPay = 'VN_PAY',
 }

@@ -1,7 +1,6 @@
 import { Outlet } from 'react-router-dom';
 import Footer from '../../components/client/footer/Footer';
 import Header from './Header';
-import AddressInput from '../../components/client/Address/AddressInput';
 const LayoutDefault = () => {
   return (
     <>
@@ -18,10 +17,6 @@ const LayoutDefault = () => {
         <footer>
           <Footer />
         </footer>
-
-        <div>
-          <AddressInput />
-        </div>
       </div>
     </>
   );
