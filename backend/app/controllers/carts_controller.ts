@@ -6,18 +6,19 @@ import Product from '#models/product'
 export default class CartsController {
   async index({ response, auth }: HttpContext) {
     try {
-      const userId = await auth.user?.id
+      const userId = auth.user?.id
       const cart = await Cart.findByOrFail('userId', userId)
       const cartItems = await CartItem.query().where('cartId', cart.id).whereNull('orderId')
-      const products = []
-      for (let cartItem of cartItems) {
-        const product = await cartItem.related('product').query().first()
-        products.push({
-          product: product?.$attributes,
-          quantity: cartItem.quantity,
-          id: cartItem.id,
+      const products = await Promise.all(
+        cartItems.map(async (cartItem) => {
+          const product = await cartItem.related('product').query().first()
+          return {
+            product: product?.$attributes,
+            quantity: cartItem.quantity,
+            id: cartItem.id,
+          }
         })
-      }
+      )
       return response.ok({
         code: 200,
         message: 'Get cart items success',
@@ -48,6 +49,7 @@ export default class CartsController {
     let cartItem
     cartItem = await CartItem.query()
       .where('cartId', cart.id)
+      .whereNull('orderId')
       .where('productId', product.id)
       .first()
 
