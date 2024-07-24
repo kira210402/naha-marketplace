@@ -1,5 +1,5 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column } from '@adonisjs/lucid/orm'
+import { BaseModel, column, hasMany } from '@adonisjs/lucid/orm'
 import type { HasMany } from '@adonisjs/lucid/types/relations'
 import CartItem from './cart_item.js'
 import { EOrderStatus } from '../enums/EOrderStatus.js'
@@ -12,8 +12,8 @@ export default class Order extends BaseModel {
   @column({ columnName: 'user_id' })
   declare userId: number
 
-  @column({ columnName: 'cart_item_id' })
-  declare cartItemId: number
+  @column({columnName: 'receiver_names'})
+  declare receiverName: string
 
   @column()
   declare status: EOrderStatus
@@ -21,7 +21,7 @@ export default class Order extends BaseModel {
   @column()
   declare payment: EOrderPayment
 
-  @column()
+  @column({columnName: 'phone_number'})
   declare phoneNumber: string
 
   @column()
@@ -33,5 +33,6 @@ export default class Order extends BaseModel {
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime
 
-  declare user: HasMany<typeof CartItem>
+  @hasMany(() => CartItem)
+  declare cartItems: HasMany<typeof CartItem>
 }
