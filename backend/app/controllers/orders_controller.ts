@@ -78,12 +78,18 @@ export default class OrdersController {
   }
 
   async store({ response, request, auth }: HttpContext) {
-    const { cartItemIds, receiverName, phoneNumber, address, payment }: {
-      cartItemIds: number[],
-      receiverName: string,
-      phoneNumber: string,
-      address: string,
-      payment: EOrderPayment,
+    const {
+      cartItemIds,
+      receiverName,
+      phoneNumber,
+      address,
+      payment,
+    }: {
+      cartItemIds: number[]
+      receiverName: string
+      phoneNumber: string
+      address: string
+      payment: EOrderPayment
     } = request.only(['cartItemIds', 'receiverName', 'phoneNumber', 'address', 'payment'])
 
     const order = await Order.create({
@@ -95,17 +101,27 @@ export default class OrdersController {
       payment,
     })
 
-    await CartItem.query().whereIn('id', cartItemIds).update({ orderId: order.id })
+    console.log('cartItem', typeof cartItemIds)
 
-    await Order.query().where('id', order.id).preload('cartItems', (query) => {
-      query.preload('product')
-      }
-    )
+    const cartItemUpdate = await CartItem.query()
+      .whereIn('id', cartItemIds)
+      .update({ orderId: order.id })
+    console.log('cartItemUpdate', cartItemUpdate)
+
+    await Order.query()
+      .where('id', order.id)
+      .preload('cartItems', (query) => {
+        query.preload('product')
+      })
 
     return response.created({
       code: 201,
       message: 'Create orders success',
       order,
     })
+  }
+
+  async getOrderById({ request }: HttpContext) {
+    
   }
 }

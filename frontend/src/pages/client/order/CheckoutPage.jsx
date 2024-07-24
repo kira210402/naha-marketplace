@@ -1,4 +1,15 @@
-import { Button, Dropdown, Flex, Form, Input, message, Space, Spin } from 'antd';
+import {
+  Button,
+  Col,
+  Dropdown,
+  Flex,
+  Form,
+  Input,
+  message,
+  Row,
+  Space,
+  Spin,
+} from 'antd';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getCookie } from '../../../helpers/cookie';
@@ -8,6 +19,7 @@ import { setUser } from '../../../redux/features/user';
 import { DownOutlined } from '@ant-design/icons';
 import { createOrder } from '../../../services/order';
 import { useLocation } from 'react-router-dom';
+import Address from '../../../components/client/Address/AddressInput';
 
 const CheckoutPage = () => {
   const location = useLocation();
@@ -40,17 +52,19 @@ const CheckoutPage = () => {
   const user = data?.user;
 
   const handlePaymentClick = ({ key }) => {
-    const selected = items.find(item => item.key === key);
+    const selected = items.find((item) => item.key === key);
     setSelectedPayment(selected.label);
   };
 
   const items = [
     {
       label: 'Cash',
+      name: 'CASH',
       key: '1',
     },
     {
       label: 'VNPay',
+      name: 'VN_PAY',
       key: '2',
     },
   ];
@@ -69,24 +83,32 @@ const CheckoutPage = () => {
     );
   }
 
+  const handleAddressChange = (addressDetails) => {
+    console.log('addressDetail', addressDetails);
+    form.setFieldsValue({
+      address: `${addressDetails.communeLabel}, ${addressDetails.districtLabel}, ${addressDetails.provinceLabel}`,
+    });
+  };
+
   const handleSubmit = async (values) => {
     try {
-      const formData = new FormData();
-      console.log('values', values);
-      formData.append('receiverName', values.fullName || '');
-      formData.append('phoneNumber', values.phoneNumber || '');
-      formData.append('address', values.address || '');
-      formData.append('payment', selectedPayment || 'Cash');
-      // const data = {
-      //   receiverName: values.fullName,
-      //   phoneNumber: values.phoneNumber,
-      //   address: values.address,
-      //   payment: selectedPayment,
-      //   cartItemIds: selectedCartItems.map((item) => item.id),
-      // };
-
-      // const response = await createOrder({data: formData, cartItemIds: selectedCartItems.map((item) => item.id)});
-      const response = await createOrder({data: formData, cartItemIds: selectedCartItems.map((item) => item.id)});
+      // const formData = new FormData();
+      // formData.append('receiverName', values.fullName || '');
+      // formData.append('phoneNumber', values.phoneNumber || '');
+      // formData.append('address', values.address || '');
+      // formData.append('payment', selectedPayment || 'Cash');
+      // formData.append(
+      //   'cartItemIds',
+      //   selectedCartItems.map((item) => item.id),
+      // );
+      const formData = {
+        receiverName: values.fullName || '',
+        phoneNumber: values.phoneNumber || '',
+        address: values.address || '',
+        payment: selectedPayment || 'CASH',
+        cartItemIds: selectedCartItems.map((item) => item.id),
+      };
+      const response = await createOrder(formData);
       if (response.code === 201) {
         message.success('Create order success!');
         return response;
@@ -94,99 +116,144 @@ const CheckoutPage = () => {
     } catch (error) {
       message.error('Có lỗi xảy ra!');
     }
-  }
+  };
   return (
-    <div
-      style={{
-        padding: '20px',
-        maxWidth: '1200px',
-        margin: '0 auto',
-        backgroundColor: '#fff',
-        borderRadius: '8px',
-        boxShadow: '0 4px 8px rgba(0,0,0,0.1)',
+    <>
+      <div className='container mx-auto p-5'>
+        <div className='rounded-lg bg-white p-5 shadow-md'>
+          <Row gutter={16} className='flex'>
+            <Col span={12} className='flex flex-col'>
+              <div className='flex flex-1 flex-col rounded-lg bg-gray-100 p-5'>
+                <h3 className='mb-5 text-2xl font-bold text-gray-700'>
+                  My Orders
+                </h3>
+                <div
+                  className='flex-1 overflow-auto'
+                  style={{ maxHeight: '400px' }}
+                >
+                  <div className='grid grid-cols-2 gap-4'>
+                    {selectedCartItems.map((item, index) => (
+                      <div
+                        key={index}
+                        className='mb-4 flex items-center rounded-lg bg-white p-4 shadow-sm'
+                      >
+                        <img
+                          src={item.product.images[0]}
+                          alt={item.product.name}
+                          className='mr-4 h-16 w-16 rounded-full object-cover'
+                        />
+                        <div>
+                          <p className='font-medium text-gray-800'>
+                            Name: {item.product.name}
+                          </p>
+                          <p className='text-gray-600'>
+                            Quantity: {item.quantity}
+                          </p>
+                          <p className='text-gray-600'>
+                            Price: $
+                            {((item.product.price *
+                              (100 - item.product.discount)) /
+                              100) *
+                              item.quantity}
+                          </p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                <h3 className='mt-6 text-xl font-bold text-gray-700'>
+                  Total Price: ${totalPrice}
+                </h3>
+              </div>
+            </Col>
 
-      }}
-    >
-      <h2 style={{ textAlign: 'center' }}><b>My Order Information</b></h2>
+            <Col span={12} className='flex flex-col'>
+              <div>
+                <Address onAddressChange={handleAddressChange} />
+              </div>
+              <div className='flex flex-1 flex-col rounded-lg bg-gray-100 p-5'>
+                <h3 className='mb-5 text-2xl font-bold text-gray-700'>
+                  My Infomation
+                </h3>
+                <Form
+                  form={form}
+                  labelCol={{ span: 6 }}
+                  wrapperCol={{ span: 18 }}
+                  layout='horizontal'
+                  initialValues={{ ...user }}
+                  onFinish={handleSubmit}
+                  className='flex flex-1 flex-col justify-between'
+                >
+                  <div>
+                    <Form.Item
+                      label='Receiver name'
+                      name='fullName'
+                      rules={[
+                        {
+                          required: true,
+                          message: "Please input receiver's name!",
+                        },
+                      ]}
+                    >
+                      <Input />
+                    </Form.Item>
+                    <Form.Item
+                      label='Phone Number'
+                      name='phoneNumber'
+                      rules={[
+                        {
+                          required: true,
+                          message: 'Please input your phone number!',
+                        },
+                      ]}
+                    >
+                      <Input />
+                    </Form.Item>
 
-      <div style={{ marginTop: '20px' }}>
-        <h3><b>My Orders</b></h3>
-        {selectedCartItems.map((item, index) => (
-          <div key={index} style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
-            <img src={item.product.images[0]} alt={item.product.name} style={{ width: '50px', height: '50px', marginRight: '10px' }} />
-            <div>
-              <p>Name: {item.product.name}</p>
-              <p>Quantity: {item.quantity}</p>
-              <p>Price: ${((item.product.price * (100 - item.product.discount)) / 100) * item.quantity}</p>
-            </div>
-          </div>
-        ))}
-        <h3 style={{ margin: '20px' }}><b>Total Price: ${totalPrice}</b></h3>
+                    <Form.Item
+                      label='Delivery Address'
+                      name='address'
+                      rules={[
+                        {
+                          required: true,
+                          message: 'Please input your address!',
+                        },
+                      ]}
+                    >
+                      <Input placeholder='Enter your address' />
+                    </Form.Item>
+                    <Form.Item label='Payment Method' wrapperCol={{ span: 24 }}>
+                      <Dropdown
+                        menu={{
+                          items,
+                          onClick: handlePaymentClick,
+                        }}
+                      >
+                        <a
+                          onClick={(e) => e.preventDefault()}
+                          className='inline-flex items-center'
+                        >
+                          <Space>
+                            {selectedPayment}
+                            <DownOutlined />
+                          </Space>
+                        </a>
+                      </Dropdown>
+                    </Form.Item>
+                  </div>
+                  <Form.Item wrapperCol={{ span: 24 }}>
+                    <Button type='primary' htmlType='submit' className='w-full'>
+                      Order
+                    </Button>
+                  </Form.Item>
+                </Form>
+              </div>
+            </Col>
+          </Row>
+        </div>
       </div>
-
-      <Form
-        form={form}
-        labelCol={{ span: 4 }}
-        wrapperCol={{ span: 14 }}
-        layout='horizontal'
-        initialValues={{ ...user }}
-        onFinish={handleSubmit}
-        className='w-screen'
-      >
-        <Form.Item
-          label='Receiver name'
-          name='fullName'
-          rules={[{ required: true, message: 'Please input receiver;s name!' }]}
-        >
-          <Input />
-        </Form.Item>
-        <Form.Item
-          label='Phone Number'
-          name='phoneNumber'
-          rules={[
-            { required: true, message: 'Please input your phone number!' },
-          ]}
-        >
-          <Input />
-        </Form.Item>
-
-        <Form.Item
-          label='Address'
-          name='address'
-          rules={[{ required: true, message: 'Please input your address!' }]}
-        >
-          <Input />
-        </Form.Item>
-
-        {/* <Form.Item
-          label='Payment method'
-          name='payment'
-        > */}
-          <Dropdown
-            menu={{
-              items,
-              onClick: handlePaymentClick,
-            }}
-          >
-            <a onClick={(e) => e.preventDefault()}>
-              <Space>
-                {selectedPayment}
-                <DownOutlined />
-              </Space>
-            </a>
-          </Dropdown>
-        {/* </Form.Item> */}
-        <Form.Item wrapperCol={{ offset: 4, span: 14 }}>
-          <Button type='primary' htmlType='submit' style={{ width: '100%' }}>
-            Order
-          </Button>
-        </Form.Item>
-      </Form>
-
-
-    </div>
+    </>
   );
-
-}
+};
 
 export default CheckoutPage;

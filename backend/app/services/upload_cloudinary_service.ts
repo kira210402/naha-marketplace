@@ -4,6 +4,7 @@ export const UploadCloudinary = {
     return new Promise(async (resolve, reject) => {
       try {
         let response = await cloudinary.uploader.upload(file.tmpPath, { folder: 'test' })
+        console.log('file', file.tmpPath)
         resolve({ url: response.secure_url })
       } catch (error) {
         reject({ status: false, url: error.message })
