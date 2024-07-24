@@ -131,6 +131,7 @@ export default class ProductsController {
     const { query } = request.qs()
     try {
       const products = await Product.query()
+        .where('deleted', false)
         .where('name', 'ilike', `%${query}%`)
         .orWhereRaw('CAST(price AS TEXT) ilike ?', [`%${query}%`])
         .paginate(1, 10)
