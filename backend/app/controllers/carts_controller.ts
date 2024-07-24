@@ -8,7 +8,7 @@ export default class CartsController {
     try {
       const userId = await auth.user?.id
       const cart = await Cart.findByOrFail('userId', userId)
-      const cartItems = await cart.related('cartItems').query()
+      const cartItems = await CartItem.query().where('cartId', cart.id).whereNull('orderId')
       const products = []
       for (let cartItem of cartItems) {
         const product = await cartItem.related('product').query().first()
