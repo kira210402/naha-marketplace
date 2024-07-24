@@ -97,14 +97,13 @@ export default class OrdersController {
 
     await CartItem.query().whereIn('id', cartItemIds).update({ orderId: order.id })
 
-    // return order with preload cartItems, then cartItems preload product
-    await order.preload('cartItems', (query) => {
+    await Order.query().where('id', order.id).preload('cartItems', (query) => {
       query.preload('product')
       }
     )
 
-    return response.ok({
-      code: 200,
+    return response.created({
+      code: 201,
       message: 'Create orders success',
       order,
     })

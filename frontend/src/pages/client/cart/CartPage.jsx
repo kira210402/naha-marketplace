@@ -7,11 +7,14 @@ import { getUser } from '../../../services/user';
 import { setUser } from '../../../redux/features/user';
 import { Button, InputNumber, Table } from 'antd';
 import DeleteCartItem from '../../../components/client/CartPage/DeleteCartItem';
+import { useNavigate } from 'react-router-dom';
 
 const CartPage = () => {
   const [cartItems, setCartItems] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [selectedRows, setSelectedRows] = useState([]);
   const dispatch = useDispatch();
+  const navigate = useNavigate()
   const fetchData = async () => {
     try {
       const token = getCookie('token');
@@ -30,6 +33,8 @@ const CartPage = () => {
       setLoading(false);
     }
   };
+
+  console.log('selectedRows', selectedRows);
 
   useEffect(() => {
     fetchData();
@@ -55,8 +60,8 @@ const CartPage = () => {
     handleQuantityChange(updatedItems);
   };
 
-  const totalPrice = cartItems.reduce(
-    (total, item) => total + item.product.price * item.quantity,
+  const totalPrice = selectedRows.reduce(
+    (total, item) => total + item.product.price * item.quantity * (1 - item.product.discount / 100),
     0,
   );
 
@@ -169,17 +174,13 @@ const CartPage = () => {
 
   const rowSelection = {
     onChange: (selectedRowKeys, selectedRows) => {
-      console.log(
-        `selectedRowKeys: ${selectedRowKeys}`,
-        'selectedRows: ',
-        selectedRows,
-      );
+      setSelectedRows(selectedRows);
     },
     onSelect: (record, selected, selectedRows) => {
-      console.log(record, selected, selectedRows);
+      setSelectedRows(selectedRows);
     },
-    onSelectAll: (selected, selectedRows, changeRows) => {
-      console.log(selected, selectedRows, changeRows);
+    onSelectAll: (selected, selectedRows) => {
+      setSelectedRows(selectedRows);
     },
   };
 
@@ -195,8 +196,13 @@ const CartPage = () => {
         pagination={false}
       />
       <div className='mx-6 flex place-content-end gap-4 py-4 text-2xl font-bold'>
-        <p>Total Price: ${totalPrice}</p>
-        <Button type='primary'>Thanh toán</Button>
+        <p>Total Price: ${totalPrice.toFixed(2)}</p>
+        <Button
+          type='primary'
+          onClick={() => navigate('/checkout', { state: { selectedCartItems: selectedRows, totalPrice: totalPrice } })}
+        >
+          Thanh toán
+        </Button>
       </div>
     </>
   );

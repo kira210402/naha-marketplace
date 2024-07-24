@@ -11,6 +11,7 @@ import SearchResult from '../pages/client/search/SearchResult';
 import StoreDetailPage from '../pages/client/store/StoreDetailPage';
 import MyStore from '../pages/client/store/MyStore';
 import ListStorePage from '../pages/client/listStore/ListStorePage';
+import CheckoutPage from '../pages/client/order/CheckoutPage';
 export const routes = [
   {
     path: '/',
@@ -45,6 +46,10 @@ export const routes = [
             element: <StoreDetailPage />,
           },
         ],
+      },
+      {
+        path: '/checkout',
+        element: <CheckoutPage />,
       },
       {
         path: '/cart',
