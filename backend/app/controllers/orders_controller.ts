@@ -91,7 +91,12 @@ export default class OrdersController {
       address: string
       payment: EOrderPayment
     } = request.only(['cartItemIds', 'receiverName', 'phoneNumber', 'address', 'payment'])
-
+    if (cartItemIds.length == 0) {
+      return response.badRequest({
+        code: 403,
+        message: 'There is no products',
+      })
+    }
     const order = await Order.create({
       userId: auth.user?.$attributes.id,
       status: EOrderStatus.Pending,
@@ -101,12 +106,20 @@ export default class OrdersController {
       payment,
     })
 
-    console.log('cartItem', typeof cartItemIds)
+    const cartItems = await CartItem.query().whereIn('id', cartItemIds).preload('product')
 
-    const cartItemUpdate = await CartItem.query()
-      .whereIn('id', cartItemIds)
-      .update({ orderId: order.id })
-    console.log('cartItemUpdate', cartItemUpdate)
+    await Promise.all(
+      cartItems.map(async (cartItem) => {
+        const totalPrice =
+          (cartItem.quantity * cartItem.product.price * (100 - cartItem.product.discount)) / 100
+        return CartItem.query().where('id', cartItem.id).update({
+          orderId: order.id,
+          totalPrice,
+        })
+      })
+    )
+
+    console.log('cartItems', cartItems)
 
     await Order.query()
       .where('id', order.id)
@@ -121,7 +134,34 @@ export default class OrdersController {
     })
   }
 
-  async getOrderById({ request }: HttpContext) {
-    
+  async getListOrderByUserId({ response, auth }: HttpContext) {
+    try {
+      const userId = auth.user?.$attributes.id
+
+      if (!userId) {
+        return response.unauthorized({
+          code: 401,
+          message: 'Unauthorized',
+        })
+      }
+
+      const orders = await Order.query()
+        .where('userId', userId)
+        .preload('cartItems', (item) => {
+          item.preload('product')
+        })
+
+      return response.ok({
+        code: 200,
+        message: 'List orders of user success',
+        orders,
+      })
+    } catch (error) {
+      console.error('Error fetching orders:', error)
+      return response.internalServerError({
+        code: 500,
+        message: 'Internal Server Error',
+      })
+    }
   }
 }

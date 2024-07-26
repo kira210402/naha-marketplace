@@ -82,10 +82,14 @@ const Header = () => {
       },
       {
         key: '3',
-        label: <NavLink to='#'>Settings</NavLink>,
+        label: <NavLink to={`/orders/history`}>Purchase History</NavLink>,
       },
       {
         key: '4',
+        label: <NavLink to='#'>Settings</NavLink>,
+      },
+      {
+        key: '5',
         label: <NavLink to='/logout'>Logout</NavLink>,
       },
     ];

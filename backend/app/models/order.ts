@@ -12,7 +12,7 @@ export default class Order extends BaseModel {
   @column({ columnName: 'user_id' })
   declare userId: number
 
-  @column({columnName: 'receiver_names'})
+  @column({ columnName: 'receiver_names' })
   declare receiverName: string
 
   @column()
@@ -21,7 +21,7 @@ export default class Order extends BaseModel {
   @column()
   declare payment: EOrderPayment
 
-  @column({columnName: 'phone_number'})
+  @column({ columnName: 'phone_number' })
   declare phoneNumber: string
 
   @column()
@@ -33,6 +33,9 @@ export default class Order extends BaseModel {
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime
 
-  @hasMany(() => CartItem)
+  @hasMany(() => CartItem, {
+    localKey: 'id',
+    foreignKey: 'orderId',
+  })
   declare cartItems: HasMany<typeof CartItem>
 }

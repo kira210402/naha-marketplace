@@ -12,6 +12,7 @@ import StoreDetailPage from '../pages/client/store/StoreDetailPage';
 import MyStore from '../pages/client/store/MyStore';
 import ListStorePage from '../pages/client/listStore/ListStorePage';
 import CheckoutPage from '../pages/client/order/CheckoutPage';
+import PurchaseHistoryPage from '../pages/client/order/PurchaseHistoryPage';
 export const routes = [
   {
     path: '/',
@@ -32,6 +33,10 @@ export const routes = [
           {
             path: '/users/:id',
             element: <UserProfilePage />,
+          },
+          {
+            path: '/orders/history',
+            element: <PurchaseHistoryPage />,
           },
         ],
       },

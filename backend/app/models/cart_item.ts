@@ -20,6 +20,9 @@ export default class CartItem extends BaseModel {
   @column()
   declare quantity: number
 
+  @column({ columnName: 'total_price' })
+  declare totalPrice: number
+
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
 
