@@ -7,6 +7,7 @@ import {
   MenuUnfoldOutlined,
   ProductOutlined,
   SettingOutlined,
+  UnorderedListOutlined,
   UserOutlined,
 } from '@ant-design/icons';
 import { Avatar, Button, Layout, Menu, theme, Typography } from 'antd';
@@ -15,6 +16,7 @@ import CollectionManagementPage from './CollectionManagementPage';
 import SettingStorePage from './SettingStorePage';
 import DashBoardPage from './DashBoardPage';
 import { useNavigate } from 'react-router-dom';
+import OrdersManagementPage from './OrdersManagementPage';
 const { Header, Sider, Content } = Layout;
 
 const MyStoreDetailPage = ({ store }) => {
@@ -29,10 +31,12 @@ const MyStoreDetailPage = ({ store }) => {
       case '1':
         return <DashBoardPage />;
       case '2':
-        return <ProductManagementPage />;
+        return <OrdersManagementPage />;
       case '3':
-        return <CollectionManagementPage />;
+        return <ProductManagementPage />;
       case '4':
+        return <CollectionManagementPage />;
+      case '5':
         return <SettingStorePage />;
       default:
         return <div>Content</div>;
@@ -69,16 +73,21 @@ const MyStoreDetailPage = ({ store }) => {
             },
             {
               key: '2',
+              icon: <UnorderedListOutlined />,
+              label: 'Orders',
+            },
+            {
+              key: '3',
               icon: <ProductOutlined />,
               label: 'Products',
             },
             {
-              key: '3',
+              key: '4',
               icon: <DatabaseOutlined />,
               label: 'Collections',
             },
             {
-              key: '4',
+              key: '5',
               icon: <SettingOutlined />,
               label: 'Settings',
             },
@@ -86,7 +95,6 @@ const MyStoreDetailPage = ({ store }) => {
         />
       </Sider>
       <Layout style={{ minHeight: '100vh' }}>
-
         <Header
           style={{
             display: 'flex',

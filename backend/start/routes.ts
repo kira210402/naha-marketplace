@@ -101,7 +101,7 @@ router
         router
           .group(() => {
             router
-              .get('/store/:id', [OrdersController, 'indexByStore'])
+              .get('/store', [OrdersController, 'indexByStore'])
               .as('orders.indexByStore')
               .use(middleware.pagination())
             router
