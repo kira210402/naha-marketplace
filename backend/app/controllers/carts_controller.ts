@@ -51,6 +51,7 @@ export default class CartsController {
       .where('cartId', cart.id)
       .whereNull('orderId')
       .where('productId', product.id)
+      .whereNull('orderId')
       .first()
 
     if (cartItem) {
