@@ -1,4 +1,4 @@
-import { del, get, post, put } from '../../utils/request';
+import { get, post, put } from '../../utils/request';
 import queryString from 'query-string';
 export const getStore = async (id) => {
   const result = await get(`/stores/${id}`);
@@ -26,12 +26,7 @@ export const updateStore = async (updatedStore) => {
   return response;
 };
 
-export const deleteStore = async (id) => {
-  const response = await del(`/stores/${id}`);
-  return response;
-};
-
-export const getListStores = async () => {
-  const response = await get(`/stores`);
-  return response;
+export const getListOrderFromStore = async () => {
+  const result = await get(`/orders/store`);
+  return result;
 };
