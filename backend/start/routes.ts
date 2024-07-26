@@ -114,6 +114,7 @@ router
               .put('/store/:storeId/order/:id', [OrdersController, 'updateStoreOrder'])
               .as('orders.updateStoreOrder')
             router.post('/', [OrdersController, 'store']).as('orders.store')
+            router.get('/history', [OrdersController, 'getListOrderByUserId']).as('orders.history')
           })
           .prefix('/orders')
 
