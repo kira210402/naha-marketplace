@@ -4,6 +4,7 @@ import type { HasMany } from '@adonisjs/lucid/types/relations'
 import CartItem from './cart_item.js'
 import { EOrderStatus } from '../enums/EOrderStatus.js'
 import { EOrderPayment } from '../enums/EOrderPayment.js'
+import OrderItem from './order_item.js'
 
 export default class Order extends BaseModel {
   @column({ isPrimary: true })
@@ -14,10 +15,7 @@ export default class Order extends BaseModel {
 
   @column({ columnName: 'receiver_names' })
   declare receiverName: string
-
-  @column()
-  declare status: EOrderStatus
-
+  
   @column()
   declare payment: EOrderPayment
 
@@ -38,4 +36,7 @@ export default class Order extends BaseModel {
     foreignKey: 'orderId',
   })
   declare cartItems: HasMany<typeof CartItem>
+
+  @hasMany(() => OrderItem)
+  declare orderItems: HasMany<typeof OrderItem>
 }

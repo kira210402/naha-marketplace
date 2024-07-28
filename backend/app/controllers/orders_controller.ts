@@ -3,27 +3,26 @@ import type { HttpContext } from '@adonisjs/core/http'
 import { EOrderPayment } from '../enums/EOrderPayment.js'
 import { EOrderStatus } from '../enums/EOrderStatus.js'
 import Store from '#models/store'
-import StoreException from '#exceptions/store_exception'
 import CartItem from '#models/cart_item'
 
 export default class OrdersController {
-  async indexByStore({ response, auth, pagination, params }: HttpContext) {
-    const { page, perPage } = pagination
-    const stores = await Store.query().where('userId', auth.user?.$attributes.id)
-    const store = stores.find((store) => store.id === params.id)
-    if (!store) throw new StoreException()
+  async indexByStore({ response, auth }: HttpContext) {
+    // const { page, perPage } = pagination
+    const store = await Store.query().where('userId', auth.user?.$attributes.id).firstOrFail()
 
-    const orders = await Order.query()
-      .select('orders.*')
-      .join('cart_items', 'orders.cart_item_id', 'cart_items.id')
-      .join('products', 'cart_items.product_id', 'products.id')
-      .where('products.store_id', store.id)
-      .paginate(page, perPage)
+    // const orders = await Order.query()
+    //   .select('orders.*')
+    //   .join('cart_items', 'orders.cart_item_id', 'cart_items.id')
+    //   .join('products', 'cart_items.product_id', 'products.id')
+    //   .where('products.store_id', store.id)
+    //   .paginate(page, perPage)
+
+    const cartItems = await CartItem.query().whereNotNull('orderId').preload('product')
 
     return response.ok({
       code: 200,
       message: `List orders of store ${store.name} success`,
-      orders,
+      cartItems,
     })
   }
 
