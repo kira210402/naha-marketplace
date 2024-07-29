@@ -1,26 +1,13 @@
-import { useEffect, useState } from 'react';
-import { getListOrderFromStore } from '../../../services/stores';
+import Page from '../../../components/client/OrderManagementPage/Page';
 
 const OrdersManagementPage = () => {
-  const [listOrders, setListOrders] = useState([]);
-  const fetchData = async () => {
-    try {
-      const data = await getListOrderFromStore();
-      console.log('data', data);
-
-      setListOrders(data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  console.log('listOrders', listOrders);
-
-  useEffect(() => {
-    fetchData();
-  }, []);
-
-  return <></>;
+  return (
+    <>
+      <div>
+        <Page />
+      </div>
+    </>
+  );
 };
 
 export default OrdersManagementPage;

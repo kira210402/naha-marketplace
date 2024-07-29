@@ -7,14 +7,32 @@ import CartItem from '#models/cart_item'
 import OrderItem from '#models/order_item'
 export default class OrdersController {
   async indexByStore({ response, auth }: HttpContext) {
-    const store = await Store.query().where('userId', auth.user?.$attributes.id).firstOrFail()
+    const userId = auth.user?.$attributes.id
+    if (!userId) {
+      return response.unauthorized({
+        code: 401,
+        message: 'Unauthorized',
+      })
+    }
 
-    const orders = await CartItem.query().where('storeId', store.id).whereNotNull('orderId')
+    const store = await Store.query().where('userId', userId).firstOrFail()
+    if (!store) {
+      return response.notFound({
+        code: 404,
+        message: 'Store not found',
+      })
+    }
+
+    const orderItem = await CartItem.query()
+      .where('storeId', store.id)
+      .whereNotNull('orderId')
+      .preload('order')
+      .preload('product')
 
     return response.ok({
       code: 200,
       message: `List orders of store ${store.name} success`,
-      orders,
+      orderItem,
     })
   }
 
@@ -34,34 +52,16 @@ export default class OrdersController {
     })
   }
 
-  async updateMyOrder({ response, request, params, auth }: HttpContext) {
-    const order = await Order.findOrFail(params.id)
-    if (order.userId !== auth.user?.id) {
-      return response.unauthorized({
-        code: 403,
-        message: 'You are not allowed to update this order',
-      })
-    }
-    const { status } = request.only(['status'])
-    if (status === EOrderStatus.Processing) {
-      return response.badRequest({
-        code: 400,
-        message: 'You are not allowed to update status to Processing',
-      })
-    }
-    const orderItems = await OrderItem.query().where('orderId', order.id)
+  async updateMyOrder({ response, request, params }: HttpContext) {
+    const cartItem = await CartItem.findOrFail(params.cartItemId)
+    let { status } = request.only(['status'])
 
-    await Promise.all(
-      orderItems.map(async (orderItem) => {
-        orderItem.status = status
-        await orderItem.save()
-      })
-    )
-    await order.save()
+    cartItem.status = status
+    await cartItem.save()
     return response.ok({
       code: 200,
-      message: 'Update order success',
-      order,
+      message: 'Update cartItem success',
+      cartItem,
     })
   }
 
@@ -97,7 +97,7 @@ export default class OrdersController {
       phoneNumber,
       address,
       payment,
-      totalPrice
+      totalPrice,
     }: {
       cartItemIds: number[]
       receiverName: string
@@ -105,7 +105,14 @@ export default class OrdersController {
       address: string
       payment: EOrderPayment
       totalPrice: number
-    } = request.only(['cartItemIds', 'receiverName', 'phoneNumber', 'address', 'payment', 'totalPrice'])
+    } = request.only([
+      'cartItemIds',
+      'receiverName',
+      'phoneNumber',
+      'address',
+      'payment',
+      'totalPrice',
+    ])
     if (cartItemIds.length === 0) {
       return response.badRequest({
         code: 403,
@@ -126,7 +133,7 @@ export default class OrdersController {
       phoneNumber,
       address,
       payment,
-      totalPrice
+      totalPrice,
     })
 
     await CartItem.query().whereIn('id', cartItemIds).update({
@@ -137,6 +144,8 @@ export default class OrdersController {
     await order.load('cartItems', (query) => {
       query.preload('product')
     })
+
+    console.log('order', order)
 
     return response.created({
       code: 201,
