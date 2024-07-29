@@ -1,4 +1,4 @@
-import { get, post, put } from '../../utils/request';
+import { get, patch, post, put } from '../../utils/request';
 import queryString from 'query-string';
 export const getStore = async (id) => {
   const result = await get(`/stores/${id}`);
@@ -34,4 +34,11 @@ export const getListOrderFromStore = async () => {
 export const getListStores = async () => {
   const result = await get(`/stores`);
   return result;
-}
+};
+
+export const acceptOrderItem = async (cartItemId, status) => {
+  const result = await patch(`/orders/${cartItemId}/update-status`, {
+    status,
+  });
+  return result;
+};

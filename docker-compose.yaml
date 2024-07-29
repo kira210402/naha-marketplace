@@ -26,6 +26,8 @@ services:
 
   postgresql:
     image: postgres:14.1-alpine
+    env_file:
+      - ./backend/.env
     environment:
       - POSTGRES_USER=${DB_USER}
       - POSTGRES_PASSWORD=${DB_PASSWORD}

@@ -13,10 +13,10 @@ import {
 import { Avatar, Button, Layout, Menu, theme, Typography } from 'antd';
 import ProductManagementPage from './ProductManagementPage';
 import CollectionManagementPage from './CollectionManagementPage';
+import OrdersManagementPage from './OrdersManagementPage';
 import SettingStorePage from './SettingStorePage';
 import DashBoardPage from './DashBoardPage';
 import { useNavigate } from 'react-router-dom';
-import OrdersManagementPage from './OrdersManagementPage';
 const { Header, Sider, Content } = Layout;
 
 const MyStoreDetailPage = ({ store }) => {

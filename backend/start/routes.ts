@@ -115,6 +115,9 @@ router
               .as('orders.updateStoreOrder')
             router.post('/', [OrdersController, 'store']).as('orders.store')
             router.get('/history', [OrdersController, 'getListOrderByUserId']).as('orders.history')
+            router
+              .patch('/:cartItemId/update-status', [OrdersController, 'updateMyOrder'])
+              .as('orders.update-status')
           })
           .prefix('/orders')
 
