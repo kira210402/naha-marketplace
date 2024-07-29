@@ -18,7 +18,7 @@ import { getUser } from '../../../services/user';
 import { setUser } from '../../../redux/features/user';
 import { DownOutlined } from '@ant-design/icons';
 import { createOrder } from '../../../services/order';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import Address from '../../../components/client/Address/AddressInput';
 
 const CheckoutPage = () => {
@@ -30,6 +30,7 @@ const CheckoutPage = () => {
   const dispatch = useDispatch();
   const [selectedPayment, setSelectedPayment] = useState('Cash');
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -84,7 +85,6 @@ const CheckoutPage = () => {
   }
 
   const handleAddressChange = (addressDetails) => {
-    console.log('addressDetail', addressDetails);
     form.setFieldsValue({
       address: `${addressDetails.communeLabel}, ${addressDetails.districtLabel}, ${addressDetails.provinceLabel}`,
     });
@@ -92,25 +92,18 @@ const CheckoutPage = () => {
 
   const handleSubmit = async (values) => {
     try {
-      // const formData = new FormData();
-      // formData.append('receiverName', values.fullName || '');
-      // formData.append('phoneNumber', values.phoneNumber || '');
-      // formData.append('address', values.address || '');
-      // formData.append('payment', selectedPayment || 'Cash');
-      // formData.append(
-      //   'cartItemIds',
-      //   selectedCartItems.map((item) => item.id),
-      // );
       const formData = {
         receiverName: values.fullName || '',
         phoneNumber: values.phoneNumber || '',
         address: values.address || '',
         payment: selectedPayment || 'CASH',
         cartItemIds: selectedCartItems.map((item) => item.id),
+        totalPrice: totalPrice.toFixed(2),
       };
       const response = await createOrder(formData);
       if (response.code === 201) {
         message.success('Create order success!');
+        navigate('/')
         return response;
       } else message.error('Create order fail!');
     } catch (error) {
@@ -151,10 +144,10 @@ const CheckoutPage = () => {
                           </p>
                           <p className='text-gray-600'>
                             Price: $
-                            {((item.product.price *
+                            {(((item.product.price *
                               (100 - item.product.discount)) /
                               100) *
-                              item.quantity}
+                              item.quantity).toFixed(2)}
                           </p>
                         </div>
                       </div>
@@ -162,7 +155,7 @@ const CheckoutPage = () => {
                   </div>
                 </div>
                 <h3 className='mt-6 text-xl font-bold text-gray-700'>
-                  Total Price: ${totalPrice}
+                  Total Price: ${totalPrice.toFixed(2)}
                 </h3>
               </div>
             </Col>
