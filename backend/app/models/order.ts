@@ -2,7 +2,6 @@ import { DateTime } from 'luxon'
 import { BaseModel, column, hasMany } from '@adonisjs/lucid/orm'
 import type { HasMany } from '@adonisjs/lucid/types/relations'
 import CartItem from './cart_item.js'
-import { EOrderStatus } from '../enums/EOrderStatus.js'
 import { EOrderPayment } from '../enums/EOrderPayment.js'
 import OrderItem from './order_item.js'
 
@@ -15,7 +14,10 @@ export default class Order extends BaseModel {
 
   @column({ columnName: 'receiver_names' })
   declare receiverName: string
-  
+
+  @column({ columnName: 'total_price' })
+  declare totalPrice: number
+
   @column()
   declare payment: EOrderPayment
 

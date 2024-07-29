@@ -46,8 +46,7 @@ export default class CartsController {
     const cart = await Cart.findByOrFail('userId', auth.user?.$attributes.id)
     const product = await Product.findOrFail(productId)
 
-    let cartItem
-    cartItem = await CartItem.query()
+    let cartItem = await CartItem.query()
       .where('cartId', cart.id)
       .whereNull('orderId')
       .where('productId', product.id)
@@ -55,12 +54,17 @@ export default class CartsController {
       .first()
 
     if (cartItem) {
-      await cartItem.merge({ quantity: cartItem.quantity + 1 }).save()
+      await cartItem.merge({
+        totalPrice: product.price * (cartItem.quantity + 1) * (100 - product.discount) / 100,
+        quantity: cartItem.quantity + 1
+      }).save()
     } else {
       cartItem = await CartItem.create({
         cartId: cart.id,
         productId: product.id,
+        storeId: product.storeId,
         quantity,
+        totalPrice: product.price * quantity * (100 - product.discount) / 100,
       })
     }
 
