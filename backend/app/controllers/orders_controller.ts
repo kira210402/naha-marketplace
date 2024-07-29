@@ -297,13 +297,14 @@ export default class OrdersController {
       cartItems.map(async (cartItem) => {
         const totalPrice =
           (cartItem.quantity * cartItem.product.price * (100 - cartItem.product.discount)) / 100
-        await OrderItem.create({
+        const orderItem = await OrderItem.create({
           orderId: order.id,
           productId: cartItem.productId,
           quantity: cartItem.quantity,
           status: EOrderStatus.Pending,
           price: totalPrice,
         })
+        console.log('orderItem', orderItem)
         await cartItem.delete()
       })
     )
