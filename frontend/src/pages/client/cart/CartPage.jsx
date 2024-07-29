@@ -14,7 +14,7 @@ const CartPage = () => {
   const [loading, setLoading] = useState(true);
   const [selectedRows, setSelectedRows] = useState([]);
   const dispatch = useDispatch();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const fetchData = async () => {
     try {
       const token = getCookie('token');
@@ -61,7 +61,9 @@ const CartPage = () => {
   };
 
   const totalPrice = selectedRows.reduce(
-    (total, item) => total + item.product.price * item.quantity * (1 - item.product.discount / 100),
+    (total, item) =>
+      total +
+      item.product.price * item.quantity * (1 - item.product.discount / 100),
     0,
   );
 
@@ -199,7 +201,14 @@ const CartPage = () => {
         <p>Total Price: ${totalPrice.toFixed(2)}</p>
         <Button
           type='primary'
-          onClick={() => navigate('/checkout', { state: { selectedCartItems: selectedRows, totalPrice: totalPrice } })}
+          onClick={() =>
+            navigate('/checkout', {
+              state: {
+                selectedCartItems: selectedRows,
+                totalPrice: totalPrice,
+              },
+            })
+          }
         >
           Thanh toán
         </Button>
