@@ -30,3 +30,8 @@ export const getListOrderFromStore = async () => {
   const result = await get(`/orders/store`);
   return result;
 };
+
+export const getListStores = async () => {
+  const result = await get(`/stores`);
+  return result;
+}

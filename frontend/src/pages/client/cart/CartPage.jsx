@@ -54,7 +54,8 @@ const CartPage = () => {
 
   const handleQuantityChangeLocal = (id, value) => {
     const updatedItems = cartItems.map((item) =>
-      item.product.id === id ? { ...item, quantity: value } : item,
+      item.product.id === id ? { ...item, quantity: value, totalPrice: value * item.product.price * (100 - item.product.discount) / 100
+      } : item,
     );
     setCartItems(updatedItems);
     handleQuantityChange(updatedItems);
@@ -153,7 +154,7 @@ const CartPage = () => {
         const quantity = record.quantity;
         return (
           <div>
-            <p>${((price * (100 - discount)) / 100) * quantity} </p>
+            <p>${(((price * (100 - discount)) / 100) * quantity).toFixed(2)} </p>
           </div>
         );
       },
