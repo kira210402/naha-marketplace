@@ -40,5 +40,5 @@ networks:
   market-place:
     driver: bridge
 volumes:
-  my-postgres:
+  my-postgres-data:
     driver: local
