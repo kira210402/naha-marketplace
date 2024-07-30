@@ -118,6 +118,9 @@ router
             router
               .patch('/:cartItemId/update-status', [OrdersController, 'updateMyOrder'])
               .as('orders.update-status')
+            router
+              .delete('/cancel/order-item/:id', [OrdersController, 'cancelOrderItemFromStore'])
+              .as('orders.cancel')
           })
           .prefix('/orders')
 

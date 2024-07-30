@@ -184,4 +184,21 @@ export default class OrdersController {
       orders,
     })
   }
+
+  async cancelOrderItemFromStore({ response, params }: HttpContext) {
+    try {
+      const cartItem = await CartItem.findOrFail(params.id)
+      await cartItem.delete()
+      return response.ok({
+        code: 200,
+        message: 'Cart item deleted successfully',
+      })
+    } catch (error) {
+      return response.internalServerError({
+        code: 500,
+        message: 'Error deleting cart item',
+        error: error.message,
+      })
+    }
+  }
 }
