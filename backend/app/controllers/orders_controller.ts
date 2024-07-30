@@ -4,7 +4,6 @@ import { EOrderPayment } from '../enums/EOrderPayment.js'
 import { EOrderStatus } from '../enums/EOrderStatus.js'
 import Store from '#models/store'
 import CartItem from '#models/cart_item'
-import OrderItem from '#models/order_item'
 export default class OrdersController {
   async indexByStore({ response, auth }: HttpContext) {
     const userId = auth.user?.$attributes.id
@@ -155,33 +154,34 @@ export default class OrdersController {
   }
 
   async getListOrderByUserId({ response, auth }: HttpContext) {
-    try {
-      const userId = auth.user?.id
+    const userId = auth.user?.id
 
-      if (!userId) {
-        return response.unauthorized({
-          code: 401,
-          message: 'Unauthorized',
-        })
-      }
-
-      const orders = await Order.query()
-        .where('userId', userId)
-        .preload('orderItems', (item) => {
-          item.preload('product')
-        })
-
-      return response.ok({
-        code: 200,
-        message: 'List orders of user success',
-        orders,
-      })
-    } catch (error) {
-      console.error('Error fetching orders:', error)
-      return response.internalServerError({
-        code: 500,
-        message: 'Internal Server Error',
+    if (!userId) {
+      return response.unauthorized({
+        code: 401,
+        message: 'Unauthorized',
       })
     }
+
+    const orders = await Order.query()
+      .where('user_id', userId)
+      .preload('cartItems', (query) => {
+        query.preload('product')
+      })
+
+    if (orders.length === 0) {
+      return response.notFound({
+        code: 404,
+        message: 'No orders found for this user',
+      })
+    }
+
+    console.log('orders', orders)
+
+    return response.ok({
+      code: 200,
+      message: 'List orders of user success',
+      orders,
+    })
   }
 }
