@@ -4,10 +4,10 @@ import { getListOrderByUserId } from '../../../services/order';
 import moment from 'moment';
 
 const steps = [
-  { id: 'pending', title: 'Pending', color: 'bg-gray-300' },
-  { id: 'processing', title: 'Processing', color: 'bg-gray-300' },
-  { id: 'delivering', title: 'Delivering', color: 'bg-gray-300' },
-  { id: 'delivered', title: 'Delivered', color: 'bg-gray-300' },
+  { id: 'Pending', title: 'Pending', color: 'bg-gray-300' },
+  { id: 'Processing', title: 'Processing', color: 'bg-gray-300' },
+  { id: 'Delivering', title: 'Delivering', color: 'bg-gray-300' },
+  { id: 'Delivered', title: 'Delivered', color: 'bg-gray-300' },
 ];
 
 const PurchaseHistoryPage = () => {
@@ -16,15 +16,12 @@ const PurchaseHistoryPage = () => {
   const fetchData = async () => {
     try {
       const data = await getListOrderByUserId();
+      console.log('data', data.orders);
       const formattedData = data.orders.map((order) => ({
         ...order,
         key: order.id,
         orderId: order.id,
         date: moment(order.createdAt).format('YYYY-MM-DD'),
-        totalPrice: order.cartItems.reduce(
-          (sum, item) => sum + item.totalPrice,
-          0,
-        ),
       }));
 
       formattedData.sort((a, b) => moment(b.date).diff(moment(a.date)));
@@ -43,7 +40,12 @@ const PurchaseHistoryPage = () => {
     <div style={{ padding: '20px' }}>
       <Card title='Purchase History' style={{ width: '100%' }}>
         {listOrder.map((order) => {
-          const currentStepId = order.status.toLowerCase();
+          const cartItems = order.cartItems;
+          let currentStepId = 'Pending';
+          if (cartItems.length > 0) {
+            currentStepId = cartItems[0].status; // Assuming the status of the order is derived from the first cart item
+          }
+
           const currentStepIndex = steps.findIndex(
             (step) => step.id === currentStepId,
           );
