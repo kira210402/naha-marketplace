@@ -1,11 +1,10 @@
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
 import ProductCard from '../productCard/ProductCard';
-
 const responsive = {
   superLargeDesktop: {
     breakpoint: { max: 4000, min: 1024 },
-    items: 4,
+    items: 3,
   },
   desktop: {
     breakpoint: { max: 1024, min: 768 },
@@ -34,7 +33,6 @@ const ProductList = ({ products }) => {
           autoPlay={true}
           swipeable={true}
           draggable={true}
-          showDots={true}
           infinite={true}
           partialVisible={false}
           dotListClass='custom-dot-list-style'

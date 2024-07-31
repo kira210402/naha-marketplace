@@ -64,14 +64,13 @@ const DataTable = (props) => {
       ellipsis: true,
     },
     {
-      title: <div style={{ fontSize: '1rem' }}>Phone Number</div>,
-      dataIndex: 'phoneNumber',
-      key: 'phoneNumber',
-      sorter: (a, b) => a.order.phoneNumber.localeCompare(b.order.phoneNumber),
+      title: <div style={{ fontSize: '1rem' }}>Product Name</div>,
+      dataIndex: 'name',
+      key: 'name',
       render: (_, record) => {
         return (
           <>
-            <div style={{ fontSize: '1rem' }}>{record.order.phoneNumber}</div>
+            <div style={{ fontSize: '1rem' }}>{record.product.name}</div>
           </>
         );
       },
