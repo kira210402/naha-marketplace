@@ -154,7 +154,7 @@ export class JwtAccessTokenProvider<TokenableModel extends LucidModel>
     }
   }
 
-  async delete(user: InstanceType<TokenableModel>, userId: number): Promise<void> {
+  async delete(user: InstanceType<TokenableModel>): Promise<void> {
     this.ensureIsPersisted(user)
   }
 }
