@@ -21,7 +21,9 @@ WORKDIR /app
 
 RUN npm install -g serve
 
-COPY --from=development /app/build /app/build
+COPY --from=development /app/dist /app/build
+
+EXPOSE 3000
 
 CMD ["serve", "-s", "build" ]
 
