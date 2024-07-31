@@ -1,7 +1,7 @@
 import { CheckCircleOutlined } from '@ant-design/icons';
 import { Button } from 'antd';
 import Swal from 'sweetalert2';
-import { acceptOrderItem } from '../../../services/stores';
+import { changeStatusOrderItem } from '../../../services/stores';
 
 const AcceptRecord = (props) => {
   const { data, onReload } = props;
@@ -10,7 +10,7 @@ const AcceptRecord = (props) => {
   const handleAccept = async () => {
     try {
       const status = 'Processing';
-      const response = await acceptOrderItem(cartItemId, status);
+      const response = await changeStatusOrderItem(cartItemId, status);
       if (response.code === 200) {
         Swal.fire({
           icon: 'success',

@@ -140,7 +140,7 @@ const DataTable = (props) => {
             <EditRecord data={record} onReload={handleReload} />
             <DeleteRecord data={record} onReload={handleReload} />
             <AcceptRecord data={record} onReload={handleReload} />
-            <DeliveryRecord />
+            <DeliveryRecord data={record} onReload={handleReload} />
           </>
         );
       },
