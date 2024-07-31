@@ -44,7 +44,7 @@ const ProductCard = ({ product }) => {
           <h3>{product.name}</h3>
           <p className='mt-1 text-sm text-gray-500'>- {product.discount} %</p>
         </div>
-        <p className='text-sm font-medium text-gray-900'>{product.price} $</p>
+        <p className='text-sm font-medium text-gray-900'>{product.price} đ</p>
       </div>
       <button
         className='flex-grow rounded-lg bg-blue-700 px-5 py-2.5 text-sm font-medium text-white transition duration-300 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'
