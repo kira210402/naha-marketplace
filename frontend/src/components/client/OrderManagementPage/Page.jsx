@@ -11,13 +11,28 @@ const Page = () => {
     },
     {
       key: '2',
-      label: 'Paid',
+      label: 'Pending',
       children: <DataTable tab='2' />,
     },
     {
       key: '3',
-      label: 'Unpaid',
+      label: 'Processing',
       children: <DataTable tab='3' />,
+    },
+    {
+      key: '4',
+      label: 'Delivering',
+      children: <DataTable tab='4' />,
+    },
+    {
+      key: '5',
+      label: 'Delivered',
+      children: <DataTable tab='5' />,
+    },
+    {
+      key: '6',
+      label: 'Cancelled',
+      children: <DataTable tab='6' />,
     },
   ];
 
