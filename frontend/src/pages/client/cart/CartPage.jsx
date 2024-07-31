@@ -5,7 +5,7 @@ import { getCookie } from '../../../helpers/cookie';
 import { jwtDecode } from 'jwt-decode';
 import { getUser } from '../../../services/user';
 import { setUser } from '../../../redux/features/user';
-import { Button, InputNumber, Table } from 'antd';
+import { Button, InputNumber, message, Table } from 'antd';
 import DeleteCartItem from '../../../components/client/CartPage/DeleteCartItem';
 import { useNavigate } from 'react-router-dom';
 
@@ -34,8 +34,6 @@ const CartPage = () => {
     }
   };
 
-  console.log('selectedRows', selectedRows);
-
   useEffect(() => {
     fetchData();
   }, [dispatch]);
@@ -48,13 +46,27 @@ const CartPage = () => {
     fetchData();
   };
 
+  const handleClickThanhToan = () => {
+    if (cartItems.length !== 0) {
+      navigate('/checkout', {
+        state: {
+          selectedCartItems: selectedRows,
+          totalPrice: totalPrice,
+        },
+      })
+    } else {
+      message.error('Giỏ hàng trống');
+    }
+  };
+
   const handleQuantityChange = async (updatedItems) => {
     await updateCart(updatedItems);
   };
 
   const handleQuantityChangeLocal = (id, value) => {
     const updatedItems = cartItems.map((item) =>
-      item.product.id === id ? { ...item, quantity: value, totalPrice: value * item.product.price * (100 - item.product.discount) / 100
+      item.product.id === id ? {
+        ...item, quantity: value, totalPrice: value * item.product.price * (100 - item.product.discount) / 100
       } : item,
     );
     setCartItems(updatedItems);
@@ -202,14 +214,7 @@ const CartPage = () => {
         <p>Total Price: ${totalPrice.toFixed(2)}</p>
         <Button
           type='primary'
-          onClick={() =>
-            navigate('/checkout', {
-              state: {
-                selectedCartItems: selectedRows,
-                totalPrice: totalPrice,
-              },
-            })
-          }
+          onClick={handleClickThanhToan}
         >
           Thanh toán
         </Button>

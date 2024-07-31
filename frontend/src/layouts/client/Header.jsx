@@ -70,10 +70,9 @@ const Header = () => {
   );
 
   const navLinks = [
-    { to: '/', label: 'Home' },
     { to: '/cart', label: iconCart },
-    { to: '/about', label: 'About' },
-    { to: '/contact', label: 'Contact' },
+    // { to: '/about', label: 'About' },
+    // { to: '/contact', label: 'Contact' },
     { to: '/stores', label: 'List Stores' },
   ];
 
