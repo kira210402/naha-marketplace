@@ -5,7 +5,9 @@ import { EOrderStatus } from '../enums/EOrderStatus.js'
 import Store from '#models/store'
 import CartItem from '#models/cart_item'
 export default class OrdersController {
-  async indexByStore({ response, auth }: HttpContext) {
+  async indexByStore({ response, auth, request }: HttpContext) {
+    const filter = request.input('status', ' all')
+    console.log('filter', filter)
     const userId = auth.user?.$attributes.id
     if (!userId) {
       return response.unauthorized({
@@ -22,16 +24,38 @@ export default class OrdersController {
       })
     }
 
-    const orderItem = await CartItem.query()
+    let orderItemsQuery = CartItem.query()
       .where('storeId', store.id)
       .whereNotNull('orderId')
       .preload('order')
       .preload('product')
 
+    switch (filter) {
+      case 'Pending':
+        orderItemsQuery.where('status', 'Pending')
+        break
+      case 'Processing':
+        orderItemsQuery.where('status', 'Processing')
+        break
+      case 'Delivering':
+        orderItemsQuery.where('status', 'Delivering')
+        break
+      case 'Delivered':
+        orderItemsQuery.where('status', 'Delivered')
+        break
+      case 'Cancelled':
+        orderItemsQuery.where('status', 'Cancelled')
+        break
+      default:
+        break
+    }
+    const orderItems = await orderItemsQuery
+    console.log('orderItems', orderItems)
+
     return response.ok({
       code: 200,
       message: `List orders of store ${store.name} success`,
-      orderItem,
+      orderItems,
     })
   }
 

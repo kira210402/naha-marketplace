@@ -9,19 +9,42 @@ import DeliveryRecord from './DeliveryRecord';
 
 const DataTable = (props) => {
   const { tab } = props;
+  console.log('tab', tab);
   const [listOrders, setListOrders] = useState([]);
   const [loading, setLoading] = useState(true);
-  console.log('listOrders', listOrders);
-  const fetchData = useCallback(async () => {
-    try {
-      const data = await getListOrderFromStore();
-      setListOrders(data.orderItem);
-      setLoading(false);
-      console.log('data', data);
-    } catch (error) {
-      console.log(error);
-    }
-  }, [tab]);
+  const fetchData = useCallback(
+    async (filter = {}) => {
+      try {
+        switch (tab) {
+          case '2':
+            filter['status'] = 'Pending';
+            break;
+          case '3':
+            filter['status'] = 'Processing';
+            break;
+          case '4':
+            filter['status'] = 'Delivering';
+            break;
+          case '5':
+            filter['status'] = 'Delivered';
+            break;
+          case '6':
+            filter['status'] = 'Cancelled';
+            break;
+          default:
+            break;
+        }
+
+        const data = await getListOrderFromStore(filter);
+        console.log('data', data);
+        setListOrders(data.orderItems);
+        setLoading(false);
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    [tab],
+  );
   useEffect(() => {
     fetchData();
   }, [fetchData]);
