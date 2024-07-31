@@ -2,7 +2,6 @@ import ProductList from '../../components/client/homepage/ProductList';
 import { useEffect, useState } from 'react';
 import { getListProduct } from '../../services/products';
 import { Flex, Spin } from 'antd';
-import Slider from '../../components/client/Slider';
 
 const HomePage = () => {
   const [products, setProducts] = useState([]);
@@ -39,9 +38,6 @@ const HomePage = () => {
 
   return (
     <>
-      <div>
-        <Slider />
-      </div>
       <div>
         <ProductList products={products} />
       </div>

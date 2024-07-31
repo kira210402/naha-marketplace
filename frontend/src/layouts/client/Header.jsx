@@ -4,40 +4,31 @@ import Search from '../../components/client/search/Search';
 import { getCookie } from '../../helpers/cookie';
 import { jwtDecode } from 'jwt-decode';
 import { getUser } from '../../services/user';
-import { Avatar, Button, Dropdown, Flex, Spin } from 'antd';
-import { UserOutlined, DownOutlined } from '@ant-design/icons';
+import { Avatar, Badge, Button, Dropdown, Flex, Spin } from 'antd';
+import {
+  UserOutlined,
+  DownOutlined,
+  ShoppingCartOutlined,
+} from '@ant-design/icons';
 import useUserStore from '../../zustandStore/UseUserStore';
-
-const iconCart = (
-  <svg
-    xmlns='http://www.w3.org/2000/svg'
-    fill='none'
-    viewBox='0 0 24 24'
-    strokeWidth={1.5}
-    stroke='currentColor'
-    className='h-6 w-6'
-  >
-    <path
-      strokeLinecap='round'
-      strokeLinejoin='round'
-      d='M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z'
-    />
-  </svg>
-);
-
-const navLinks = [
-  { to: '/', label: 'Home' },
-  { to: '/cart', label: iconCart },
-  { to: '/about', label: 'About' },
-  { to: '/contact', label: 'Contact' },
-  { to: '/stores', label: 'List Stores' },
-];
+import { getCartItems } from '../../services/cart';
 
 const Header = () => {
   const token = getCookie('token');
   const setUser = useUserStore((state) => state.setUser);
   const user = useUserStore((state) => state.user);
+  const [quantityCartItems, setQuantityCartItems] = useState(0);
   const [loading, setLoading] = useState(true);
+
+  const updateCartQuantity = async () => {
+    try {
+      const cartItems = await getCartItems();
+      const quantityProductInCart = cartItems.products.length;
+      setQuantityCartItems(quantityProductInCart);
+    } catch (error) {
+      console.error('Failed to update cart quantity:', error);
+    }
+  };
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -46,6 +37,7 @@ const Header = () => {
           const decodedUser = jwtDecode(token);
           const userInfo = await getUser(decodedUser.id);
           setUser(userInfo.user);
+          await updateCartQuantity();
         }
       } catch (error) {
         console.error('Failed to fetch user:', error);
@@ -69,6 +61,21 @@ const Header = () => {
       </Flex>
     );
   }
+
+  const iconCart = (
+    <Badge size='small' count={quantityCartItems}>
+      <ShoppingCartOutlined style={{ fontSize: '24px' }} />
+    </Badge>
+  );
+
+  const navLinks = [
+    { to: '/', label: 'Home' },
+    { to: '/cart', label: iconCart },
+    { to: '/about', label: 'About' },
+    { to: '/contact', label: 'Contact' },
+    { to: '/stores', label: 'List Stores' },
+  ];
+
   let items = [];
   if (user) {
     items = [
@@ -96,14 +103,17 @@ const Header = () => {
   }
 
   return (
-    <div className='container mx-auto flex items-center justify-between px-6 py-3'>
+    <div
+      className='left-0 top-0 flex w-full items-center justify-between px-6 py-3'
+      style={{ backgroundColor: '#fff', zIndex: 900 }}
+    >
       <div className='w-1/6 text-2xl font-bold'>
-        <Link to='/'>MyApp</Link>
+        <Link to='/'>NaHa Market</Link>
       </div>
       <div className='w-2/6'>
         <Search />
       </div>
-      <nav className='flex w-3/6 space-x-4'>
+      <nav className='flex w-3/6 items-center space-x-4'>
         <ul className='flex w-2/3 space-x-4'>
           {navLinks.map((link) => (
             <li key={link.to}>
@@ -124,24 +134,22 @@ const Header = () => {
             </li>
           ))}
         </ul>
-        <ul className='layout__default--account flex space-x-4'>
+        <ul className='flex w-1/3 justify-end space-x-4'>
           {token ? (
             <>
               <li>
-                <div className='user-menu'>
-                  <Dropdown menu={{ items }}>
-                    <Button type='text' onClick={(e) => e.preventDefault()}>
-                      <NavLink to={`/users/${user.id}`} className='username'>
-                        <Avatar
-                          size='small'
-                          src={user.avatar}
-                          icon={!user.avatar && <UserOutlined />}
-                        />
-                      </NavLink>
-                      <DownOutlined />
-                    </Button>
-                  </Dropdown>
-                </div>
+                <Dropdown menu={{ items }}>
+                  <Button type='text' onClick={(e) => e.preventDefault()}>
+                    <NavLink to={`/users/${user.id}`} className='username'>
+                      <Avatar
+                        size='small'
+                        src={user.avatar}
+                        icon={!user.avatar && <UserOutlined />}
+                      />
+                    </NavLink>
+                    <DownOutlined />
+                  </Button>
+                </Dropdown>
               </li>
             </>
           ) : (
