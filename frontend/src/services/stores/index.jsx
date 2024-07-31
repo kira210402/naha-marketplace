@@ -36,7 +36,7 @@ export const getListStores = async () => {
   return result;
 };
 
-export const acceptOrderItem = async (cartItemId, status) => {
+export const changeStatusOrderItem = async (cartItemId, status) => {
   const result = await patch(`/orders/${cartItemId}/update-status`, {
     status,
   });

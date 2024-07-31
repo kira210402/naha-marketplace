@@ -1,10 +1,7 @@
 services:
-
   frontend:
     container_name: reactjs
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
+    image: kira2104/naha-marketplace-frontend
     ports:
       - "5432:5432"
     networks:
@@ -14,11 +11,9 @@ services:
 
   backend:
     container_name: nodejs
+    image: kira2104/naha-marketplace-backend
     env_file:
       - path: .env
-    build:
-      context: ./backend
-      dockerfile: Dockerfile
     ports:
       - "3333:3333"
     networks:
@@ -29,13 +24,13 @@ services:
   postgresql:
     image: postgres:14.1-alpine
     env_file:
-      - ./backend/.env
+      - path: .env
     environment:
       - POSTGRES_USER=${DB_USER}
       - POSTGRES_PASSWORD=${DB_PASSWORD}
       - POSTGRES_DB=${DB_DATABASE}
     expose:
-      - '${DB_PORT}'
+      - "${DB_PORT}"
     networks:
       - market-place
     volumes:
