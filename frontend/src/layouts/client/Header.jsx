@@ -12,6 +12,7 @@ import {
 } from '@ant-design/icons';
 import useUserStore from '../../zustandStore/UseUserStore';
 import { getCartItems } from '../../services/cart';
+import logoURL from '../../../public/logo.png';
 
 const Header = () => {
   const token = getCookie('token');
@@ -104,13 +105,16 @@ const Header = () => {
 
   return (
     <div
-      className='left-0 top-0 flex w-full items-center justify-between px-6 py-3'
-      style={{ backgroundColor: '#fff', zIndex: 900 }}
+      className="left-0 top-0 flex w-full items-center justify-between px-6 py-3"
+      style={{ backgroundColor: "#fff", zIndex: 900 }}
     >
-      <div className='w-1/6 text-2xl font-bold'>
-        <Link to='/'>NaHa Market</Link>
+      <div className="flex items-center space-x-4 w-1/3">
+        <Link to="/" className="flex items-center space-x-2">
+          <img src={logoURL} alt="Logo" className="w-16 h-16 rounded-full" />
+          <span className="text-xl font-semibold">NAHA Marketplace</span>
+        </Link>
       </div>
-      <div className='w-2/6'>
+      <div className="w-2/6">
         <Search />
       </div>
       <nav className='flex w-3/6 items-center space-x-4'>

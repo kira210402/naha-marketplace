@@ -83,19 +83,18 @@ const ProductDetailPage = () => {
 
             <div className='flex flex-col gap-4 lg:w-2/4'>
               <div>
-                <span className='font-semibold'>{product.name}</span>
                 <h1 className='text-3xl font-bold'>{product.name}</h1>
               </div>
 
               <h6 className='text-2xl font-semibold'>
-                New price: $ {(product.price * (100 - product.discount)) / 100}
+                New price: {(product.price * (100 - product.discount)) / 100} đ
               </h6>
               <div className='flex'>
                 <span className='text-2xl font-semibold text-gray-400'>
                   Old price:
                 </span>
                 <h6 className='mx-2 text-2xl font-semibold text-gray-400 line-through'>
-                  $ {product.price}
+                   {product.price} đ
                 </h6>
               </div>
 
