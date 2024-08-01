@@ -23,10 +23,6 @@ export const routes = [
         element: <HomePage />,
       },
       {
-        path: '/stores/my',
-        element: <MyStore />,
-      },
-      {
         path: '/products/:id',
         element: <ProductDetailPage />,
       },
@@ -73,6 +69,10 @@ export const routes = [
         redirectTo: '/',
       },
     ],
+  },
+  {
+    path: '/stores/my',
+    element: <MyStore />,
   },
   {
     path: '/login',
