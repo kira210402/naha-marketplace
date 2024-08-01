@@ -113,7 +113,7 @@ const Header = () => {
           <span className="text-xl font-semibold">NAHA Marketplace</span>
         </Link>
       </div>
-      <div className="w-2/6">
+      <div className="w-2/6 pe-2">
         <Search />
       </div>
       <nav className='flex w-3/6 items-center space-x-4'>

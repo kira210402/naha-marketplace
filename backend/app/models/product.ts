@@ -1,7 +1,8 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column, manyToMany } from '@adonisjs/lucid/orm'
-import type { ManyToMany } from '@adonisjs/lucid/types/relations'
+import { BaseModel, belongsTo, column, manyToMany } from '@adonisjs/lucid/orm'
+import type { BelongsTo, ManyToMany } from '@adonisjs/lucid/types/relations'
 import Collection from './collection.js'
+import Store from './store.js'
 
 export default class Product extends BaseModel {
   @column({ isPrimary: true })
@@ -48,4 +49,7 @@ export default class Product extends BaseModel {
 
   @manyToMany(() => Collection)
   declare collections: ManyToMany<typeof Collection>
+
+  @belongsTo(() => Store)
+  declare store: BelongsTo<typeof Store>
 }

@@ -12,7 +12,10 @@ export default class ProductsController {
     const { page, perPage } = pagination
     const sortField = request.input('sortField', 'createdAt')
     const sortOrder = request.input('sortOrder', 'desc')
-    const products = await Product.query().where('deleted', false).orderBy(sortField, sortOrder).paginate(page, perPage)
+    const products = await Product.query()
+      .where('deleted', false)
+      .orderBy(sortField, sortOrder)
+      .paginate(page, perPage)
     if (!products) throw new ProductException()
     return response.ok({
       code: 200,
@@ -167,6 +170,19 @@ export default class ProductsController {
         code: 400,
         messages: 'Failed',
       })
+    }
+  }
+
+  async getTopDiscount({ response }: HttpContext) {
+    try {
+      const products = await Product.query().orderBy('discount', 'desc').limit(8).preload('store')
+      return response.ok({
+        code: 200,
+        message: 'success',
+        products,
+      })
+    } catch (error) {
+      return response.status(500).send(`error`)
     }
   }
 }

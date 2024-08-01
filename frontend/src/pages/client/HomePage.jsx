@@ -2,6 +2,7 @@ import ProductList from '../../components/client/homepage/ProductList';
 import { useEffect, useState } from 'react';
 import { getListProduct } from '../../services/products';
 import { Flex, Spin } from 'antd';
+import TopDiscount from '../../components/client/homepage/TopDiscount';
 
 const HomePage = () => {
   const [products, setProducts] = useState([]);
@@ -43,7 +44,7 @@ const HomePage = () => {
       </div>
 
       <div>
-        <ProductList products={products} />
+        <TopDiscount />
       </div>
     </>
   );
