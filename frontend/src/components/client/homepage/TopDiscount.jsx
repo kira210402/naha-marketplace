@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { EnvironmentOutlined } from '@ant-design/icons';
 import { topDiscount } from '../../../services/products';
+import { vnd } from '../FormatPrice';
 
 const TopDiscount = () => {
   const [products, setProducts] = useState([]);
@@ -44,7 +45,9 @@ const TopDiscount = () => {
                       <h2 className='text-lg font-bold text-white'>
                         {product.name}
                       </h2>
-                      <p className='text-sm text-white'>{product.price}</p>
+                      <p className='text-sm text-white'>
+                        {vnd.format(product.price)}
+                      </p>
                     </div>
                   </div>
                 </div>
