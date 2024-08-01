@@ -7,7 +7,6 @@ const Sidebar = () => {
     { key: '2', label: 'Clothes' },
     { key: '3', label: 'Food' },
   ];
-
   return (
     <Sider width={200} className='site-layout-background'>
       <Menu

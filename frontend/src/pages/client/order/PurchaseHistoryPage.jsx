@@ -103,10 +103,10 @@ const PurchaseHistoryPage = () => {
                 })}
               </ol>
               <p>
-                <strong>Date:</strong> {order.date}
+                <strong>Product name: </strong> {order.cartItems[0].product.name}
               </p>
               <p>
-                <strong>Total Price:</strong> ${order.totalPrice}
+                <strong>Total Price:</strong> {order.totalPrice} đ
               </p>
               <p>
                 <strong>Receiver:</strong> {order.receiverName}
@@ -116,6 +116,9 @@ const PurchaseHistoryPage = () => {
               </p>
               <p>
                 <strong>Address:</strong> {order.address}
+              </p>
+              <p>
+                <strong>Date:</strong> {order.date}
               </p>
             </Card>
           );

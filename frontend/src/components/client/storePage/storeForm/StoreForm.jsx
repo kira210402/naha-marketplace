@@ -1,12 +1,10 @@
 import { UploadOutlined } from '@ant-design/icons';
 import { Button, Form, Input, message, Upload } from 'antd';
 import { useState } from 'react';
-import {useNavigate} from 'react-router-dom'
 import { createNewStore } from '../../../../services/stores';
 const StoreForm = () => {
   const [form] = Form.useForm();
   const [fileList, setFileList] = useState([]);
-  const navigate = useNavigate()
 
   const handleSubmit = async (values) => {
     try {
@@ -18,11 +16,10 @@ const StoreForm = () => {
       if (fileList.length > 0) {
         formData.append('avatar', fileList[0].originFileObj);
       }
-      console.log('values', values);
       const response = await createNewStore(formData);
-      if (response) {
+      if (response.code === 201) {
         message.success('create store success!');
-        navigate('/stores/my')
+        window.location.reload();
         return response;
       } else message.error('Create store fail');
     } catch (error) {
