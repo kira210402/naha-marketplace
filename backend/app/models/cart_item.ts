@@ -4,6 +4,7 @@ import Product from './product.js'
 import type { BelongsTo, HasOne } from '@adonisjs/lucid/types/relations'
 import Order from './order.js'
 import { EOrderStatus } from '../enums/EOrderStatus.js'
+import Store from './store.js'
 
 export default class CartItem extends BaseModel {
   @column({ isPrimary: true })
@@ -20,6 +21,9 @@ export default class CartItem extends BaseModel {
 
   @column()
   declare productId: number
+
+  @column()
+  declare storeName: string
 
   @column()
   declare quantity: number
@@ -44,4 +48,7 @@ export default class CartItem extends BaseModel {
 
   @belongsTo(() => Order)
   declare order: BelongsTo<typeof Order>
+
+  @belongsTo(() => Store)
+  declare store: BelongsTo<typeof Store>
 }
