@@ -193,6 +193,15 @@ export default class OrdersController {
         query.preload('product')
       })
 
+    for (const order of orders) {
+      for (const cartItem of order.cartItems) {
+        const store = await Store.find(cartItem.storeId);
+        if (store) {
+          cartItem.storeName = store.name; // Add store name to cartItem
+        }
+      }
+    }
+
     if (orders.length === 0) {
       return response.notFound({
         code: 404,
