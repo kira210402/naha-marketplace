@@ -103,10 +103,7 @@ const Header = () => {
   }
 
   return (
-    <div
-      className='left-0 top-0 flex w-full items-center justify-between px-6 py-3'
-      style={{ backgroundColor: '#fff', zIndex: 900 }}
-    >
+    <div className='fixed left-0 right-0 top-0 z-[9999] flex items-center justify-between bg-white px-6 py-3 shadow-md'>
       <div className='w-1/6 text-2xl font-bold'>
         <Link to='/'>NaHa Market</Link>
       </div>
