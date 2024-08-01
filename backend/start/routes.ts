@@ -161,6 +161,7 @@ router
           .as('products.index')
           .use(middleware.pagination())
         router.get('/:id', [ProductsController, 'show']).as('products.show')
+        router.get('/top-discount', [ProductsController, 'getTopDiscount'])
         router
           .post('/create', [ProductsController, 'store'])
           .as('products.store')

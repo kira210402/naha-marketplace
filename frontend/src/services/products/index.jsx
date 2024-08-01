@@ -29,3 +29,8 @@ export const editProduct = async (id, options) => {
   const result = await patch(`/products/${id}`, options);
   return result;
 };
+
+export const topDiscount = async () => {
+  const result = await get(`/products/top-discount`);
+  return result;
+};
