@@ -1,7 +1,7 @@
 import { CloseCircleOutlined } from '@ant-design/icons';
 import { Button } from 'antd';
 import Swal from 'sweetalert2';
-import { cancelOrderItem } from '../../../services/stores';
+import { changeStatusOrderItem } from '../../../services/stores';
 
 const DeleteRecord = ({ data, onReload }) => {
   const handleDelete = () => {
@@ -17,7 +17,8 @@ const DeleteRecord = ({ data, onReload }) => {
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
-          const response = await cancelOrderItem(data.id);
+          // const response = await cancelOrderItem(data.id);
+          const response = await changeStatusOrderItem(data.id, 'Cancelled');
           console.log(response);
           if (response?.code === 200) {
             Swal.fire({
