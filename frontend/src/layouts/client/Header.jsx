@@ -104,7 +104,7 @@ const Header = () => {
 
   return (
     <div
-      className="left-0 top-0 flex w-full items-center justify-between px-6 py-3"
+      className="left-0 top-0 flex w-full items-center justify-between px-6"
       style={{ backgroundColor: "#fff", zIndex: 900 }}
     >
       <div className="flex items-center space-x-4 w-1/3">

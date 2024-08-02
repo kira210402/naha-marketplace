@@ -6,7 +6,13 @@ export default class extends BaseSchema {
   async up() {
     this.schema.alterTable(this.tableName, (table) => {
       table.dropForeign(['store_id'])
-      table.integer('store_id').unsigned().references('id').inTable('stores').onDelete('CASCADE').alter()
+      table
+        .integer('store_id')
+        .unsigned()
+        .references('id')
+        .inTable('stores')
+        .onDelete('CASCADE')
+        .alter()
     })
   }
 

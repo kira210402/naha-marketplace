@@ -10,7 +10,10 @@ export default class StoresController {
     const { page, perPage } = pagination
     const sortField = request.input('sortField', 'id')
     const sortOrder = request.input('sortOrder', 'asc')
-    const stores = await Store.query().where('status', true).orderBy(sortField, sortOrder).paginate(page, perPage)
+    const stores = await Store.query()
+      .where('status', true)
+      .orderBy(sortField, sortOrder)
+      .paginate(page, perPage)
     if (!stores) throw new StoreException()
     return response.ok({
       code: 200,

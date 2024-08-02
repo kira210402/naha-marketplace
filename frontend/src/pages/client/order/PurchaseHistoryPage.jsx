@@ -2,6 +2,7 @@ import { Card } from 'antd';
 import { useEffect, useState } from 'react';
 import { getListOrderByUserId } from '../../../services/order';
 import moment from 'moment';
+import { vnd } from './../../../components/client/FormatPrice/index';
 
 const steps = [
   { id: 'Pending', title: 'Pending', color: 'bg-gray-300' },
@@ -43,7 +44,7 @@ const PurchaseHistoryPage = () => {
           const cartItems = order.cartItems;
           let currentStepId = 'Pending';
           if (cartItems.length > 0) {
-            currentStepId = cartItems[0].status; // Assuming the status of the order is derived from the first cart item
+            currentStepId = cartItems[0].status;
           }
 
           const currentStepIndex = steps.findIndex(
@@ -103,10 +104,11 @@ const PurchaseHistoryPage = () => {
                 })}
               </ol>
               <p>
-                <strong>Product name: </strong> {order.cartItems[0].product.name}
+                <strong>Product name: </strong>{' '}
+                {order.cartItems[0].product.name}
               </p>
               <p>
-                <strong>Total Price:</strong> {order.totalPrice} đ
+                <strong>Total Price:</strong> {vnd.format(order.totalPrice)}
               </p>
               <p>
                 <strong>Receiver:</strong> {order.receiverName}

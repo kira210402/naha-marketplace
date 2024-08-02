@@ -17,12 +17,13 @@ export default class extends BaseSchema {
         ])
         .defaultTo(EOrderStatus.Pending)
         .notNullable()
-    })}
+    })
+  }
 
   async down() {
-      this.schema.alterTable(this.tableName, (table) => {
-        table.dropColumn('store_id')
-        table.dropColumn('status')
-      })
-    }
+    this.schema.alterTable(this.tableName, (table) => {
+      table.dropColumn('store_id')
+      table.dropColumn('status')
+    })
   }
+}

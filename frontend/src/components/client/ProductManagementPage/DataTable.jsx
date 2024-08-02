@@ -5,6 +5,7 @@ import CreateRecord from './CreateRecord';
 import DeleteRecord from './DeleteRecord';
 import ViewRecord from './ViewRecord';
 import EditRecord from './EditRecord';
+import { vnd } from '../FormatPrice';
 
 const DataTable = (props) => {
   const { tab } = props;
@@ -138,6 +139,14 @@ const DataTable = (props) => {
       dataIndex: 'price',
       key: 'price',
       sorter: (a, b) => parseInt(a.price, 10) - parseInt(b.price, 10),
+      render: (_, record) => {
+        const price = record.price;
+        return (
+          <>
+            <span>{vnd.format(price)}</span>
+          </>
+        );
+      },
       ellipsis: true,
     },
     {
