@@ -9,12 +9,11 @@ import DeliveryRecord from './DeliveringRecord';
 import DeliveredRecord from './DeliveredRecord';
 import { vnd } from './../FormatPrice/index';
 
-
 const DataTable = (props) => {
-  const { tab } = props;
-  console.log('tab', tab);
+  const { tab, startDate, endDate } = props;
   const [listOrders, setListOrders] = useState([]);
   const [loading, setLoading] = useState(true);
+
   const fetchData = useCallback(
     async (filter = {}) => {
       try {
@@ -38,15 +37,17 @@ const DataTable = (props) => {
             break;
         }
 
+        if (startDate) filter['start_date'] = startDate;
+        if (endDate) filter['end_date'] = endDate;
+
         const data = await getListOrderFromStore(filter);
-        console.log('data', data);
         setListOrders(data.orderItems);
         setLoading(false);
       } catch (error) {
         console.log(error);
       }
     },
-    [tab],
+    [tab, startDate, endDate],
   );
   useEffect(() => {
     fetchData();
@@ -189,7 +190,6 @@ const DataTable = (props) => {
   return (
     <>
       <div>
-
         <Table
           dataSource={listOrders}
           columns={columns}

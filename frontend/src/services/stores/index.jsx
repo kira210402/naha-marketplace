@@ -28,6 +28,7 @@ export const updateStore = async (updatedStore) => {
 
 export const getListOrderFromStore = async (filter) => {
   const queryParams = queryString.stringify({ ...filter });
+  console.log('queryParams', queryParams);
   const result = await get(`/orders/store?${queryParams}`);
   return result;
 };
