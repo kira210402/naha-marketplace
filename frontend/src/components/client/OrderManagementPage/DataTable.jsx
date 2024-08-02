@@ -5,8 +5,8 @@ import ViewRecord from './ViewRecord';
 import EditRecord from './EditRecord';
 import DeleteRecord from './DeleteRecord';
 import AcceptRecord from './AcceptRecord';
-import DeliveryRecord from './DeliveryRecord';
-
+import DeliveryRecord from './DeliveringRecord';
+import DeliveredRecord from './DeliveredRecord';
 import { vnd } from './../FormatPrice/index';
 
 const DataTable = (props) => {
@@ -167,6 +167,7 @@ const DataTable = (props) => {
             <DeleteRecord data={record} onReload={handleReload} />
             <AcceptRecord data={record} onReload={handleReload} />
             <DeliveryRecord data={record} onReload={handleReload} />
+            <DeliveredRecord data={record} onReload={handleReload} />
           </>
         );
       },
