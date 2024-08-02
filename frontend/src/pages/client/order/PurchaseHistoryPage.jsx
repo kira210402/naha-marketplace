@@ -2,7 +2,10 @@ import { Button, Card } from 'antd';
 import { useEffect, useState } from 'react';
 import { getListOrderByUserId } from '../../../services/order';
 import moment from 'moment';
+
+import { vnd } from './../../../components/client/FormatPrice/index';
 import DeleteRecord from '../../../components/client/OrderManagementPage/DeleteRecord';
+
 
 const steps = [
   { id: 'Pending', title: 'Pending', color: 'bg-gray-300' },
@@ -115,7 +118,7 @@ const PurchaseHistoryPage = () => {
                                   className='order-card mb-4'
                                 >
                                   <p>
-                                    <strong>Price :</strong> {item.product.price} đ
+                                    <strong>Price :</strong> {vnd.format(item.product.price)}
                                   </p>
                                   <p>
                                     <strong>Quantity:</strong> {item.quantity}

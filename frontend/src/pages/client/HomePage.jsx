@@ -39,6 +39,9 @@ const HomePage = () => {
 
   return (
     <>
+      {/* <div>
+        <Slider />
+      </div> */}
       <div>
         <ProductList products={products} />
       </div>

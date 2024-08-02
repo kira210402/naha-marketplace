@@ -8,6 +8,7 @@ import { setUser } from '../../../redux/features/user';
 import { Button, InputNumber, message, Table } from 'antd';
 import DeleteCartItem from '../../../components/client/CartPage/DeleteCartItem';
 import { useNavigate } from 'react-router-dom';
+import { vnd } from '../../../components/client/FormatPrice';
 
 const CartPage = () => {
   const [cartItems, setCartItems] = useState([]);
@@ -53,7 +54,7 @@ const CartPage = () => {
           selectedCartItems: selectedRows,
           totalPrice: totalPrice,
         },
-      })
+      });
     } else {
       message.error('Giỏ hàng trống');
     }
@@ -65,9 +66,15 @@ const CartPage = () => {
 
   const handleQuantityChangeLocal = (id, value) => {
     const updatedItems = cartItems.map((item) =>
-      item.product.id === id ? {
-        ...item, quantity: value, totalPrice: value * item.product.price * (100 - item.product.discount) / 100
-      } : item,
+      item.product.id === id
+        ? {
+            ...item,
+            quantity: value,
+            totalPrice:
+              (value * item.product.price * (100 - item.product.discount)) /
+              100,
+          }
+        : item,
     );
     setCartItems(updatedItems);
     handleQuantityChange(updatedItems);
@@ -93,11 +100,15 @@ const CartPage = () => {
     {
       title: <div style={{ fontSize: '1rem' }}>Image</div>,
       dataIndex: 'images',
-      width: 80,
+      width: 90,
       key: 'images',
-      render: (text, record) => {
+      render: (_, record) => {
         const images = record.product.images;
-        return images !== null ? <img src={images[0]} /> : <></>;
+        return images !== null ? (
+          <img src={images[0]} className='h-[90px] w-[90px] object-cover' />
+        ) : (
+          <></>
+        );
       },
 
       ellipsis: true,
@@ -114,19 +125,19 @@ const CartPage = () => {
       },
     },
     {
-      title: <div style={{ fontSize: '1rem' }}>Unit Price ( $ )</div>,
+      title: <div style={{ fontSize: '1rem' }}>Unit Price</div>,
       dataIndex: 'unitPrice',
       key: 'unitPrice',
       width: 150,
-      render: (text, record) => {
+      render: (_, record) => {
         const price = record.product.price;
         const discount = record.product.discount;
         return (
           <div className='flex gap-2'>
             <span className='text-gray-400 line-through'>
-              ${record.product.price}
+              {vnd.format(record.product.price)}
             </span>
-            <p>${(price * (100 - discount)) / 100}</p>
+            <p>{vnd.format(((price * (100 - discount)) / 100).toFixed(2))}</p>
           </div>
         );
       },
@@ -138,7 +149,7 @@ const CartPage = () => {
       key: 'quantity',
       width: 150,
       sorter: (a, b) => parseInt(a.quantity, 10) - parseInt(b.quantity, 10),
-      render: (text, record) => {
+      render: (_, record) => {
         return (
           <>
             <InputNumber
@@ -156,18 +167,20 @@ const CartPage = () => {
       ellipsis: true,
     },
     {
-      title: <div style={{ fontSize: '1rem' }}>Price ( $ )</div>,
+      title: <div style={{ fontSize: '1rem' }}>Price</div>,
       dataIndex: 'price',
       key: 'price',
       width: 130,
-      render: (text, record) => {
+      render: (_, record) => {
         const price = record.product.price;
         const discount = record.product.discount;
         const quantity = record.quantity;
         return (
-          <div>
-            <p>${(((price * (100 - discount)) / 100) * quantity).toFixed(2)} </p>
-          </div>
+          <p className='text-red-500'>
+            {vnd.format(
+              (((price * (100 - discount)) / 100) * quantity).toFixed(2),
+            )}
+          </p>
         );
       },
       ellipsis: true,
@@ -177,7 +190,7 @@ const CartPage = () => {
       width: 100,
       key: 'actions',
       dataIndex: 'actions',
-      render: (text, record) => {
+      render: (_, record) => {
         return (
           <>
             <DeleteCartItem data={record} onReload={handleReload} />
@@ -211,11 +224,8 @@ const CartPage = () => {
         pagination={false}
       />
       <div className='mx-6 flex place-content-end gap-4 py-4 text-2xl font-bold'>
-        <p>Total Price: ${totalPrice.toFixed(2)}</p>
-        <Button
-          type='primary'
-          onClick={handleClickThanhToan}
-        >
+        <p>Total Price: {vnd.format(totalPrice.toFixed(2))}</p>
+        <Button type='primary' onClick={handleClickThanhToan}>
           Thanh toán
         </Button>
       </div>

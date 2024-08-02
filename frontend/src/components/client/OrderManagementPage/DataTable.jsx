@@ -7,6 +7,8 @@ import DeleteRecord from './DeleteRecord';
 import AcceptRecord from './AcceptRecord';
 import DeliveryRecord from './DeliveringRecord';
 import DeliveredRecord from './DeliveredRecord';
+import { vnd } from './../FormatPrice/index';
+
 
 const DataTable = (props) => {
   const { tab } = props;
@@ -122,7 +124,7 @@ const DataTable = (props) => {
       key: 'totalPrice',
       width: 110,
       sorter: (a, b) => parseFloat(a.totalPrice) - parseFloat(b.totalPrice),
-      render: (text) => <div>$ {parseFloat(text).toFixed(2)}</div>,
+      render: (text) => <div>{vnd.format(parseFloat(text).toFixed(2))}</div>,
       ellipsis: true,
     },
     {
@@ -187,13 +189,6 @@ const DataTable = (props) => {
   return (
     <>
       <div>
-        {/* <Space
-          style={{
-            marginBottom: 16,
-          }}
-        >
-          <CreateRecord onReload={handleReload} />
-        </Space> */}
 
         <Table
           dataSource={listOrders}

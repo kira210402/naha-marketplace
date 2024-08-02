@@ -49,9 +49,15 @@ const ProductCard = ({ product }) => {
             <></>
           )}
         </div>
-        <p className='text-sm font-medium text-red-600'>
-          {vnd.format(product.price)}
-        </p>
+        <div className='flex gap-2'>
+          <p className='text-lg font-medium text-red-600'>
+            {vnd.format((product.price * (100 - product.discount)) / 100)}
+          </p>
+
+          <p className='text-sm font-medium text-gray-500 line-through'>
+            {vnd.format(product.price)}
+          </p>
+        </div>
       </div>
       <button
         className='flex-grow rounded-lg bg-blue-700 px-5 py-2.5 text-sm font-medium text-white transition duration-300 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'
