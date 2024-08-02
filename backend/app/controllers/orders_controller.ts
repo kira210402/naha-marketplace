@@ -4,10 +4,14 @@ import { EOrderPayment } from '../enums/EOrderPayment.js'
 import { EOrderStatus } from '../enums/EOrderStatus.js'
 import Store from '#models/store'
 import CartItem from '#models/cart_item'
+import { DateTime } from 'luxon'
 export default class OrdersController {
   async indexByStore({ response, auth, request }: HttpContext) {
     const filter = request.input('status', ' all')
-    console.log('filter', filter)
+    const startDate = request.input('start_date')
+    console.log('startDate', startDate)
+    const endDate = request.input('end_date')
+    console.log('endDate', endDate)
     const userId = auth.user?.$attributes.id
     if (!userId) {
       return response.unauthorized({
@@ -30,6 +34,22 @@ export default class OrdersController {
       .preload('order')
       .preload('product')
 
+    if (startDate) {
+      const parsedStartDate = DateTime.fromISO(startDate).toSQLDate()
+      console.log('parsedStartDate', parsedStartDate)
+      if (parsedStartDate) {
+        orderItemsQuery.where('createdAt', '>=', parsedStartDate)
+        console.log('orderItemsQuery', orderItemsQuery)
+      }
+    }
+
+    if (endDate) {
+      const parsedEndDate = DateTime.fromISO(endDate).toSQLDate()
+      if (parsedEndDate) {
+        orderItemsQuery.where('createdAt', '<=', parsedEndDate)
+      }
+    }
+
     switch (filter) {
       case 'Pending':
         orderItemsQuery.where('status', 'Pending')
@@ -51,7 +71,6 @@ export default class OrdersController {
     }
     const orderItems = await orderItemsQuery
     console.log('orderItems', orderItems)
-
     return response.ok({
       code: 200,
       message: `List orders of store ${store.name} success`,

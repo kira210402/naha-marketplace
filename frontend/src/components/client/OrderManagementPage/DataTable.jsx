@@ -6,13 +6,16 @@ import EditRecord from './EditRecord';
 import DeleteRecord from './DeleteRecord';
 import AcceptRecord from './AcceptRecord';
 import DeliveryRecord from './DeliveryRecord';
+import { DatePicker } from 'antd';
+import moment from 'moment';
 import { vnd } from './../FormatPrice/index';
 
 const DataTable = (props) => {
   const { tab } = props;
-  console.log('tab', tab);
   const [listOrders, setListOrders] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
   const fetchData = useCallback(
     async (filter = {}) => {
       try {
@@ -36,21 +39,29 @@ const DataTable = (props) => {
             break;
         }
 
+        if (startDate) filter['start_date'] = startDate;
+        if (endDate) filter['end_date'] = endDate;
+
         const data = await getListOrderFromStore(filter);
-        console.log('data', data);
         setListOrders(data.orderItems);
         setLoading(false);
       } catch (error) {
         console.log(error);
       }
     },
-    [tab],
+    [tab, startDate, endDate],
   );
   useEffect(() => {
     fetchData();
   }, [fetchData]);
   const handleReload = () => {
     fetchData();
+  };
+  const handleStartDateChange = (date, dateString) => {
+    setStartDate(dateString);
+  };
+  const handleEndDateChange = (date, dateString) => {
+    setEndDate(dateString);
   };
 
   const columns = [
@@ -186,7 +197,20 @@ const DataTable = (props) => {
   return (
     <>
       <div>
-
+        <DatePicker
+          placeholder='Start Date'
+          onChange={handleStartDateChange}
+          format='YYYY-MM-DD'
+          value={startDate ? moment(startDate, 'YYYY-MM-DD') : null}
+          style={{ marginRight: '8px' }}
+        />
+        <DatePicker
+          placeholder='End Date'
+          onChange={handleEndDateChange}
+          format='YYYY-MM-DD'
+          value={endDate ? moment(endDate, 'YYYY-MM-DD') : null}
+          style={{ marginRight: '8px' }}
+        />
         <Table
           dataSource={listOrders}
           columns={columns}
