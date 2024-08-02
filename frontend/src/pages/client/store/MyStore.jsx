@@ -3,13 +3,10 @@ import { getMyStore } from '../../../services/stores';
 import StoreForm from '../../../components/client/storePage/storeForm/StoreForm';
 import { Button, Flex, Spin } from 'antd';
 import MyStoreDetailPage from './MyStoreDetailPage';
-import { useNavigate } from 'react-router-dom';
 
 const MyStore = () => {
   const [store, setStore] = useState(null);
   const [loading, setLoading] = useState(true);
-  const navigate = useNavigate()
-
   useEffect(() => {
     const fetchData = async () => {
       try {
