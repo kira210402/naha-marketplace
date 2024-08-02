@@ -39,7 +39,6 @@ export default class OrdersController {
       console.log('parsedStartDate', parsedStartDate)
       if (parsedStartDate) {
         orderItemsQuery.where('createdAt', '>=', parsedStartDate)
-        console.log('orderItemsQuery', orderItemsQuery)
       }
     }
 
