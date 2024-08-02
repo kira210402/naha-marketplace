@@ -11,15 +11,17 @@ export default class extends BaseSchema {
   }
 
   async down() {
-    this.schema.alterTable(this.tableName, table => {
-      table.enum('status', [
-        EOrderStatus.Pending,
-        EOrderStatus.Processing,
-        EOrderStatus.Delivered,
-        EOrderStatus.Delivering,
-        EOrderStatus.Cancelled,
-      ]).defaultTo(EOrderStatus.Pending).notNullable()
-    }
-    )
+    this.schema.alterTable(this.tableName, (table) => {
+      table
+        .enum('status', [
+          EOrderStatus.Pending,
+          EOrderStatus.Processing,
+          EOrderStatus.Delivered,
+          EOrderStatus.Delivering,
+          EOrderStatus.Cancelled,
+        ])
+        .defaultTo(EOrderStatus.Pending)
+        .notNullable()
+    })
   }
 }

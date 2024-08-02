@@ -27,7 +27,10 @@ export default class CollectionsController {
     const store = await Store.findByOrFail('userId', auth.user?.$attributes.id)
     const data = request.only(['name', 'description'])
     const payload = await createCollectionValidator.validate(data)
-    const existedCollection = await Collection.query().where('name', payload.name).where('deleted', false).first()
+    const existedCollection = await Collection.query()
+      .where('name', payload.name)
+      .where('deleted', false)
+      .first()
     if (existedCollection) {
       return response.badRequest({
         code: 400,

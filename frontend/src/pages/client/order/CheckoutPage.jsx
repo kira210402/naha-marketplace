@@ -20,6 +20,7 @@ import { DownOutlined } from '@ant-design/icons';
 import { createOrder } from '../../../services/order';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Address from '../../../components/client/Address/AddressInput';
+import { vnd } from '../../../components/client/FormatPrice';
 
 const CheckoutPage = () => {
   const location = useLocation();
@@ -103,7 +104,7 @@ const CheckoutPage = () => {
       const response = await createOrder(formData);
       if (response.code === 201) {
         message.success('Create order success!');
-        navigate('/')
+        navigate('/');
         return response;
       } else message.error('Create order fail!');
     } catch (error) {
@@ -143,11 +144,15 @@ const CheckoutPage = () => {
                             Quantity: {item.quantity}
                           </p>
                           <p className='text-gray-600'>
-                            Price: $
-                            {(((item.product.price *
-                              (100 - item.product.discount)) /
-                              100) *
-                              item.quantity).toFixed(2)}
+                            Price:
+                            {vnd.format(
+                              (
+                                ((item.product.price *
+                                  (100 - item.product.discount)) /
+                                  100) *
+                                item.quantity
+                              ).toFixed(2),
+                            )}
                           </p>
                         </div>
                       </div>

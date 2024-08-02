@@ -54,17 +54,19 @@ export default class CartsController {
       .first()
 
     if (cartItem) {
-      await cartItem.merge({
-        totalPrice: product.price * (cartItem.quantity + 1) * (100 - product.discount) / 100,
-        quantity: cartItem.quantity + 1
-      }).save()
+      await cartItem
+        .merge({
+          totalPrice: (product.price * (cartItem.quantity + 1) * (100 - product.discount)) / 100,
+          quantity: cartItem.quantity + 1,
+        })
+        .save()
     } else {
       cartItem = await CartItem.create({
         cartId: cart.id,
         productId: product.id,
         storeId: product.storeId,
         quantity,
-        totalPrice: product.price * quantity * (100 - product.discount) / 100,
+        totalPrice: (product.price * quantity * (100 - product.discount)) / 100,
       })
     }
 
